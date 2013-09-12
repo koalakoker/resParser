@@ -8,17 +8,33 @@ HystoryLineEdit::HystoryLineEdit(QWidget *parent) :
 
 void HystoryLineEdit::keyPressEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Up)
+    switch (event->key())
+    {
+    case Qt::Key_Up:
     {
         emit keyUpPressed();
+        break;
     }
-    if (event->key() == Qt::Key_Down)
+    case Qt::Key_Down:
     {
         emit keyDownPressed();
+        break;
     }
-    if (event->key() == Qt::Key_Escape)
+    case Qt::Key_Escape:
     {
         emit keyEscPressed();
+        break;
     }
+    case Qt::Key_Plus:
+    case Qt::Key_Minus:
+    case Qt::Key_Asterisk:
+    case Qt::Key_Slash:
+    case Qt::Key_Colon:
+    {
+        emit keyOperator();
+        break;
+    }
+    }
+
     QLineEdit::keyPressEvent(event);
 }

@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (ui->line_input,SIGNAL(keyUpPressed()),this,SLOT(keyUpPress()));
     connect (ui->line_input,SIGNAL(keyDownPressed()),this,SLOT(keyDownPress()));
+    connect (ui->line_input,SIGNAL(keyOperator()),this,SLOT(keyOperatorPress()));
     connect (ui->line_input,SIGNAL(keyEscPressed()),this,SLOT(close()));
 }
 
@@ -70,4 +71,12 @@ void MainWindow::keyUpPress()
 void MainWindow::keyDownPress()
 {
     ui->line_input->setText(cmdMngr.GetNextCommand());
+}
+
+void MainWindow::keyOperatorPress()
+{
+    if (ui->line_input->text().length()==0)
+    {
+        ui->line_input->setText("ans");
+    }
 }

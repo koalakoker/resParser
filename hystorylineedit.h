@@ -13,6 +13,7 @@ signals:
     void keyUpPressed(void);
     void keyDownPressed(void);
     void keyEscPressed(void);
+    void keyOperator(void);
 public slots:
     
 protected:

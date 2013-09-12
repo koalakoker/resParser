@@ -22,6 +22,7 @@ private slots:
     void on_line_input_returnPressed();
     void keyUpPress();
     void keyDownPress();
+    void keyOperatorPress();
 
 private:
     Ui::MainWindow *ui;
