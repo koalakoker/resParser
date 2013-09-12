@@ -1,7 +1,7 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-#include "QDebug"
+//#include "QDebug"
 
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
@@ -84,10 +84,7 @@ double ParserClass::Parse(QString str)
     {
         int pos = str.indexOf("->E12");
         QString res = str.mid(0,pos);
-        qDebug()<<QString("ParserClass::Parse ->E12 section : res:%1").arg(res);
-
         Int64 val = (Int64)Parse(res);
-        qDebug()<<QString("ParserClass::Parse ->E12 section : val:%1").arg(val);
         retVal = Resistor::ToNearE12(val);
     } else if (IsNumeric(str))
     {
@@ -346,11 +343,11 @@ double ParserClass::EvaluateSumAndDifference(QString str)
     int operatorPos = str.indexOf(operand);
     if (operatorPos == 0)
     {
-        tot -= splittedStr[0].toDouble();
+        tot -= Parse(splittedStr[0]);
     }
     else
     {
-        tot += splittedStr[0].toDouble();
+        tot += Parse(splittedStr[0]);
         operatorPos = -1;
     }
     int i;
@@ -359,11 +356,11 @@ double ParserClass::EvaluateSumAndDifference(QString str)
         operatorPos = str.indexOf(operand,operatorPos+1);
         if (str[operatorPos] == '-')
         {
-            tot -= splittedStr[i].toDouble();
+            tot -= Parse(splittedStr[i]);
         }
         else
         {
-            tot += splittedStr[i].toDouble();
+            tot += Parse(splittedStr[i]);
         }
     }
     return tot;

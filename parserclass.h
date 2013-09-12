@@ -20,7 +20,7 @@ private:
     QString EvaluateParallel(QString str);
     QString EvaluateDivision(QString str);
     QString EvaluateMultiply(QString str);
-    static double EvaluateSumAndDifference(QString str);
+    double EvaluateSumAndDifference(QString str);
 
 public:
     ParserClass();
