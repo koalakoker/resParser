@@ -3,6 +3,7 @@
 
 #include "variable.h"
 #include "QString"
+#include "hfloat.h"
 
 class ParserClass
 {
@@ -20,16 +21,16 @@ private:
     QString EvaluateParallel(QString str);
     QString EvaluateDivision(QString str);
     QString EvaluateMultiply(QString str);
-    double EvaluateSumAndDifference(QString str);
+    hfloat EvaluateSumAndDifference(QString str);
 
 public:
     ParserClass();
     int VariableCreated(void);
-    double LoadVariable(QString name);
-    void StoreVariable(QString name,double newValue);
+    hfloat LoadVariable(QString name);
+    void StoreVariable(QString name,hfloat newValue);
     Variable GetVariableAtIndex(int i);
     void Clear(void);
-    double Parse(QString str);
+    hfloat Parse(QString str);
 };
 
 #endif // PARSERCLASS_H

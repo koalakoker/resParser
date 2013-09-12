@@ -3,19 +3,20 @@
 
 #include "QString"
 #include "resistor.h"
+#include "hfloat.h"
 
 class Variable
 {
 private:
-    double m_value;
+    hfloat m_value;
     QString m_name;
     Resistor* m_resistor;
 
 public:
     Variable();
 
-    void setValue(double value);
-    double Value(void);
+    void setValue(hfloat value);
+    hfloat Value(void);
     void setName(QString value);
     QString Name(void);
     QString ToString (void);

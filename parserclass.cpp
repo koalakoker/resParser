@@ -1,7 +1,7 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-//#include "QDebug"
+#include "QDebug"
 
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
@@ -17,9 +17,9 @@ int ParserClass::VariableCreated(void)
     return m_VariableCreated;
 }
 
-double ParserClass::LoadVariable(QString name)
+hfloat ParserClass::LoadVariable(QString name)
 {
-    double retVal = -1;
+    hfloat retVal = hfloat("-1");
     int i;
     for (i = 0; i < m_VariableCreated; i++)
     {
@@ -32,7 +32,7 @@ double ParserClass::LoadVariable(QString name)
     return retVal;
 }
 
-void ParserClass::StoreVariable(QString name,double newValue)
+void ParserClass::StoreVariable(QString name,hfloat newValue)
 {
     bool found = false;
     int i;
@@ -69,7 +69,7 @@ void ParserClass::Clear(void)
     m_VariableCreated = 0;
 }
 
-double ParserClass::Parse(QString str)
+hfloat ParserClass::Parse(QString str)
 {
     // Remove spaces
     str = str.replace(" ","");
@@ -78,17 +78,17 @@ double ParserClass::Parse(QString str)
     str = str.replace ("K","000");
     str = str.replace ("M","000000");
 
-    double retVal = -1;
+    hfloat retVal = hfloat("-1");
 
     if (str.contains("->E12"))
     {
         int pos = str.indexOf("->E12");
         QString res = str.mid(0,pos);
-        Int64 val = (Int64)Parse(res);
-        retVal = Resistor::ToNearE12(val);
+        Int64 val = (Int64)Parse(res).toString().toLong();
+        retVal = hfloat(QString("%1").arg(Resistor::ToNearE12(val)));
     } else if (IsNumeric(str))
     {
-        retVal = str.toDouble();
+        retVal = hfloat(str);
     }
     else if (IsVariableName(str))
     {
@@ -99,7 +99,7 @@ double ParserClass::Parse(QString str)
         int equalPos = str.indexOf("=");
         QString VarName = str.mid(0,equalPos);
         QString expression = str.mid(equalPos+1,str.length()-equalPos-1);
-        double expressionValue = this->Parse(expression);
+        hfloat expressionValue = this->Parse(expression);
         StoreVariable(VarName,expressionValue);
         retVal = expressionValue;
     }
@@ -108,7 +108,7 @@ double ParserClass::Parse(QString str)
         QString expression = ExtractExpressionFromParentesis(str);
         if (expression != "")
         {
-            str = str.replace("("+expression+")",QString("%1").arg(this->Parse(expression)));
+            str = str.replace("("+expression+")",this->Parse(expression).toString());
             retVal = this->Parse(str);
         }
     }
@@ -270,9 +270,9 @@ QString ParserClass::EvaluateParallel(QString str)
         QStringList afterOpSplitted = afterOp.split(operand);
         QString lastValueStr = beforeOpSplitted[beforeOpSplitted.count()-1];
         QString firstValueStr = afterOpSplitted[0];
-        double result = 1/((1/this->Parse(lastValueStr))+(1/this->Parse(firstValueStr)));
+        hfloat result = hfloat("1")/((hfloat("1")/this->Parse(lastValueStr))+(hfloat("1")/this->Parse(firstValueStr)));
 
-        QString evaluated = str.replace(lastValueStr+":"+firstValueStr,QString("%1").arg(result));
+        QString evaluated = str.replace(lastValueStr+":"+firstValueStr,result.toString());
         retVal = EvaluateParallel(evaluated);
     }
     else
@@ -296,9 +296,9 @@ QString ParserClass::EvaluateMultiply(QString str)
         QStringList afterOpSplitted = afterOp.split(operand);
         QString lastValueStr = beforeOpSplitted[beforeOpSplitted.count()-1];
         QString firstValueStr = afterOpSplitted[0];
-        double result = this->Parse(lastValueStr)*this->Parse(firstValueStr);
+        hfloat result = this->Parse(lastValueStr)*this->Parse(firstValueStr);
 
-        QString evaluated = str.replace(lastValueStr+"*"+firstValueStr,QString("%1").arg(result));
+        QString evaluated = str.replace(lastValueStr+"*"+firstValueStr,result.toString());
         retVal = EvaluateMultiply(evaluated);
     }
     else
@@ -322,9 +322,9 @@ QString ParserClass::EvaluateDivision(QString str)
         QStringList afterOpSplitted = afterOp.split(operand);
         QString lastValueStr = beforeOpSplitted[beforeOpSplitted.count()-1];
         QString firstValueStr = afterOpSplitted[0];
-        double result = this->Parse(lastValueStr)/this->Parse(firstValueStr);
+        hfloat result = this->Parse(lastValueStr)/this->Parse(firstValueStr);
 
-        QString evaluated = str.replace(lastValueStr+"/"+firstValueStr,QString("%1").arg(result));
+        QString evaluated = str.replace(lastValueStr+"/"+firstValueStr,result.toString());
         retVal = EvaluateDivision(evaluated);
     }
     else
@@ -334,20 +334,22 @@ QString ParserClass::EvaluateDivision(QString str)
     return retVal;
 }
 
-double ParserClass::EvaluateSumAndDifference(QString str)
+hfloat ParserClass::EvaluateSumAndDifference(QString str)
 {
     QRegExp operand(REGEXP2OPERAND);
     QStringList splittedStr = str.split(operand,QString::SkipEmptyParts);
     int numAddend = splittedStr.count();
-    double tot = 0;
+    hfloat tot = hfloat("0");
     int operatorPos = str.indexOf(operand);
     if (operatorPos == 0)
     {
-        tot -= Parse(splittedStr[0]);
+        hfloat tmp = tot - Parse(splittedStr[0]);
+        tot = tmp;
     }
     else
     {
-        tot += Parse(splittedStr[0]);
+        hfloat tmp = tot + Parse(splittedStr[0]);
+        tot = tmp;
         operatorPos = -1;
     }
     int i;
@@ -356,11 +358,13 @@ double ParserClass::EvaluateSumAndDifference(QString str)
         operatorPos = str.indexOf(operand,operatorPos+1);
         if (str[operatorPos] == '-')
         {
-            tot -= Parse(splittedStr[i]);
+            hfloat tmp = tot - Parse(splittedStr[i]);
+            tot = tmp;
         }
         else
         {
-            tot += Parse(splittedStr[i]);
+            hfloat tmp = tot + Parse(splittedStr[i]);
+            tot = tmp;
         }
     }
     return tot;

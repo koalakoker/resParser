@@ -54,10 +54,19 @@ void MainWindow::on_line_input_returnPressed()
         ui->output_pane->appendPlainText(Resistor::E24ValuesToString());
         ui->output_pane->appendPlainText("");
     }
+    else if (qsInput.toLower() == "usage")
+    {
+        ui->output_pane->appendPlainText("list or ls to show varaibles.");
+        ui->output_pane->appendPlainText("clear to delete all varaibles.");
+        ui->output_pane->appendPlainText("E12 to show all E12 resitor values.");
+        ui->output_pane->appendPlainText("E24 to show all E24 resitor values.");
+        ui->output_pane->appendPlainText("->E12 to round to nearest E12 resitor values.");
+        ui->output_pane->appendPlainText(": parallel operator.\n");
+    }
     else
     {
-        double retVal = parser.Parse(qsInput);
-        ui->output_pane->appendPlainText(QString("Retval:%1\n").arg(retVal));
+        hfloat retVal = parser.Parse(qsInput);
+        ui->output_pane->appendPlainText(QString("ans=%1\n").arg(retVal.toString()));
     }
 
     ui->line_input->setText("");

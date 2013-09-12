@@ -11,21 +11,25 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>resParser</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPlainTextEdit" name="output_pane">
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+       <enum>Qt::ClickFocus</enum>
+      </property>
+      <property name="plainText">
+       <string>Type &quot;usage&quot; for help...
+</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="HystoryLineEdit" name="line_input">
       <property name="focusPolicy">
-       <enum>Qt::TabFocus</enum>
+       <enum>Qt::StrongFocus</enum>
       </property>
      </widget>
     </item>
@@ -37,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>437</width>
-     <height>29</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

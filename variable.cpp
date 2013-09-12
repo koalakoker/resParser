@@ -5,21 +5,21 @@ Variable::Variable()
     m_resistor = new Resistor();
 }
 
-void Variable::setValue(double value)
+void Variable::setValue(hfloat value)
 {
     m_value = value;
     if (m_name.toLower()[0] == 'r')
     {
-        m_resistor->setValue((Int64)(m_value));
+        m_resistor->setValue((Int64)(m_value.toString().toLong()));
     }
 }
 
-double Variable::Value(void)
+hfloat Variable::Value(void)
 {
-    double retVal;
+    hfloat retVal;
     if (m_name.toLower()[0] == 'r')
     {
-        retVal = (double)m_resistor->Value();
+        retVal = hfloat(QString("%1").arg(m_resistor->Value()));
     }
     else
     {
@@ -34,7 +34,7 @@ void Variable::setName(QString value)
     m_name = value;
     if (m_name.toLower()[0] == 'r')
     {
-        m_resistor->setValue((Int64)(m_value));
+        m_resistor->setValue((Int64)(m_value.toString().toLong()));
     }
 }
 
@@ -52,7 +52,7 @@ QString Variable::ToString (void)
     }
     else
     {
-        retVal = QString("[Variable: Name={%1}, Value={%2}]").arg(Name()).arg(Value());
+        retVal = QString("[Variable: Name={%1}, Value={%2}]").arg(Name()).arg(Value().toString());
     }
     return retVal;
 }
