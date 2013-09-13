@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->line_input->setPalette(p);
     ui->statusBar->showMessage(QString(tr("Type \"usage\" for help...\n")),10000);
 
-    parser = ParserClass();
     cmdMngr = CommandMngrClass();
 
     connect (ui->line_input,SIGNAL(keyUpPressed()),this,SLOT(keyUpPress()));
@@ -29,52 +28,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_line_input_returnPressed()
 {
     QString qsInput = ui->line_input->text();
-
-    //ui->output_pane->appendPlainText(qsInput);
     ui->output_pane->appendHtml(qsInput);
-
-    cmdMngr.AddNewCommand(qsInput);
-
-    if ((qsInput.contains("list"))||(qsInput.contains("ls")))
-    {
-        int i;
-        for (i = 0; i < parser.VariableCreated(); i++)
-        {
-            Variable var = parser.GetVariableAtIndex(i);
-            ui->output_pane->appendPlainText(var.ToString());
-        }
-        ui->output_pane->appendPlainText("");
-    }
-    else if (qsInput.contains("clear"))
-    {
-        parser.Clear();
-        ui->output_pane->clear();
-    }
-    else if (qsInput == "E12")
-    {
-        ui->output_pane->appendPlainText(Resistor::E12ValuesToString());
-        ui->output_pane->appendPlainText("");
-    }
-    else if (qsInput == "E24")
-    {
-        ui->output_pane->appendPlainText(Resistor::E24ValuesToString());
-        ui->output_pane->appendPlainText("");
-    }
-    else if (qsInput.toLower() == "usage")
-    {
-        ui->output_pane->appendPlainText("list or ls to show varaibles.");
-        ui->output_pane->appendPlainText("clear to delete all varaibles.");
-        ui->output_pane->appendPlainText("E12 to show all E12 resitor values.");
-        ui->output_pane->appendPlainText("E24 to show all E24 resitor values.");
-        ui->output_pane->appendPlainText("->E12 to round to nearest E12 resitor values.");
-        ui->output_pane->appendPlainText(": parallel operator.\n");
-    }
-    else
-    {
-        hfloat retVal = parser.Parse(qsInput);
-        ui->output_pane->appendPlainText(QString("ans=%1\n").arg(retVal.toString()));
-    }
-
+    ui->output_pane->appendHtml(cmdMngr.AddNewCommand(qsInput));
     ui->line_input->setText("");
 }
 

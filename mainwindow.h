@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include "parserclass.h"
 #include "commandmngrclass.h"
 
 namespace Ui {
@@ -27,7 +25,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    ParserClass parser;
     CommandMngrClass cmdMngr;
 };
 

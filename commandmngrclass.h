@@ -2,16 +2,18 @@
 #define COMMANDMNGRCLASS_H
 
 #include "QStringList"
+#include "parserclass.h"
 
 class CommandMngrClass
 {
 private:
+    ParserClass parser;
     QStringList commands;
     int lastCommand;
     int commandIndex;
 public:
     CommandMngrClass();
-    void AddNewCommand(QString str);
+    QString AddNewCommand(QString qsInput);
     QString GetPreviousCommand(void);
     QString GetNextCommand(void);
 };
