@@ -63,7 +63,7 @@ Int64 Resistor::FromStringToValue(QString str)
     str = str.replace("M","000000");
     str = str.replace("k","000");
     bool ok;
-    retVal = str.toLong(&ok);
+    retVal = str.toFloat(&ok);
     if (!ok) retVal = 0;
     return retVal;
 }
@@ -137,7 +137,7 @@ int Resistor::GetTwoDigit(Int64 val)
         QString str = QString("%1").arg(val);
         str = str.mid(0,2);
         bool ok;
-        retVal = str.toLong(&ok);
+        retVal = str.toFloat(&ok);
         if (!ok) retVal = 0;
     }
     return retVal;

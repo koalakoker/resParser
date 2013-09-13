@@ -7,6 +7,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QPalette p = ui->line_input->palette();
+    p.setColor(QPalette::Text, Qt::darkGreen);
+    ui->line_input->setPalette(p);
+    ui->statusBar->showMessage(QString(tr("Type \"usage\" for help...\n")),10000);
 
     parser = ParserClass();
     cmdMngr = CommandMngrClass();
@@ -25,7 +29,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_line_input_returnPressed()
 {
     QString qsInput = ui->line_input->text();
-    ui->output_pane->appendPlainText(qsInput);
+
+    //ui->output_pane->appendPlainText(qsInput);
+    ui->output_pane->appendHtml(qsInput);
 
     cmdMngr.AddNewCommand(qsInput);
 

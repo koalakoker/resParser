@@ -10,7 +10,7 @@ void Variable::setValue(hfloat value)
     m_value = value;
     if (m_name.toLower()[0] == 'r')
     {
-        m_resistor->setValue((Int64)(m_value.toString().toLong()));
+        m_resistor->setValue((Int64)(m_value.toString().toFloat()));
     }
 }
 
@@ -34,7 +34,7 @@ void Variable::setName(QString value)
     m_name = value;
     if (m_name.toLower()[0] == 'r')
     {
-        m_resistor->setValue((Int64)(m_value.toString().toLong()));
+        m_resistor->setValue((Int64)(m_value.toString().toFloat()));
     }
 }
 

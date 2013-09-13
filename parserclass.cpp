@@ -84,7 +84,7 @@ hfloat ParserClass::Parse(QString str)
     {
         int pos = str.indexOf("->E12");
         QString res = str.mid(0,pos);
-        Int64 val = (Int64)Parse(res).toString().toLong();
+        Int64 val = (Int64)Parse(res).toString().toFloat();
         retVal = hfloat(QString("%1").arg(Resistor::ToNearE12(val)));
     } else if (IsNumeric(str))
     {
