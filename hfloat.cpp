@@ -3,6 +3,7 @@
 hfloat::hfloat()
 {
     mpfr_init2(value,128);
+    setNan();
 }
 
 hfloat::hfloat(QString str)
@@ -28,6 +29,16 @@ QString hfloat::toString(void)
     mpfr_sprintf(out,"%.32Rg",value);
     QString retVal = QString("%1").arg(QString(out));
     return retVal;
+}
+
+bool hfloat::isNan(void)
+{
+    return (mpfr_nan_p(this->value) != 0);
+}
+
+void hfloat::setNan(void)
+{
+    mpfr_set_nan(this->value);
 }
 
 hfloat hfloat::operator+(const hfloat& a) const

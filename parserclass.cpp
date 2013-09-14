@@ -18,7 +18,7 @@ int ParserClass::VariableCreated(void)
 
 hfloat ParserClass::LoadVariable(QString name)
 {
-    hfloat retVal("-1.0");
+    hfloat retVal;
     int i;
     for (i = 0; i < m_VariableCreated; i++)
     {
@@ -82,7 +82,7 @@ hfloat ParserClass::Parse(QString str)
     str = str.replace ("K","000");
     str = str.replace ("M","000000");
 
-    hfloat retVal = hfloat("-1");
+    hfloat retVal;
 
     if (str.contains("->E12"))
     {

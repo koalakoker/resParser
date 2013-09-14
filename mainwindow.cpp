@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "QToolTip"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -46,5 +47,18 @@ void MainWindow::keyOperatorPress()
     if (ui->line_input->text().length()==0)
     {
         ui->line_input->setText("ans");
+    }
+}
+
+void MainWindow::on_line_input_textChanged(const QString &arg1)
+{
+    hfloat result = cmdMngr.PreviewResult(arg1);
+    if (!result.isNan())
+    {
+        QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),QString("ans=") + result.toString());
+    }
+    else
+    {
+        QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),QString(""));
     }
 }

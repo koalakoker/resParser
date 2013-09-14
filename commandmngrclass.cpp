@@ -83,3 +83,8 @@ QString CommandMngrClass::GetNextCommand(void)
     }
     return  retVal;
 }
+
+hfloat CommandMngrClass::PreviewResult(QString qsInput)
+{
+    return parser.Parse(qsInput);
+}

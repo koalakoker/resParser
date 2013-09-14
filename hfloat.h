@@ -16,6 +16,8 @@ public:
     hfloat(const hfloat& val);
 
     QString toString(void);
+    bool isNan(void);
+    void setNan(void);
 
     hfloat& operator=(hfloat a);
     hfloat operator+(const hfloat& a) const;

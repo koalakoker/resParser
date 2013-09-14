@@ -16,6 +16,7 @@ public:
     QString AddNewCommand(QString qsInput);
     QString GetPreviousCommand(void);
     QString GetNextCommand(void);
+    hfloat PreviewResult(QString qsInput);
 };
 
 #endif // COMMANDMNGRCLASS_H

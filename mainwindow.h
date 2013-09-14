@@ -22,6 +22,8 @@ private slots:
     void keyDownPress();
     void keyOperatorPress();
 
+    void on_line_input_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 
