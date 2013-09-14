@@ -5,10 +5,12 @@
 #include "QString"
 #include "hfloat.h"
 
+#define MAX_VARIABLES 3
+
 class ParserClass
 {
 private:
-    Variable* m_variables;
+    Variable m_variables[MAX_VARIABLES];
     int m_VariableCreated;
 
     bool IsVariableName(QString str);
@@ -27,8 +29,8 @@ public:
     ParserClass();
     int VariableCreated(void);
     hfloat LoadVariable(QString name);
-    void StoreVariable(QString name,hfloat newValue);
-    Variable GetVariableAtIndex(int i);
+    bool StoreVariable(QString name,hfloat newValue);
+    Variable *GetVariableAtIndex(int i);
     void Clear(void);
     hfloat Parse(QString str);
 };

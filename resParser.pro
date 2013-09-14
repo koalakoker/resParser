@@ -12,6 +12,7 @@ TARGET = resParser
 TEMPLATE = app
 
 unix:LIBS+= -L/usr/lib -lgmp
+unix:LIBS+= -L/usr/lib -lmpfr
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -44,3 +45,12 @@ DEPENDPATH += $$PWD/
 
 win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/libgmp.lib
 else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/libgmpd.lib
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/ -lmpfr
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/ -lmpfrd
+
+INCLUDEPATH += $$PWD/
+DEPENDPATH += $$PWD/
+
+win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/mpfr.lib
+else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/mpfrd.lib

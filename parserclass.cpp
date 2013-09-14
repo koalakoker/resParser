@@ -1,14 +1,13 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-#include "QDebug"
+//#include "QDebug"
 
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
 
 ParserClass::ParserClass()
 {
-    m_variables = new Variable[100];
     m_VariableCreated = 0;
 }
 
@@ -19,22 +18,22 @@ int ParserClass::VariableCreated(void)
 
 hfloat ParserClass::LoadVariable(QString name)
 {
-    hfloat retVal = hfloat("-1");
+    hfloat retVal("-1.0");
     int i;
     for (i = 0; i < m_VariableCreated; i++)
     {
-        Variable var = m_variables[i];
-        if (var.Name() == name)
+        Variable* var = &m_variables[i];
+        if (var->Name() == name)
         {
-            retVal = var.Value();
+            retVal = var->Value();
         }
     }
     return retVal;
 }
 
-void ParserClass::StoreVariable(QString name,hfloat newValue)
+bool ParserClass::StoreVariable(QString name,hfloat newValue)
 {
-    bool found = false;
+    bool retVal = false, found = false;
     int i;
     for (i = 0; i < m_VariableCreated; i++)
     {
@@ -43,23 +42,28 @@ void ParserClass::StoreVariable(QString name,hfloat newValue)
         {
             var->setValue(newValue);
             found = true;
+            retVal = true;
         }
     }
     if (!found)
     {
-        m_variables[m_VariableCreated] = Variable();
-        m_variables[m_VariableCreated].setName(name);
-        m_variables[m_VariableCreated].setValue(newValue);
-        m_VariableCreated++;
+        if (m_VariableCreated < MAX_VARIABLES)
+        {
+            m_variables[m_VariableCreated].setName(name);
+            m_variables[m_VariableCreated].setValue(newValue);
+            m_VariableCreated++;
+            retVal = true;
+        }
     }
+    return retVal;
 }
 
-Variable ParserClass::GetVariableAtIndex(int i)
+Variable* ParserClass::GetVariableAtIndex(int i)
 {
-    Variable retVal;
+    Variable* retVal = 0;
     if (i < m_VariableCreated)
     {
-        retVal = m_variables[i];
+        retVal = &(m_variables[i]);
     }
     return retVal;
 }
@@ -100,7 +104,7 @@ hfloat ParserClass::Parse(QString str)
         QString VarName = str.mid(0,equalPos);
         QString expression = str.mid(equalPos+1,str.length()-equalPos-1);
         hfloat expressionValue = this->Parse(expression);
-        StoreVariable(VarName,expressionValue);
+        StoreVariable(VarName,expressionValue); // Not used return value (False if no more variables available)
         retVal = expressionValue;
     }
     else if (HasParentesis(str))
@@ -123,8 +127,6 @@ hfloat ParserClass::Parse(QString str)
     {
     }
 
-    // Store the last result
-    StoreVariable("ans",retVal);
     return retVal;
 }
 
@@ -339,17 +341,15 @@ hfloat ParserClass::EvaluateSumAndDifference(QString str)
     QRegExp operand(REGEXP2OPERAND);
     QStringList splittedStr = str.split(operand,QString::SkipEmptyParts);
     int numAddend = splittedStr.count();
-    hfloat tot = hfloat("0");
+    hfloat tot("0");
     int operatorPos = str.indexOf(operand);
     if (operatorPos == 0)
     {
-        hfloat tmp = tot - Parse(splittedStr[0]);
-        tot = tmp;
+        tot = tot - Parse(splittedStr[0]);
     }
     else
     {
-        hfloat tmp = tot + Parse(splittedStr[0]);
-        tot = tmp;
+        tot = tot + Parse(splittedStr[0]);
         operatorPos = -1;
     }
     int i;
@@ -358,13 +358,11 @@ hfloat ParserClass::EvaluateSumAndDifference(QString str)
         operatorPos = str.indexOf(operand,operatorPos+1);
         if (str[operatorPos] == '-')
         {
-            hfloat tmp = tot - Parse(splittedStr[i]);
-            tot = tmp;
+            tot = tot - Parse(splittedStr[i]);
         }
         else
         {
-            hfloat tmp = tot + Parse(splittedStr[i]);
-            tot = tmp;
+            tot = tot + Parse(splittedStr[i]);
         }
     }
     return tot;

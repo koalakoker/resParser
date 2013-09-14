@@ -12,8 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->line_input->setPalette(p);
     ui->statusBar->showMessage(QString(tr("Type \"usage\" for help...\n")),10000);
 
-    cmdMngr = CommandMngrClass();
-
     connect (ui->line_input,SIGNAL(keyUpPressed()),this,SLOT(keyUpPress()));
     connect (ui->line_input,SIGNAL(keyDownPressed()),this,SLOT(keyDownPress()));
     connect (ui->line_input,SIGNAL(keyOperator()),this,SLOT(keyOperatorPress()));

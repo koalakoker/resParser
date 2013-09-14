@@ -2,16 +2,18 @@
 #define HFLOAT_H
 
 #include "gmp.h"
+#include "mpfr.h"
 #include "QString"
 
 class hfloat
 {
 private:
-    mpf_t value;
+    mpfr_t value;
 public:
     ~hfloat();
     hfloat();
     hfloat(QString str);
+    hfloat(const hfloat& val);
 
     QString toString(void);
 

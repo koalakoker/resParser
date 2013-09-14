@@ -2,7 +2,6 @@
 
 CommandMngrClass::CommandMngrClass()
 {
-    parser = ParserClass();
     lastCommand = 0;
     commandIndex = 0;
 }
@@ -17,16 +16,11 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     QString retVal;
     if ((qsInput.contains("list"))||(qsInput.contains("ls")))
     {
-        bool found=false;
         int i;
         for (i = 0; i < parser.VariableCreated(); i++)
         {
-            Variable var = parser.GetVariableAtIndex(i);
-            retVal.append(var.ToString());
-            found=true;
-        }
-        if (found)
-        {
+            Variable* var = parser.GetVariableAtIndex(i);
+            retVal.append(var->ToString());
             retVal.append("<br>");
         }
     }
@@ -55,7 +49,9 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     }
     else
     {
-        retVal.append(QString("ans=%1<br>").arg(parser.Parse(qsInput).toString()));
+        hfloat result = parser.Parse(qsInput);
+        parser.StoreVariable("ans",result); // Store the last result
+        retVal.append(QString("ans=%1<br>").arg(result.toString()));
     }
     return retVal;
 }

@@ -2,24 +2,30 @@
 
 hfloat::hfloat()
 {
-    mpf_init2(value,256);
+    mpfr_init2(value,128);
 }
 
 hfloat::hfloat(QString str)
 {
-    mpf_init2(value,256);
-    mpf_set_str(value, str.toLocal8Bit().data(), 10);
+    mpfr_init2(value,128);
+    mpfr_set_str(value, str.toLocal8Bit().data(), 10, MPFR_RNDN);
+}
+
+hfloat::hfloat(const hfloat &val)
+{
+    mpfr_init2(value,128);
+    mpfr_set(this->value,val.value,MPFR_RNDN);
 }
 
 hfloat::~hfloat()
 {
-    //mpf_clear(value);
+    mpfr_clear(value);
 }
 
 QString hfloat::toString(void)
 {
     char out[200];
-    gmp_sprintf(out,"%.32Fg",value);
+    mpfr_sprintf(out,"%.32Rg",value);
     QString retVal = QString("%1").arg(QString(out));
     return retVal;
 }
@@ -27,33 +33,33 @@ QString hfloat::toString(void)
 hfloat hfloat::operator+(const hfloat& a) const
 {
     hfloat result;
-    mpf_add(result.value, this->value, a.value);
+    mpfr_add(result.value, this->value, a.value,MPFR_RNDN);
     return result;
 }
 
 hfloat hfloat::operator-(const hfloat& a) const
 {
     hfloat result;
-    mpf_sub(result.value, this->value, a.value);
+    mpfr_sub(result.value, this->value, a.value,MPFR_RNDN);
     return result;
 }
 
 hfloat hfloat::operator*(const hfloat& a) const
 {
     hfloat result;
-    mpf_mul(result.value, this->value, a.value);
+    mpfr_mul(result.value, this->value, a.value,MPFR_RNDN);
     return result;
 }
 
 hfloat hfloat::operator/(const hfloat& a) const
 {
     hfloat result;
-    mpf_div(result.value, this->value, a.value);
+    mpfr_div(result.value, this->value, a.value,MPFR_RNDN);
     return result;
 }
 
 hfloat& hfloat::operator=(hfloat a)
 {
-    mpf_set(this->value,a.value);
+    mpfr_set(this->value,a.value,MPFR_RNDN);
     return *this;
 }
