@@ -1,0 +1,10 @@
+The purpouse of this project is to implement a command line calculator able to execute the floating point computation with good precision. For this reason the GMP and MPFR library has been used for computations.
+The project will be open source with GLP v2 licence and cross platform an so it is implemented with QT.
+
+Features:
+* Command line input
+* Built-in functions (log, exp, sin, cos, ...)
+* Variables
+* Specific functions for computation of resistors value (E12, E24) rounding, parallel computation, k = 000, M = 000000
+* Store the status (hystory of the commands, variables status) between session
+
