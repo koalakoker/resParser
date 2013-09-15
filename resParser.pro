@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     commandmngrclass.cpp \
     hystorylineedit.cpp \
     hfloat.cpp \
-    builtinfunction.cpp
+    builtinfunction.cpp \
+    functionwindow.cpp \
+    aboutdialog.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -31,9 +33,13 @@ HEADERS  += mainwindow.h \
     commandmngrclass.h \
     hystorylineedit.h \
     hfloat.h \
-    builtinfunction.h
+    builtinfunction.h \
+    functionwindow.h \
+    aboutdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    functionwindow.ui \
+    aboutdialog.ui
 
 RC_FILE = resParser.rc
 
@@ -56,3 +62,6 @@ DEPENDPATH += $$PWD/
 
 win32:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/mpfr.lib
 else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/mpfrd.lib
+
+RESOURCES += \
+    AboutDialog.qrc

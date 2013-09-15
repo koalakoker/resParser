@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "QToolTip"
+#include "aboutdialog.h"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->line_input->setPalette(p);
     ui->statusBar->showMessage(QString(tr("Type \"usage\" for help...\n")),10000);
 
+    funcWin.functionListPopulate(cmdMngr.builtInFunctionList());
+
     connect (ui->line_input,SIGNAL(keyUpPressed()),this,SLOT(keyUpPress()));
     connect (ui->line_input,SIGNAL(keyDownPressed()),this,SLOT(keyDownPress()));
     connect (ui->line_input,SIGNAL(keyOperator()),this,SLOT(keyOperatorPress()));
@@ -22,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    funcWin.close();
 }
 
 void MainWindow::on_line_input_returnPressed()
@@ -61,4 +65,23 @@ void MainWindow::on_line_input_textChanged(const QString &arg1)
     {
         QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),QString(""));
     }
+}
+
+void MainWindow::on_actionFunctions_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        funcWin.move(this->pos().x()+this->size().width()+20,this->pos().y()+10);
+        funcWin.show();
+    }
+    else
+    {
+        funcWin.hide();
+    }
+}
+
+void MainWindow::on_actionAbout_activated()
+{
+    AboutDialog diag;
+    diag.exec();
 }

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "functionwindow.h"
 #include "commandmngrclass.h"
 
 namespace Ui {
@@ -23,10 +24,13 @@ private slots:
     void keyOperatorPress();
 
     void on_line_input_textChanged(const QString &arg1);
+    void on_actionFunctions_toggled(bool arg1);
+
+    void on_actionAbout_activated();
 
 private:
     Ui::MainWindow *ui;
-
+    FunctionWindow funcWin;
     CommandMngrClass cmdMngr;
 };
 

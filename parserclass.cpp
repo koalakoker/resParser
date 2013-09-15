@@ -67,6 +67,17 @@ void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr2a)(hfloat a,hflo
     }
 }
 
+QStringList ParserClass::builtInFunctionList(void)
+{
+    QStringList list;
+    int i;
+    for (i = 0; i < m_builtinfunctionCreated; i++)
+    {
+        list.append(m_functions[i]->name());
+    }
+    return list;
+}
+
 int ParserClass::VariableCreated(void)
 {
     return m_VariableCreated;

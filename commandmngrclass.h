@@ -17,6 +17,7 @@ public:
     QString GetPreviousCommand(void);
     QString GetNextCommand(void);
     hfloat PreviewResult(QString qsInput);
+    QStringList builtInFunctionList(void);
 };
 
 #endif // COMMANDMNGRCLASS_H

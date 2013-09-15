@@ -88,3 +88,8 @@ hfloat CommandMngrClass::PreviewResult(QString qsInput)
 {
     return parser.Parse(qsInput);
 }
+
+QStringList CommandMngrClass::builtInFunctionList(void)
+{
+    return parser.builtInFunctionList();
+}

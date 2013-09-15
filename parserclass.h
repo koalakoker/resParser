@@ -44,6 +44,7 @@ public:
     Variable *GetVariableAtIndex(int i);
     void Clear(void);
     hfloat Parse(QString str);
+    QStringList builtInFunctionList(void);
 };
 
 #endif // PARSERCLASS_H

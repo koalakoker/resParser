@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>icons/Copyleft.png</file>
+        <file>icons/KoalaLogo1.png</file>
+        <file>icons/KoalaLogo2.gif</file>
+        <file>icons/Qt.png</file>
+    </qresource>
+</RCC>
