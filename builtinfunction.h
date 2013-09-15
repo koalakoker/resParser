@@ -10,6 +10,7 @@ class builtinFunction
 public:
     builtinFunction(QString name, hfloat (*ptr0a)());
     builtinFunction(QString name, hfloat (*ptr1a)(hfloat a));
+    builtinFunction(QString name, hfloat (*ptr1a)(hfloat a,hfloat b));
     QString name(void);
     hfloat exec(void);
     void clearArgs(void);
@@ -19,6 +20,7 @@ private:
     QString m_name; // String used to call the function
     hfloat (*m_ptr0a)(); // Pointer to the function to be executed
     hfloat (*m_ptr1a)(hfloat a); // Pointer to the function to be executed
+    hfloat (*m_ptr2a)(hfloat a,hfloat b); // Pointer to the function to be executed
     QList<hfloat> arg; // List of arguments
 
 };

@@ -1,7 +1,7 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-//#include "QDebug"
+#include "QDebug"
 
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
@@ -13,6 +13,40 @@ ParserClass::ParserClass()
 
     addBuiltInFunction("sqrt",hfloat::sqrt);
     addBuiltInFunction("sqr",hfloat::sqr);
+    addBuiltInFunction("cbrt",hfloat::cbrt);
+    addBuiltInFunction("pow",hfloat::pow);
+    addBuiltInFunction("abs",hfloat::abs);
+    addBuiltInFunction("log",hfloat::log);
+    addBuiltInFunction("log2",hfloat::log2);
+    addBuiltInFunction("log10",hfloat::log10);
+    addBuiltInFunction("exp",hfloat::exp);
+    addBuiltInFunction("exp2",hfloat::exp2);
+    addBuiltInFunction("exp10",hfloat::exp10);
+
+    addBuiltInFunction("sec",hfloat::sec);
+    addBuiltInFunction("csc",hfloat::csc);
+    addBuiltInFunction("cot",hfloat::cot);
+
+    addBuiltInFunction("sech",hfloat::sech);
+    addBuiltInFunction("csch",hfloat::csch);
+    addBuiltInFunction("coth",hfloat::coth);
+
+    addBuiltInFunction("asin",hfloat::asin);
+    addBuiltInFunction("acos",hfloat::acos);
+    addBuiltInFunction("atan",hfloat::atan);
+    addBuiltInFunction("atan2",hfloat::atan2);
+
+    addBuiltInFunction("sin",hfloat::sin);
+    addBuiltInFunction("cos",hfloat::cos);
+    addBuiltInFunction("tan",hfloat::tan);
+
+    addBuiltInFunction("acosh",hfloat::acosh);
+    addBuiltInFunction("asinh",hfloat::asinh);
+    addBuiltInFunction("atanh",hfloat::atanh);
+
+    addBuiltInFunction("cosh",hfloat::cosh);
+    addBuiltInFunction("sinh",hfloat::sinh);
+    addBuiltInFunction("tanh",hfloat::tanh);
 }
 
 void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr1a)(hfloat a))
@@ -20,6 +54,15 @@ void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr1a)(hfloat a))
     if (m_builtinfunctionCreated < MAX_BUILTINFUNCTIONS)
     {
         m_functions[m_builtinfunctionCreated] = new builtinFunction(name,ptr1a);
+        m_builtinfunctionCreated++;
+    }
+}
+
+void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr2a)(hfloat a,hfloat b))
+{
+    if (m_builtinfunctionCreated < MAX_BUILTINFUNCTIONS)
+    {
+        m_functions[m_builtinfunctionCreated] = new builtinFunction(name,ptr2a);
         m_builtinfunctionCreated++;
     }
 }
@@ -427,14 +470,55 @@ void ParserClass::ExtractFunction(QString str, int biFuncOrder, QString& from, Q
         if (functionPos >= 0)
         {
             functionPos+=functionName.length()-1;
-            QString argumentStr = ExtractExpressionFromParentesis(str.mid(functionPos,str.length()-functionPos));
-            biFunc->addArg(Parse(argumentStr)); // Create ExtractArgument and add arg inside for multi arg functions
+            QStringList argumentStr = ExtractFunctionArguments(str.mid(functionPos,str.length()-functionPos),from);
+            int i;
+            for (i = 0; i < argumentStr.count(); i++)
+            {
+                biFunc->addArg(Parse(argumentStr[i]));
+            }
             hfloat result = biFunc->exec();
             if (!result.isNan())
             {
-                from = functionName+argumentStr+QString(")");
+                from = biFunc->name() + from;
                 to = result.toString();
+            }
+            else
+            {
+                from = QString("");
+                to=QString("");
             }
         }
     }
+}
+
+QStringList ParserClass::ExtractFunctionArguments(QString str,QString& from)
+{
+    QStringList expression;
+    if (str[0] != '(')
+    {
+        return expression;
+    }
+    int indexOfFirstParentesis = 0;
+    int i;
+    int numberOfParentesisOpen = 1;
+    int numberOfParentesisClose = 0;
+    for (i = indexOfFirstParentesis + 1; i < str.length(); i++)
+    {
+        if (str[i] == '(')
+        {
+            numberOfParentesisOpen++;
+        }
+        if (str[i] == ')')
+        {
+            numberOfParentesisClose++;
+            if (numberOfParentesisOpen == numberOfParentesisClose)
+            {
+                QString extractStr = str.mid(indexOfFirstParentesis + 1, i - indexOfFirstParentesis -1);
+                expression = extractStr.split(",");
+                from = QString("(") + extractStr + QString(")");
+                return expression;
+            }
+        }
+    }
+    return expression;
 }

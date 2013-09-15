@@ -6,6 +6,12 @@ builtinFunction::builtinFunction(QString name,hfloat (*ptr1a)(hfloat a))
     this->m_ptr1a = ptr1a;
 }
 
+builtinFunction::builtinFunction(QString name,hfloat (*ptr2a)(hfloat a,hfloat b))
+{
+    this->m_name = name;
+    this->m_ptr2a = ptr2a;
+}
+
 QString builtinFunction::name(void)
 {
     return this->m_name;
@@ -29,6 +35,14 @@ hfloat builtinFunction::exec(void)
         if (m_ptr1a)
         {
             retVal = (*m_ptr1a)(arg[0]);
+        }
+        break;
+    }
+    case 2:
+    {
+        if (m_ptr2a)
+        {
+            retVal = (*m_ptr2a)(arg[0],arg[1]);
         }
         break;
     }
