@@ -11,12 +11,37 @@ QString builtinFunction::name(void)
     return this->m_name;
 }
 
-hfloat builtinFunction::exec(hfloat* arg, int argc)
+hfloat builtinFunction::exec(void)
 {
     hfloat retVal;
-    if ((argc==1)&&(m_ptr1a))
+    switch (arg.count())
     {
-        retVal = (*m_ptr1a)(arg[0]);
+    case 0:
+    {
+        if (m_ptr0a)
+        {
+            retVal = (*m_ptr0a)();
+        }
+        break;
+    }
+    case 1:
+    {
+        if (m_ptr1a)
+        {
+            retVal = (*m_ptr1a)(arg[0]);
+        }
+        break;
+    }
     }
     return retVal;
+}
+
+void builtinFunction::clearArgs(void)
+{
+    arg.clear();
+}
+
+void builtinFunction::addArg(hfloat arg)
+{
+    this->arg.append(arg);
 }

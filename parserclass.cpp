@@ -1,7 +1,7 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-#include "QDebug"
+//#include "QDebug"
 
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
@@ -103,7 +103,6 @@ hfloat ParserClass::Parse(QString str)
     {
         QString from,to;
         ExtractFunction(str,biFunc,from,to);
-        qDebug()<<QString("Parse has function - str:%1 from:%2 to:%3").arg(str).arg(from).arg(to);
         if (from != "")
         {
             if (str.contains(from))
@@ -249,7 +248,6 @@ bool ParserClass::HasParentesis(QString str)
 
 QString ParserClass::ExtractExpressionFromParentesis(QString str)
 {
-    qDebug()<<QString("ParserClass::ExtractExpressionFromParentesis - str:").arg(str);
     int indexOfFirstParentesis = str.indexOf('(');
     int i;
     int numberOfParentesisOpen = 1;
@@ -422,17 +420,16 @@ void ParserClass::ExtractFunction(QString str, int biFuncOrder, QString& from, Q
     to=QString("");
     if ((biFuncOrder >= 0)&&(biFuncOrder < m_builtinfunctionCreated))
     {
-        QString functionName = m_functions[biFuncOrder]->name() + QString("(");
+        builtinFunction* biFunc = m_functions[biFuncOrder];
+        biFunc->clearArgs();
+        QString functionName = biFunc->name() + QString("(");
         int functionPos = str.indexOf(functionName);
         if (functionPos >= 0)
         {
             functionPos+=functionName.length()-1;
-            qDebug()<<QString("ParserClass::ExtratcFunction - functionPos:%1").arg(functionPos);
             QString argumentStr = ExtractExpressionFromParentesis(str.mid(functionPos,str.length()-functionPos));
-            qDebug()<<QString("ParserClass::ExtractFunction - argumentStr:%1").arg(argumentStr);
-            hfloat arg[1];
-            arg[0] = Parse(argumentStr);
-            hfloat result = m_functions[biFuncOrder]->exec(arg,1);
+            biFunc->addArg(Parse(argumentStr)); // Create ExtractArgument and add arg inside for multi arg functions
+            hfloat result = biFunc->exec();
             if (!result.isNan())
             {
                 from = functionName+argumentStr+QString(")");
