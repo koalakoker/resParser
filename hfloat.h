@@ -24,6 +24,9 @@ public:
     hfloat operator-(const hfloat& a) const;
     hfloat operator*(const hfloat& a) const;
     hfloat operator/(const hfloat& a) const;
+
+    static hfloat sqrt(const hfloat a);
+    static hfloat sqr(const hfloat a);
 };
 
 #endif // HFLOAT_H

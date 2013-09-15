@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     parserclass.cpp \
     commandmngrclass.cpp \
     hystorylineedit.cpp \
-    hfloat.cpp
+    hfloat.cpp \
+    builtinfunction.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     parserclass.h \
     commandmngrclass.h \
     hystorylineedit.h \
-    hfloat.h
+    hfloat.h \
+    builtinfunction.h
 
 FORMS    += mainwindow.ui
 

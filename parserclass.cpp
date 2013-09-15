@@ -1,7 +1,7 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-//#include "QDebug"
+#include "QDebug"
 
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
@@ -9,6 +9,19 @@
 ParserClass::ParserClass()
 {
     m_VariableCreated = 0;
+    m_builtinfunctionCreated = 0;
+
+    addBuiltInFunction("sqrt",hfloat::sqrt);
+    addBuiltInFunction("sqr",hfloat::sqr);
+}
+
+void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr1a)(hfloat a))
+{
+    if (m_builtinfunctionCreated < MAX_BUILTINFUNCTIONS)
+    {
+        m_functions[m_builtinfunctionCreated] = new builtinFunction(name,ptr1a);
+        m_builtinfunctionCreated++;
+    }
 }
 
 int ParserClass::VariableCreated(void)
@@ -84,7 +97,26 @@ hfloat ParserClass::Parse(QString str)
 
     hfloat retVal;
 
-    if (str.contains("->E12"))
+    // Builtin function parsing
+    int biFunc = HasFunction(str);
+    if (biFunc!=-1)
+    {
+        QString from,to;
+        ExtractFunction(str,biFunc,from,to);
+        qDebug()<<QString("Parse has function - str:%1 from:%2 to:%3").arg(str).arg(from).arg(to);
+        if (from != "")
+        {
+            if (str.contains(from))
+            {
+                str = str.replace(from,to);
+                retVal = this->Parse(str);
+            }
+            else
+            {
+                retVal.setNan();
+            }
+        }
+    } else if (str.contains("->E12"))
     {
         int pos = str.indexOf("->E12");
         QString res = str.mid(0,pos);
@@ -217,6 +249,7 @@ bool ParserClass::HasParentesis(QString str)
 
 QString ParserClass::ExtractExpressionFromParentesis(QString str)
 {
+    qDebug()<<QString("ParserClass::ExtractExpressionFromParentesis - str:").arg(str);
     int indexOfFirstParentesis = str.indexOf('(');
     int i;
     int numberOfParentesisOpen = 1;
@@ -368,3 +401,43 @@ hfloat ParserClass::EvaluateSumAndDifference(QString str)
     return tot;
 }
 
+int ParserClass::HasFunction(QString str)
+{
+    int retVal = -1;
+    int i;
+    for (i = 0; i < m_builtinfunctionCreated; i++)
+    {
+        if (str.toLower().contains(m_functions[i]->name()+QString("(")))
+        {
+            retVal = i;
+            break;
+        }
+    }
+    return retVal;
+}
+
+void ParserClass::ExtractFunction(QString str, int biFuncOrder, QString& from, QString& to)
+{
+    from=QString("");
+    to=QString("");
+    if ((biFuncOrder >= 0)&&(biFuncOrder < m_builtinfunctionCreated))
+    {
+        QString functionName = m_functions[biFuncOrder]->name() + QString("(");
+        int functionPos = str.indexOf(functionName);
+        if (functionPos >= 0)
+        {
+            functionPos+=functionName.length()-1;
+            qDebug()<<QString("ParserClass::ExtratcFunction - functionPos:%1").arg(functionPos);
+            QString argumentStr = ExtractExpressionFromParentesis(str.mid(functionPos,str.length()-functionPos));
+            qDebug()<<QString("ParserClass::ExtractFunction - argumentStr:%1").arg(argumentStr);
+            hfloat arg[1];
+            arg[0] = Parse(argumentStr);
+            hfloat result = m_functions[biFuncOrder]->exec(arg,1);
+            if (!result.isNan())
+            {
+                from = functionName+argumentStr+QString(")");
+                to = result.toString();
+            }
+        }
+    }
+}

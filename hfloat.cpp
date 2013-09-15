@@ -1,5 +1,7 @@
 #include "hfloat.h"
 
+#define ROUND MPFR_RNDN
+
 hfloat::hfloat()
 {
     mpfr_init2(value,128);
@@ -9,13 +11,13 @@ hfloat::hfloat()
 hfloat::hfloat(QString str)
 {
     mpfr_init2(value,128);
-    mpfr_set_str(value, str.toLocal8Bit().data(), 10, MPFR_RNDN);
+    mpfr_set_str(value, str.toLocal8Bit().data(), 10, ROUND);
 }
 
 hfloat::hfloat(const hfloat &val)
 {
     mpfr_init2(value,128);
-    mpfr_set(this->value,val.value,MPFR_RNDN);
+    mpfr_set(this->value,val.value,ROUND);
 }
 
 hfloat::~hfloat()
@@ -44,33 +46,47 @@ void hfloat::setNan(void)
 hfloat hfloat::operator+(const hfloat& a) const
 {
     hfloat result;
-    mpfr_add(result.value, this->value, a.value,MPFR_RNDN);
+    mpfr_add(result.value, this->value, a.value,ROUND);
     return result;
 }
 
 hfloat hfloat::operator-(const hfloat& a) const
 {
     hfloat result;
-    mpfr_sub(result.value, this->value, a.value,MPFR_RNDN);
+    mpfr_sub(result.value, this->value, a.value,ROUND);
     return result;
 }
 
 hfloat hfloat::operator*(const hfloat& a) const
 {
     hfloat result;
-    mpfr_mul(result.value, this->value, a.value,MPFR_RNDN);
+    mpfr_mul(result.value, this->value, a.value,ROUND);
     return result;
 }
 
 hfloat hfloat::operator/(const hfloat& a) const
 {
     hfloat result;
-    mpfr_div(result.value, this->value, a.value,MPFR_RNDN);
+    mpfr_div(result.value, this->value, a.value,ROUND);
     return result;
 }
 
 hfloat& hfloat::operator=(hfloat a)
 {
-    mpfr_set(this->value,a.value,MPFR_RNDN);
+    mpfr_set(this->value,a.value,ROUND);
     return *this;
+}
+
+hfloat hfloat::sqrt(const hfloat a)
+{
+    hfloat retVal;
+    mpfr_sqrt(retVal.value,a.value,ROUND);
+    return retVal;
+}
+
+hfloat hfloat::sqr(const hfloat a)
+{
+    hfloat retVal;
+    mpfr_sqr(retVal.value,a.value,ROUND);
+    return retVal;
 }
