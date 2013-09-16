@@ -40,12 +40,14 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     }
     else if (qsInput.toLower() == "usage")
     {
-        retVal.append("list or ls to show varaibles.");
-        retVal.append("clear to delete all varaibles.");
-        retVal.append("E12 to show all E12 resitor values.");
-        retVal.append("E24 to show all E24 resitor values.");
-        retVal.append("->E12 to round to nearest E12 resitor values.");
-        retVal.append(": parallel operator.<br>");
+        retVal.append("- Using built-in function function_name(arg,[arg])<br>");
+        retVal.append("- Variable assignment: var_name = expression<br>");
+        retVal.append("- Show variables ""list"" or ""ls"".<br>");
+        retVal.append("- ""clear"" to delete all varaibles.<br>");
+        retVal.append("- ""E12"" to show all E12 resitor values.<br>");
+        retVal.append("- ""E24"" to show all E24 resitor values.<br>");
+        retVal.append("- ""->E12"" to round to nearest E12 resitor values.<br>");
+        retVal.append("- "":"" parallel operator between resistors.<br>");
     }
     else
     {

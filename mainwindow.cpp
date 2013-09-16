@@ -4,11 +4,18 @@
 #include "aboutdialog.h"
 #include <QDebug>
 
+#define PRJ_NAME    "resParser"
+#define PRJ_VERSION "0.1.0"
+#define PRJ_WINDOWS_TITLE (QString("%1 - v%2").arg(QString(PRJ_NAME)).arg(QString(PRJ_VERSION)))
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    this->setWindowTitle(PRJ_WINDOWS_TITLE);
+
     QPalette p = ui->line_input->palette();
     p.setColor(QPalette::Text, Qt::darkGreen);
     ui->line_input->setPalette(p);
@@ -83,5 +90,6 @@ void MainWindow::on_actionFunctions_toggled(bool arg1)
 void MainWindow::on_actionAbout_activated()
 {
     AboutDialog diag;
+    diag.SetAboutTxt(PRJ_WINDOWS_TITLE);
     diag.exec();
 }
