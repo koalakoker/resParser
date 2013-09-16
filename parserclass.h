@@ -31,7 +31,7 @@ private:
     QString EvaluateMultiply(QString str);
     hfloat EvaluateSumAndDifference(QString str);
     void ExtractFunction(QString str, int biFuncOrder, QString& from, QString& to);
-    QStringList ExtractFunctionArguments(QString str, QString &from);
+    bool ExtractFunctionArguments(QString str,QStringList &args, QString &from);
 
     void addBuiltInFunction(QString name, hfloat (*ptr1a)(hfloat a));
     void addBuiltInFunction(QString name, hfloat (*ptr2a)(hfloat a,hfloat b));

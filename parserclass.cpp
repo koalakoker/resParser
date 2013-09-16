@@ -481,55 +481,56 @@ void ParserClass::ExtractFunction(QString str, int biFuncOrder, QString& from, Q
         if (functionPos >= 0)
         {
             functionPos+=functionName.length()-1;
-            QStringList argumentStr = ExtractFunctionArguments(str.mid(functionPos,str.length()-functionPos),from);
-            int i;
-            for (i = 0; i < argumentStr.count(); i++)
+            QStringList argumentStr;
+            if (ExtractFunctionArguments(str.mid(functionPos,str.length()-functionPos),argumentStr,from))
             {
-                biFunc->addArg(Parse(argumentStr[i]));
-            }
-            hfloat result = biFunc->exec();
-            if (!result.isNan())
-            {
-                from = biFunc->name() + from;
-                to = result.toString();
-            }
-            else
-            {
-                from = QString("");
-                to=QString("");
+                int i;
+                for (i = 0; i < argumentStr.count(); i++)
+                {
+                    biFunc->addArg(Parse(argumentStr[i]));
+                }
+                hfloat result = biFunc->exec();
+                if (!result.isNan())
+                {
+                    from = biFunc->name() + from;
+                    to = result.toString();
+                }
+                else
+                {
+                    from = QString("");
+                    to=QString("");
+                }
             }
         }
     }
 }
 
-QStringList ParserClass::ExtractFunctionArguments(QString str,QString& from)
+bool ParserClass::ExtractFunctionArguments(QString str, QStringList &args, QString& from)
 {
-    QStringList expression;
-    if (str[0] != '(')
+    bool retVal = false;
+    if (str[0] == '(')
     {
-        return expression;
-    }
-    int indexOfFirstParentesis = 0;
-    int i;
-    int numberOfParentesisOpen = 1;
-    int numberOfParentesisClose = 0;
-    for (i = indexOfFirstParentesis + 1; i < str.length(); i++)
-    {
-        if (str[i] == '(')
+        int i;
+        int numberOfParentesisOpen = 1;
+        int numberOfParentesisClose = 0;
+        for (i = 1; i < str.length(); i++)
         {
-            numberOfParentesisOpen++;
-        }
-        if (str[i] == ')')
-        {
-            numberOfParentesisClose++;
-            if (numberOfParentesisOpen == numberOfParentesisClose)
+            if (str[i] == '(')
             {
-                QString extractStr = str.mid(indexOfFirstParentesis + 1, i - indexOfFirstParentesis -1);
-                expression = extractStr.split(",");
-                from = QString("(") + extractStr + QString(")");
-                return expression;
+                numberOfParentesisOpen++;
+            }
+            if (str[i] == ')')
+            {
+                numberOfParentesisClose++;
+                if (numberOfParentesisOpen == numberOfParentesisClose)
+                {
+                    QString extractStr = str.mid(1, i-1);
+                    args = extractStr.split(",");
+                    from = QString("(") + extractStr + QString(")");
+                    retVal = true;
+                }
             }
         }
     }
-    return expression;
+    return retVal;
 }

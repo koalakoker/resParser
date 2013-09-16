@@ -40,20 +40,21 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     }
     else if (qsInput.toLower() == "usage")
     {
-        retVal.append("- Using built-in function function_name(arg,[arg])<br>");
-        retVal.append("- Variable assignment: var_name = expression<br>");
-        retVal.append("- Show variables ""list"" or ""ls"".<br>");
-        retVal.append("- ""clear"" to delete all varaibles.<br>");
-        retVal.append("- ""E12"" to show all E12 resitor values.<br>");
-        retVal.append("- ""E24"" to show all E24 resitor values.<br>");
-        retVal.append("- ""->E12"" to round to nearest E12 resitor values.<br>");
-        retVal.append("- "":"" parallel operator between resistors.<br>");
+        retVal.append("<br>");
+        retVal.append("Using built-in function <b>function_name(arg,[arg])</b>.<br>");
+        retVal.append("Variable assignment: <b>var_name = expression</b>.<br>");
+        retVal.append("Show variables <b>list</b> or <b>ls</b>.<br>");
+        retVal.append("<b>clear</b> to delete all varaibles.<br>");
+        retVal.append("<b>E12</b> to show all E12 resitor values.<br>");
+        retVal.append("<b>E24</b> to show all E24 resitor values.<br>");
+        retVal.append("<b>->E12</b> to round to nearest E12 resitor values.<br>");
+        retVal.append("<b>:</b> parallel operator between resistors.<br>");
     }
     else
     {
         hfloat result = parser.Parse(qsInput);
         parser.StoreVariable("ans",result); // Store the last result
-        retVal.append(QString("ans=%1<br>").arg(result.toString()));
+        retVal.append(formatAnswer(QString("ans=%1<br>").arg(result.toString())));
     }
     return retVal;
 }
@@ -94,4 +95,9 @@ hfloat CommandMngrClass::PreviewResult(QString qsInput)
 QStringList CommandMngrClass::builtInFunctionList(void)
 {
     return parser.builtInFunctionList();
+}
+
+QString CommandMngrClass::formatAnswer(QString str)
+{
+    return QString("<font size=""4""><b>&nbsp;&nbsp;")+str+QString("</b></font>");
 }

@@ -5,7 +5,7 @@
 #include <QDebug>
 
 #define PRJ_NAME    "resParser"
-#define PRJ_VERSION "0.1.0"
+#define PRJ_VERSION "0.1.1"
 #define PRJ_WINDOWS_TITLE (QString("%1 - v%2").arg(QString(PRJ_NAME)).arg(QString(PRJ_VERSION)))
 
 MainWindow::MainWindow(QWidget *parent) :

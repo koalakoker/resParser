@@ -11,6 +11,8 @@ private:
     QStringList commands;
     int lastCommand;
     int commandIndex;
+
+    QString formatAnswer(QString str);
 public:
     CommandMngrClass();
     QString AddNewCommand(QString qsInput);
