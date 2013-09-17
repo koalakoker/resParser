@@ -15,5 +15,6 @@ FunctionWindow::~FunctionWindow()
 
 void FunctionWindow::functionListPopulate(QStringList list)
 {
+    ui->functionsList->clear();
     ui->functionsList->addItems(list);
 }

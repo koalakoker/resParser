@@ -2,31 +2,36 @@
 
 CommandMngrClass::CommandMngrClass()
 {
-    lastCommand = 0;
-    commandIndex = 0;
+    m_lastCommand = 0;
+    m_commandIndex = 0;
+}
+
+ParserClass* CommandMngrClass::Parser(void)
+{
+    return &m_parser;
 }
 
 QString CommandMngrClass::AddNewCommand(QString qsInput)
 {
-    commands.append(qsInput);
-    commandIndex = lastCommand;
-    lastCommand++;
+    m_commands.append(qsInput);
+    m_commandIndex = m_lastCommand;
+    m_lastCommand++;
 
     /* execute command */
     QString retVal;
     if ((qsInput.contains("list"))||(qsInput.contains("ls")))
     {
         int i;
-        for (i = 0; i < parser.VariableCreated(); i++)
+        for (i = 0; i < m_parser.VariableCreated(); i++)
         {
-            Variable* var = parser.GetVariableAtIndex(i);
+            Variable* var = m_parser.GetVariableAtIndex(i);
             retVal.append(var->ToString());
             retVal.append("<br>");
         }
     }
     else if (qsInput.contains("clear"))
     {
-        parser.Clear();
+        m_parser.Clear();
     }
     else if (qsInput == "E12")
     {
@@ -52,9 +57,9 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     }
     else
     {
-        hfloat result = parser.Parse(qsInput);
-        parser.StoreVariable("ans",result); // Store the last result
-        retVal.append(formatAnswer(QString("ans=%1<br>").arg(result.toString())));
+        hfloat result = m_parser.Parse(qsInput);
+        m_parser.StoreVariable("ans",result); // Store the last result
+        retVal.append(FormatAnswer(QString("ans=%1<br>").arg(result.toString())));
     }
     return retVal;
 }
@@ -62,12 +67,12 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
 QString CommandMngrClass::GetPreviousCommand(void)
 {
     QString retVal = "";
-    if ((commandIndex < commands.count()) && (commandIndex >= 0))
+    if ((m_commandIndex < m_commands.count()) && (m_commandIndex >= 0))
     {
-        retVal = commands[commandIndex];
-        if (commandIndex > 0)
+        retVal = m_commands[m_commandIndex];
+        if (m_commandIndex > 0)
         {
-            commandIndex--;
+            m_commandIndex--;
         }
     }
     return  retVal;
@@ -76,28 +81,28 @@ QString CommandMngrClass::GetPreviousCommand(void)
 QString CommandMngrClass::GetNextCommand(void)
 {
     QString retVal = "";
-    if (commandIndex < lastCommand - 1)
+    if (m_commandIndex < m_lastCommand - 1)
     {
-        commandIndex++;
+        m_commandIndex++;
     }
-    if ((commandIndex < commands.count()) && (commandIndex >= 0))
+    if ((m_commandIndex < m_commands.count()) && (m_commandIndex >= 0))
     {
-        retVal = commands[commandIndex];
+        retVal = m_commands[m_commandIndex];
     }
     return  retVal;
 }
 
 hfloat CommandMngrClass::PreviewResult(QString qsInput)
 {
-    return parser.Parse(qsInput);
+    return m_parser.Parse(qsInput);
 }
 
-QStringList CommandMngrClass::builtInFunctionList(void)
+QStringList CommandMngrClass::BuiltInFunctionList(void)
 {
-    return parser.builtInFunctionList();
+    return m_parser.builtInFunctionList();
 }
 
-QString CommandMngrClass::formatAnswer(QString str)
+QString CommandMngrClass::FormatAnswer(QString str)
 {
     return QString("<font size=""4""><b>&nbsp;&nbsp;")+str+QString("</b></font>");
 }

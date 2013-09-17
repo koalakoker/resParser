@@ -30,8 +30,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    FunctionWindow funcWin;
-    CommandMngrClass cmdMngr;
+    FunctionWindow m_funcWin;
+    CommandMngrClass m_cmdMngr;
 };
 
 #endif // MAINWINDOW_H

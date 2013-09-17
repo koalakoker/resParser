@@ -7,19 +7,20 @@
 class CommandMngrClass
 {
 private:
-    ParserClass parser;
-    QStringList commands;
-    int lastCommand;
-    int commandIndex;
+    ParserClass m_parser;
+    QStringList m_commands;
+    int m_lastCommand;
+    int m_commandIndex;
 
-    QString formatAnswer(QString str);
+    QString FormatAnswer(QString str);
 public:
     CommandMngrClass();
     QString AddNewCommand(QString qsInput);
     QString GetPreviousCommand(void);
     QString GetNextCommand(void);
     hfloat PreviewResult(QString qsInput);
-    QStringList builtInFunctionList(void);
+    QStringList BuiltInFunctionList(void);
+    ParserClass* Parser(void);
 };
 
 #endif // COMMANDMNGRCLASS_H

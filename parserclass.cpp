@@ -1,12 +1,13 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-#include "QDebug"
+//#include "QDebug"
 
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
 
-ParserClass::ParserClass()
+ParserClass::ParserClass(QObject *parent):
+    QObject(parent)
 {
     m_VariableCreated = 0;
     m_builtinfunctionCreated = 0;
@@ -75,6 +76,11 @@ QStringList ParserClass::builtInFunctionList(void)
     {
         list.append(m_functions[i]->name());
     }
+    // TBF
+    for (i = 0; i < m_userdefinedFunctions.count(); i++)
+    {
+        list.append(m_userdefinedFunctions[i].toString());
+    }
     return list;
 }
 
@@ -125,6 +131,36 @@ bool ParserClass::StoreVariable(QString name,hfloat newValue)
     return retVal;
 }
 
+bool ParserClass::StoreFunction(QString name,QStringList args,QString newFuncStr)
+{
+    bool retVal = false, found = false;
+    int i;
+    for (i = 0; i < m_userdefinedFunctions.count(); i++)
+    {
+        userdefinedFunctions func = m_userdefinedFunctions.at(i);
+        if (func.Name() == name)
+        {
+            func.setFunctionStr(newFuncStr);
+            func.setArgs(args);
+            m_userdefinedFunctions[i]=func;
+            found = true;
+            retVal = true;
+            emit(functionListUpdate(builtInFunctionList()));
+        }
+    }
+    if (!found)
+    {
+        userdefinedFunctions newFunc;
+        newFunc.setName(name);
+        newFunc.setArgs(args);
+        newFunc.setFunctionStr(newFuncStr);
+        m_userdefinedFunctions.append(newFunc);
+        retVal = true;
+        emit(functionListUpdate(builtInFunctionList()));
+    }
+    return retVal;
+}
+
 Variable* ParserClass::GetVariableAtIndex(int i)
 {
     Variable* retVal = 0;
@@ -150,13 +186,64 @@ hfloat ParserClass::Parse(QString str)
     str = str.replace ("M","000000");
 
     hfloat retVal;
+    int biFunc,udFunc;
 
-    // Builtin function parsing
-    int biFunc = HasFunction(str);
-    if (biFunc!=-1)
+    if (IsAssignment(str))
     {
+        // Variable or function?
+        int equalPos = str.indexOf("=");
+        if (equalPos>0)
+        {
+            if (str[equalPos-1] != ')')
+            {
+                // Variable assignment
+                QString VarName = str.mid(0,equalPos);
+                QString expression = str.mid(equalPos+1,str.length()-equalPos-1);
+                hfloat expressionValue = this->Parse(expression);
+                StoreVariable(VarName,expressionValue); // Not used return value (False if no more variables available)
+                retVal = expressionValue;
+            }
+            else
+            {
+                // Function assignment
+                QString beforeAssignStr = str.mid(0,equalPos);
+                QString functionName = beforeAssignStr.mid(0,str.indexOf("("));
+                QString fromPar = ExtractExpressionFromParentesis(beforeAssignStr);
+                fromPar = QString("(")+fromPar+QString(")");
+                QString from;
+                QStringList args;
+                if (ExtractFunctionArguments(fromPar,args,from))
+                {
+                    QString expression = str.mid(equalPos+1,str.length()-equalPos-1);
+                    if (expression.length()>0)
+                    {
+                        StoreFunction(functionName,args,expression);
+                    }
+                }
+            }
+        }
+    } else if ((biFunc = HasFunction(str))!=-1)
+    {
+        // Builtin function parsing
         QString from,to;
-        ExtractFunction(str,biFunc,from,to);
+        ExtractBuiltInFunction(str,biFunc,from,to);
+        if (from != "")
+        {
+            if (str.contains(from))
+            {
+                str = str.replace(from,to);
+                retVal = this->Parse(str);
+            }
+            else
+            {
+                retVal.setNan();
+            }
+        }
+    } else if ((udFunc = HasUserDefinedFunction(str))!=-1)
+    {
+        // User defined function parsing
+        QString from,to;
+        ExtractUserDefinedFunction(str,udFunc,from,to);
         if (from != "")
         {
             if (str.contains(from))
@@ -182,15 +269,6 @@ hfloat ParserClass::Parse(QString str)
     else if (IsVariableName(str))
     {
         retVal = LoadVariable(str);
-    }
-    else if (IsAssignment(str))
-    {
-        int equalPos = str.indexOf("=");
-        QString VarName = str.mid(0,equalPos);
-        QString expression = str.mid(equalPos+1,str.length()-equalPos-1);
-        hfloat expressionValue = this->Parse(expression);
-        StoreVariable(VarName,expressionValue); // Not used return value (False if no more variables available)
-        retVal = expressionValue;
     }
     else if (HasParentesis(str))
     {
@@ -468,7 +546,22 @@ int ParserClass::HasFunction(QString str)
     return retVal;
 }
 
-void ParserClass::ExtractFunction(QString str, int biFuncOrder, QString& from, QString& to)
+int ParserClass::HasUserDefinedFunction(QString str)
+{
+    int retVal = -1;
+    int i;
+    for (i = 0; i < m_userdefinedFunctions.count(); i++)
+    {
+        if (str.toLower().contains(m_userdefinedFunctions[i].Name()+QString("(")))
+        {
+            retVal = i;
+            break;
+        }
+    }
+    return retVal;
+}
+
+void ParserClass::ExtractBuiltInFunction(QString str, int biFuncOrder, QString& from, QString& to)
 {
     from=QString("");
     to=QString("");
@@ -493,6 +586,48 @@ void ParserClass::ExtractFunction(QString str, int biFuncOrder, QString& from, Q
                 if (!result.isNan())
                 {
                     from = biFunc->name() + from;
+                    to = result.toString();
+                }
+                else
+                {
+                    from = QString("");
+                    to=QString("");
+                }
+            }
+        }
+    }
+}
+
+void ParserClass::ExtractUserDefinedFunction(QString str, int udFuncOrder, QString& from, QString& to)
+{
+    from=QString("");
+    to=QString("");
+    if ((udFuncOrder >= 0)&&(udFuncOrder < m_userdefinedFunctions.count()))
+    {
+        userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
+        QString functionName = udFunc.Name() + QString("(");
+        int functionPos = str.indexOf(functionName);
+        if (functionPos >= 0)
+        {
+            functionPos+=functionName.length()-1;
+            QStringList argument;
+            if (ExtractFunctionArguments(str.mid(functionPos,str.length()-functionPos),argument,from))
+            {
+                QString functionStr = udFunc.functionSrt();
+                QStringList funcionArgs = udFunc.args();
+                if (funcionArgs.count()==argument.count())
+                {
+                    // Replace arguments
+                    int i;
+                    for (i = 0; i < argument.count(); i++)
+                    {
+                        functionStr.replace(funcionArgs[i],argument[i]);
+                    }
+                }
+                hfloat result = Parse(functionStr);
+                if (!result.isNan())
+                {
+                    from = udFunc.Name() + from;
                     to = result.toString();
                 }
                 else

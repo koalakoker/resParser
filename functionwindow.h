@@ -15,10 +15,11 @@ public:
     explicit FunctionWindow(QWidget *parent = 0);
     ~FunctionWindow();
 
-    void functionListPopulate(QStringList list);
-    
 private:
     Ui::FunctionWindow *ui;
+
+public slots:
+    void functionListPopulate(QStringList list);
 };
 
 #endif // FUNCTIONWINDOW_H

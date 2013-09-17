@@ -1,4 +1,7 @@
 - Use operator ^ instead of POW function
 - Save hystory between session
-- Custom functions
+- Custom functions <- Implemented (To be implemented: print the formula if name is insert, fix function windows)
 - Variables window
+- Avoid to set functions or variables during preview
+- Avoid to set ans if nan
+- Highlight parentesis !?!
