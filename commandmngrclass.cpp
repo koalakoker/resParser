@@ -58,8 +58,13 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     else
     {
         hfloat result = m_parser.Parse(qsInput);
-        m_parser.StoreVariable("ans",result); // Store the last result
-        retVal.append(FormatAnswer(QString("ans=%1<br>").arg(result.toString())));
+        QString ansStr;
+        if (!result.isNan())
+        {
+            m_parser.StoreVariable("ans",result); // Store the last result
+            ansStr = QString("ans=");
+        }
+        retVal.append(FormatAnswer(QString("%1%2<br>").arg(ansStr).arg(result.toString())));
     }
     return retVal;
 }

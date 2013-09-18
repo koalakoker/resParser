@@ -2,6 +2,4 @@
 - Save hystory between session
 - Custom functions <- Implemented (To be implemented: print the formula if name is insert, fix function windows)
 - Variables window
-- Avoid to set functions or variables during preview
-- Avoid to set ans if nan
 - Highlight parentesis !?!
