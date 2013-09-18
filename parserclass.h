@@ -52,7 +52,7 @@ public:
     bool StoreFunction(QString name,QStringList args,QString newValue);
     Variable *GetVariableAtIndex(int i);
     void Clear(void);
-    hfloat Parse(QString str);
+    hfloat Parse(QString str,bool preview  = false);
     QStringList builtInFunctionList(void);
 
 signals:

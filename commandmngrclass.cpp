@@ -94,7 +94,7 @@ QString CommandMngrClass::GetNextCommand(void)
 
 hfloat CommandMngrClass::PreviewResult(QString qsInput)
 {
-    return m_parser.Parse(qsInput);
+    return m_parser.Parse(qsInput,true);
 }
 
 QStringList CommandMngrClass::BuiltInFunctionList(void)

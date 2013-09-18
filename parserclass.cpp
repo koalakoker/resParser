@@ -176,7 +176,7 @@ void ParserClass::Clear(void)
     m_VariableCreated = 0;
 }
 
-hfloat ParserClass::Parse(QString str)
+hfloat ParserClass::Parse(QString str, bool preview)
 {
     // Remove spaces
     str = str.replace(" ","");
@@ -200,7 +200,10 @@ hfloat ParserClass::Parse(QString str)
                 QString VarName = str.mid(0,equalPos);
                 QString expression = str.mid(equalPos+1,str.length()-equalPos-1);
                 hfloat expressionValue = this->Parse(expression);
-                StoreVariable(VarName,expressionValue); // Not used return value (False if no more variables available)
+                if (!preview)
+                {
+                    StoreVariable(VarName,expressionValue); // Not used return value (False if no more variables available)
+                }
                 retVal = expressionValue;
             }
             else
@@ -217,7 +220,10 @@ hfloat ParserClass::Parse(QString str)
                     QString expression = str.mid(equalPos+1,str.length()-equalPos-1);
                     if (expression.length()>0)
                     {
-                        StoreFunction(functionName,args,expression);
+                        if (!preview)
+                        {
+                            StoreFunction(functionName,args,expression);
+                        }
                     }
                 }
             }
