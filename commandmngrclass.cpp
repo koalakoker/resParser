@@ -19,6 +19,7 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
 
     /* execute command */
     QString retVal;
+
     if ((qsInput.contains("list"))||(qsInput.contains("ls")))
     {
         int i;
@@ -54,6 +55,11 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
         retVal.append("<b>E24</b> to show all E24 resitor values.<br>");
         retVal.append("<b>->E12</b> to round to nearest E12 resitor values.<br>");
         retVal.append("<b>:</b> parallel operator between resistors.<br>");
+    }
+    else if ((retVal = Parser()->UserDefineFunctionFormulaFromName(qsInput))!="") // Sbagliato
+    {
+        /* Append user defined formula if name is in qsInput */
+        retVal = FormatAnswer(retVal).append("<br>");
     }
     else
     {

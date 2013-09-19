@@ -675,3 +675,24 @@ bool ParserClass::ExtractFunctionArguments(QString str, QStringList &args, QStri
     }
     return retVal;
 }
+
+QString ParserClass::UserDefineFunctionFormulaFromName(QString name)
+{
+    QString retVal = QString("");
+    int udFuncOrder = -1;
+    int i;
+    for (i = 0; i < m_userdefinedFunctions.count(); i++)
+    {
+        if (name == m_userdefinedFunctions[i].Name())
+        {
+            udFuncOrder = i;
+            break;
+        }
+    }
+    if ((udFuncOrder >= 0) && (udFuncOrder < m_userdefinedFunctions.count()))
+    {
+        userdefinedFunctions func = m_userdefinedFunctions.at(udFuncOrder);
+        retVal = func.functionSrt();
+    }
+    return retVal;
+}

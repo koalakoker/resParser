@@ -31,7 +31,7 @@ private:
     static bool HasOperand(QString str);
     static bool HasOperand(QString str,char operand);
     int HasFunction(QString str);
-    int HasUserDefinedFunction(QString str);
+
     static QString ExtractExpressionFromParentesis(QString str);
     QString EvaluateParallel(QString str);
     QString EvaluateDivision(QString str);
@@ -40,7 +40,7 @@ private:
     void ExtractBuiltInFunction(QString str, int biFuncOrder, QString& from, QString& to);
     void ExtractUserDefinedFunction(QString str, int udFuncOrder, QString& from, QString& to);
     bool ExtractFunctionArguments(QString str,QStringList &args, QString &from);
-
+    int HasUserDefinedFunction(QString str);
     void addBuiltInFunction(QString name, hfloat (*ptr1a)(hfloat a));
     void addBuiltInFunction(QString name, hfloat (*ptr2a)(hfloat a,hfloat b));
 
@@ -54,6 +54,7 @@ public:
     void Clear(void);
     hfloat Parse(QString str,bool preview  = false);
     QStringList builtInFunctionList(void);
+    QString UserDefineFunctionFormulaFromName(QString name);
 
 signals:
     void functionListUpdate(QStringList list);
