@@ -1,22 +1,23 @@
 #include "hfloat.h"
 
 #define ROUND MPFR_RNDN
+#define PRECISION 256
 
 hfloat::hfloat()
 {
-    mpfr_init2(value,128);
+    mpfr_init2(value,PRECISION);
     setNan();
 }
 
 hfloat::hfloat(QString str)
 {
-    mpfr_init2(value,128);
+    mpfr_init2(value,PRECISION);
     mpfr_set_str(value, str.toLocal8Bit().data(), 10, ROUND);
 }
 
 hfloat::hfloat(const hfloat &val)
 {
-    mpfr_init2(value,128);
+    mpfr_init2(value,PRECISION);
     mpfr_set(this->value,val.value,ROUND);
 }
 
@@ -25,10 +26,10 @@ hfloat::~hfloat()
     mpfr_clear(value);
 }
 
-QString hfloat::toString(void)
+QString hfloat::toString(const char* format)
 {
     char out[200];
-    mpfr_sprintf(out,"%.32Rg",value);
+    mpfr_sprintf(out,format,value);
     QString retVal = QString("%1").arg(QString(out));
     return retVal;
 }
@@ -36,6 +37,11 @@ QString hfloat::toString(void)
 bool hfloat::isNan(void)
 {
     return (mpfr_nan_p(this->value) != 0);
+}
+
+bool hfloat::isNumber(void)
+{
+    return (mpfr_number_p(this->value) != 0);
 }
 
 void hfloat::setNan(void)

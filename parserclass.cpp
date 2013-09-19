@@ -266,7 +266,7 @@ hfloat ParserClass::Parse(QString str, bool preview)
     {
         int pos = str.indexOf("->E12");
         QString res = str.mid(0,pos);
-        Int64 val = (Int64)Parse(res).toString().toFloat();
+        Int64 val = (Int64)Parse(res).toString("%.50Rf").toFloat();
         retVal = hfloat(QString("%1").arg(Resistor::ToNearE12(val)));
     } else if (IsNumeric(str))
     {
@@ -281,7 +281,7 @@ hfloat ParserClass::Parse(QString str, bool preview)
         QString expression = ExtractExpressionFromParentesis(str);
         if (expression != "")
         {
-            str = str.replace("("+expression+")",this->Parse(expression).toString());
+            str = str.replace("("+expression+")",this->Parse(expression).toString("%.50Rf"));
             retVal = this->Parse(str);
         }
     }
@@ -443,7 +443,7 @@ QString ParserClass::EvaluateParallel(QString str)
         QString firstValueStr = afterOpSplitted[0];
         hfloat result = hfloat("1")/((hfloat("1")/this->Parse(lastValueStr))+(hfloat("1")/this->Parse(firstValueStr)));
 
-        QString evaluated = str.replace(lastValueStr+":"+firstValueStr,result.toString());
+        QString evaluated = str.replace(lastValueStr+":"+firstValueStr,result.toString("%.50Rf"));
         retVal = EvaluateParallel(evaluated);
     }
     else
@@ -469,7 +469,7 @@ QString ParserClass::EvaluateMultiply(QString str)
         QString firstValueStr = afterOpSplitted[0];
         hfloat result = this->Parse(lastValueStr)*this->Parse(firstValueStr);
 
-        QString evaluated = str.replace(lastValueStr+"*"+firstValueStr,result.toString());
+        QString evaluated = str.replace(lastValueStr+"*"+firstValueStr,result.toString("%.50Rf"));
         retVal = EvaluateMultiply(evaluated);
     }
     else
@@ -495,7 +495,7 @@ QString ParserClass::EvaluateDivision(QString str)
         QString firstValueStr = afterOpSplitted[0];
         hfloat result = this->Parse(lastValueStr)/this->Parse(firstValueStr);
 
-        QString evaluated = str.replace(lastValueStr+"/"+firstValueStr,result.toString());
+        QString evaluated = str.replace(lastValueStr+"/"+firstValueStr,result.toString("%.50Rf"));
         retVal = EvaluateDivision(evaluated);
     }
     else
@@ -592,7 +592,7 @@ void ParserClass::ExtractBuiltInFunction(QString str, int biFuncOrder, QString& 
                 if (!result.isNan())
                 {
                     from = biFunc->name() + from;
-                    to = result.toString();
+                    to = result.toString("%.50Rf");
                 }
                 else
                 {
@@ -634,7 +634,7 @@ void ParserClass::ExtractUserDefinedFunction(QString str, int udFuncOrder, QStri
                 if (!result.isNan())
                 {
                     from = udFunc.Name() + from;
-                    to = result.toString();
+                    to = result.toString("%.50Rf");
                 }
                 else
                 {

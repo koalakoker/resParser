@@ -67,7 +67,7 @@ void MainWindow::on_line_input_textChanged(const QString &arg1)
     hfloat result = m_cmdMngr.PreviewResult(arg1);
     if (!result.isNan())
     {
-        QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),QString("ans=") + result.toString());
+        QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),QString("ans=") + result.toString("%.50Rg"));
     }
     else
     {

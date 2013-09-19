@@ -70,7 +70,7 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
             m_parser.StoreVariable("ans",result); // Store the last result
             ansStr = QString("ans=");
         }
-        retVal.append(FormatAnswer(QString("%1%2<br>").arg(ansStr).arg(result.toString())));
+        retVal.append(FormatAnswer(QString("%1%2<br>").arg(ansStr).arg(result.toString("%.50Rg"))));
     }
     return retVal;
 }

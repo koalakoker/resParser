@@ -9,7 +9,7 @@ void Variable::setValue(hfloat value)
     m_value = value;
     if (m_name.toLower()[0] == 'r')
     {
-        m_resistor.setValue((Int64)(m_value.toString().toFloat()));
+        m_resistor.setValue((Int64)(m_value.toString("%.50Rf").toFloat()));
     }
 }
 
@@ -33,7 +33,7 @@ void Variable::setName(QString name)
     m_name = name;
     if (m_name.toLower()[0] == 'r')
     {
-        m_resistor.setValue((Int64)(m_value.toString().toFloat()));
+        m_resistor.setValue((Int64)(m_value.toString("%.50Rf").toFloat()));
     }
 }
 
@@ -51,7 +51,7 @@ QString Variable::ToString (void)
     }
     else
     {
-        retVal = QString("[Variable: Name={%1}, Value={%2}]").arg(Name()).arg(Value().toString());
+        retVal = QString("[Variable: Name={%1}, Value={%2}]").arg(Name()).arg(Value().toString("%.50Rg"));
     }
     return retVal;
 }
