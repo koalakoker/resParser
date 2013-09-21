@@ -1,14 +1,40 @@
 #include "commandmngrclass.h"
 
+#define FIXED "%.%1Rf"
+#define SCIENTIFIC "%.%1Re"
+#define AUTO "%.%1Rg"
+
 CommandMngrClass::CommandMngrClass()
 {
     m_lastCommand = 0;
     m_commandIndex = 0;
+    m_formatOutput = Auto;
+    m_precision = 20;
 }
 
 ParserClass* CommandMngrClass::Parser(void)
 {
     return &m_parser;
+}
+
+formatOutput_t CommandMngrClass::Format(void)
+{
+    return m_formatOutput;
+}
+
+void CommandMngrClass::SetFormat(formatOutput_t format)
+{
+    m_formatOutput = format;
+}
+
+int CommandMngrClass::Precision(void)
+{
+    return m_precision;
+}
+
+void CommandMngrClass::SetPrecision(int precision)
+{
+    m_precision = precision;
 }
 
 QString CommandMngrClass::AddNewCommand(QString qsInput)
@@ -56,7 +82,7 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
         retVal.append("<b>->E12</b> to round to nearest E12 resitor values.<br>");
         retVal.append("<b>:</b> parallel operator between resistors.<br>");
     }
-    else if ((retVal = Parser()->UserDefineFunctionFormulaFromName(qsInput))!="") // Sbagliato
+    else if ((retVal = Parser()->UserDefineFunctionFormulaFromName(qsInput))!="")
     {
         /* Append user defined formula if name is in qsInput */
         retVal = FormatAnswer(retVal).append("<br>");
@@ -70,7 +96,7 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
             m_parser.StoreVariable("ans",result); // Store the last result
             ansStr = QString("ans=");
         }
-        retVal.append(FormatAnswer(QString("%1%2<br>").arg(ansStr).arg(result.toString("%.50Rg"))));
+        retVal.append(FormatAnswer(QString("%1%2<br>").arg(ansStr).arg(result.toString(FormatOutput()))));
     }
     return retVal;
 }
@@ -103,9 +129,15 @@ QString CommandMngrClass::GetNextCommand(void)
     return  retVal;
 }
 
-hfloat CommandMngrClass::PreviewResult(QString qsInput)
+QString CommandMngrClass::PreviewResult(QString qsInput)
 {
-    return m_parser.Parse(qsInput,true);
+    QString retVal;
+    hfloat result = m_parser.Parse(qsInput,true);
+    if (!result.isNan())
+    {
+        retVal = QString("ans=") + result.toString(FormatOutput());
+    }
+    return retVal;
 }
 
 QStringList CommandMngrClass::BuiltInFunctionList(void)
@@ -116,4 +148,32 @@ QStringList CommandMngrClass::BuiltInFunctionList(void)
 QString CommandMngrClass::FormatAnswer(QString str)
 {
     return QString("<font size=""4""><b>&nbsp;&nbsp;")+str+QString("</b></font>");
+}
+
+char* CommandMngrClass::FormatOutput(void)
+{
+    QString retVal;
+    switch (m_formatOutput)
+    {
+    case Fixed:
+    {
+        retVal = QString(FIXED).arg(m_precision);
+    }
+        break;
+    case Scientific:
+    {
+        retVal = QString(SCIENTIFIC).arg(m_precision);
+    }
+        break;
+    case Auto:
+    default:
+    {
+        retVal = QString(AUTO).arg(m_precision);
+    }
+        break;
+    }
+    QByteArray ba = retVal.toLocal8Bit();
+    char c = 0;
+    ba.append(c);
+    return ba.data();
 }

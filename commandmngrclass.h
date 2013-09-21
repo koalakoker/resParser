@@ -4,6 +4,8 @@
 #include "QStringList"
 #include "parserclass.h"
 
+typedef enum {Fixed, Scientific, Auto} formatOutput_t;
+
 class CommandMngrClass
 {
 private:
@@ -11,6 +13,8 @@ private:
     QStringList m_commands;
     int m_lastCommand;
     int m_commandIndex;
+    formatOutput_t m_formatOutput;
+    int m_precision;
 
     QString FormatAnswer(QString str);
 public:
@@ -18,9 +22,14 @@ public:
     QString AddNewCommand(QString qsInput);
     QString GetPreviousCommand(void);
     QString GetNextCommand(void);
-    hfloat PreviewResult(QString qsInput);
+    QString PreviewResult(QString qsInput);
     QStringList BuiltInFunctionList(void);
     ParserClass* Parser(void);
+    char* FormatOutput(void);
+    formatOutput_t Format(void);
+    void SetFormat(formatOutput_t format);
+    int Precision(void);
+    void SetPrecision(int precision);
 };
 
 #endif // COMMANDMNGRCLASS_H

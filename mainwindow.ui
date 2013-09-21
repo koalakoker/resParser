@@ -68,7 +68,16 @@
     <property name="title">
      <string>&amp;View</string>
     </property>
+    <widget class="QMenu" name="menu_Output_format">
+     <property name="title">
+      <string>&amp;Output format</string>
+     </property>
+     <addaction name="actionAuto"/>
+     <addaction name="actionFloating"/>
+     <addaction name="actionScientific"/>
+    </widget>
     <addaction name="actionFunctions"/>
+    <addaction name="menu_Output_format"/>
    </widget>
    <addaction name="menu_Session"/>
    <addaction name="menuView"/>
@@ -107,6 +116,30 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionAuto">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Auto</string>
+   </property>
+  </action>
+  <action name="actionFloating">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Floating</string>
+   </property>
+  </action>
+  <action name="actionScientific">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Scientific</string>
    </property>
   </action>
  </widget>

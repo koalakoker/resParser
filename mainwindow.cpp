@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    updateOutputFormatSetting();
 
     this->setWindowTitle(PRJ_WINDOWS_TITLE);
 
@@ -64,15 +65,7 @@ void MainWindow::keyOperatorPress()
 
 void MainWindow::on_line_input_textChanged(const QString &arg1)
 {
-    hfloat result = m_cmdMngr.PreviewResult(arg1);
-    if (!result.isNan())
-    {
-        QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),QString("ans=") + result.toString("%.50Rg"));
-    }
-    else
-    {
-        QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),QString(""));
-    }
+    QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),m_cmdMngr.PreviewResult(arg1));
 }
 
 void MainWindow::on_actionFunctions_toggled(bool arg1)
@@ -94,4 +87,56 @@ void MainWindow::on_actionAbout_activated()
     AboutDialog diag;
     diag.SetAboutTxt(PRJ_WINDOWS_TITLE);
     diag.exec();
+}
+
+void MainWindow::on_actionAuto_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        ui->actionFloating->setChecked(false);
+        ui->actionScientific->setChecked(false);
+        m_cmdMngr.SetFormat(Auto);
+    }
+}
+
+void MainWindow::on_actionFloating_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        ui->actionAuto->setChecked(false);
+        ui->actionScientific->setChecked(false);
+        m_cmdMngr.SetFormat(Fixed);
+    }
+}
+
+void MainWindow::on_actionScientific_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        ui->actionAuto->setChecked(false);
+        ui->actionFloating->setChecked(false);
+        m_cmdMngr.SetFormat(Scientific);
+    }
+}
+
+void MainWindow::updateOutputFormatSetting(void)
+{
+    switch (m_cmdMngr.Format())
+    {
+    case Auto:
+    {
+        ui->actionAuto->setChecked(true);
+    }
+        break;
+    case Fixed:
+    {
+        ui->actionFloating->setChecked(true);
+    }
+        break;
+    case Scientific:
+    {
+        ui->actionScientific->setChecked(true);
+    }
+        break;
+    }
 }
