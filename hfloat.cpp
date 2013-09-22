@@ -26,10 +26,10 @@ hfloat::~hfloat()
     mpfr_clear(value);
 }
 
-QString hfloat::toString(const char* format)
+QString hfloat::toString(QString format)
 {
     char out[200];
-    mpfr_sprintf(out,format,value);
+    mpfr_sprintf(out,format.toLocal8Bit().data(),value);
     QString retVal = QString("%1").arg(QString(out));
     return retVal;
 }

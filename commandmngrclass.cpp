@@ -150,7 +150,7 @@ QString CommandMngrClass::FormatAnswer(QString str)
     return QString("<font size=""4""><b>&nbsp;&nbsp;")+str+QString("</b></font>");
 }
 
-char* CommandMngrClass::FormatOutput(void)
+QString CommandMngrClass::FormatOutput(void)
 {
     QString retVal;
     switch (m_formatOutput)
@@ -172,8 +172,5 @@ char* CommandMngrClass::FormatOutput(void)
     }
         break;
     }
-    QByteArray ba = retVal.toLocal8Bit();
-    char c = 0;
-    ba.append(c);
-    return ba.data();
+    return retVal;
 }

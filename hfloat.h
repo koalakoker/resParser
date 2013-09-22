@@ -15,7 +15,7 @@ public:
     hfloat(QString str);
     hfloat(const hfloat& val);
 
-    QString toString(const char *format);
+    QString toString(QString format);
     bool isNan(void);
     bool isNumber(void);
     void setNan(void);

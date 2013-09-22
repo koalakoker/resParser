@@ -25,7 +25,7 @@ public:
     QString PreviewResult(QString qsInput);
     QStringList BuiltInFunctionList(void);
     ParserClass* Parser(void);
-    char* FormatOutput(void);
+    QString FormatOutput(void);
     formatOutput_t Format(void);
     void SetFormat(formatOutput_t format);
     int Precision(void);
