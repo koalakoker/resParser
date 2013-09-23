@@ -3,12 +3,13 @@
 #define FIXED "%.%1Rf"
 #define SCIENTIFIC "%.%1Re"
 #define AUTO "%.%1Rg"
+#define HEXADECIMAL "%lX"
 
 CommandMngrClass::CommandMngrClass()
 {
     m_lastCommand = 0;
     m_commandIndex = 0;
-    m_formatOutput = Auto;
+    m_formatOutput = Hexadecimal;
     m_precision = 20;
 }
 
@@ -155,6 +156,11 @@ QString CommandMngrClass::FormatOutput(void)
     QString retVal;
     switch (m_formatOutput)
     {
+    case Hexadecimal:
+    {
+        retVal = QString(HEXADECIMAL);
+    }
+        break;
     case Fixed:
     {
         retVal = QString(FIXED).arg(m_precision);

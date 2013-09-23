@@ -48,7 +48,7 @@
      <x>0</x>
      <y>0</y>
      <width>437</width>
-     <height>29</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_Session">
@@ -75,6 +75,8 @@
      <addaction name="actionAuto"/>
      <addaction name="actionFloating"/>
      <addaction name="actionScientific"/>
+     <addaction name="separator"/>
+     <addaction name="actionHexadecimal"/>
     </widget>
     <addaction name="actionFunctions"/>
     <addaction name="menu_Output_format"/>
@@ -123,7 +125,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Auto</string>
+    <string>Decimal (Auto)</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
   <action name="actionFloating">
@@ -131,7 +136,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Floating</string>
+    <string>Decimal (Floating)</string>
+   </property>
+   <property name="shortcut">
+    <string>F6</string>
    </property>
   </action>
   <action name="actionScientific">
@@ -139,7 +147,21 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Scientific</string>
+    <string>Decimal (Scientific)</string>
+   </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
+  </action>
+  <action name="actionHexadecimal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hexadecimal</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
    </property>
   </action>
  </widget>

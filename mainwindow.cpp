@@ -93,50 +93,55 @@ void MainWindow::on_actionAuto_toggled(bool arg1)
 {
     if (arg1)
     {
-        ui->actionFloating->setChecked(false);
-        ui->actionScientific->setChecked(false);
         m_cmdMngr.SetFormat(Auto);
     }
+    updateOutputFormatSetting();
+    ui->statusBar->showMessage(QString(tr("Switched to Decimal (Auto)")),10000);
 }
 
 void MainWindow::on_actionFloating_toggled(bool arg1)
 {
     if (arg1)
     {
-        ui->actionAuto->setChecked(false);
-        ui->actionScientific->setChecked(false);
         m_cmdMngr.SetFormat(Fixed);
     }
+    updateOutputFormatSetting();
+    ui->statusBar->showMessage(QString(tr("Switched to Decimal (Floating)")),10000);
 }
 
 void MainWindow::on_actionScientific_toggled(bool arg1)
 {
     if (arg1)
     {
-        ui->actionAuto->setChecked(false);
-        ui->actionFloating->setChecked(false);
         m_cmdMngr.SetFormat(Scientific);
     }
+    updateOutputFormatSetting();
+    ui->statusBar->showMessage(QString(tr("Switched to Decimal (Scientific)")),10000);
 }
+
+void MainWindow::on_actionHexadecimal_toggled(bool arg1)
+{
+    if (arg1)
+    {
+        m_cmdMngr.SetFormat(Hexadecimal);
+    }
+    updateOutputFormatSetting();
+    ui->statusBar->showMessage(QString(tr("Switched to Hexadecimal")),10000);
+}
+
 
 void MainWindow::updateOutputFormatSetting(void)
 {
-    switch (m_cmdMngr.Format())
-    {
-    case Auto:
-    {
-        ui->actionAuto->setChecked(true);
-    }
-        break;
-    case Fixed:
-    {
-        ui->actionFloating->setChecked(true);
-    }
-        break;
-    case Scientific:
-    {
-        ui->actionScientific->setChecked(true);
-    }
-        break;
-    }
+    formatOutput_t format = m_cmdMngr.Format();
+    ui->actionAuto->setChecked(format == Auto);
+    ui->actionFloating->setChecked(format == Fixed);
+    ui->actionScientific->setChecked(format == Scientific);
+    ui->actionHexadecimal->setChecked(format == Hexadecimal);
+    updateOutputPaneAndPreview();
+
+}
+
+void MainWindow::updateOutputPaneAndPreview(void)
+{
+    on_line_input_textChanged(ui->line_input->text());
 }

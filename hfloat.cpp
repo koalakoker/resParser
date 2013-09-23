@@ -28,9 +28,18 @@ hfloat::~hfloat()
 
 QString hfloat::toString(QString format)
 {
+    QString retVal;
     char out[200];
-    mpfr_sprintf(out,format.toLocal8Bit().data(),value);
-    QString retVal = QString("%1").arg(QString(out));
+    if (format.toLower().contains("x"))
+    {
+        sprintf(out,format.toLocal8Bit().data(),mpfr_get_si(value,ROUND));
+        retVal = QString("0x%1").arg(QString(out));
+    }
+    else
+    {
+        mpfr_sprintf(out,format.toLocal8Bit().data(),value);
+        retVal = QString(out);
+    }
     return retVal;
 }
 

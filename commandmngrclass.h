@@ -4,7 +4,7 @@
 #include "QStringList"
 #include "parserclass.h"
 
-typedef enum {Fixed, Scientific, Auto} formatOutput_t;
+typedef enum {Fixed, Scientific, Auto, Hexadecimal} formatOutput_t;
 
 class CommandMngrClass
 {

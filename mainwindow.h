@@ -22,6 +22,8 @@ private slots:
     void keyUpPress();
     void keyDownPress();
     void keyOperatorPress();
+    void updateOutputFormatSetting(void);
+    void updateOutputPaneAndPreview(void);
 
     void on_line_input_textChanged(const QString &arg1);
     void on_actionFunctions_toggled(bool arg1);
@@ -29,8 +31,7 @@ private slots:
     void on_actionAuto_toggled(bool arg1);
     void on_actionFloating_toggled(bool arg1);
     void on_actionScientific_toggled(bool arg1);
-
-    void updateOutputFormatSetting(void);
+    void on_actionHexadecimal_toggled(bool arg1);
 
 private:
     Ui::MainWindow *ui;
