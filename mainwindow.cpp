@@ -40,7 +40,6 @@ MainWindow::~MainWindow()
 void MainWindow::on_line_input_returnPressed()
 {
     QString qsInput = ui->line_input->text();
-    ui->output_pane->appendHtml(qsInput);
     ui->output_pane->appendHtml(m_cmdMngr.AddNewCommand(qsInput));
     ui->line_input->setText("");
 }

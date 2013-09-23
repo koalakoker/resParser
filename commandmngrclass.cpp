@@ -9,7 +9,7 @@ CommandMngrClass::CommandMngrClass()
 {
     m_lastCommand = 0;
     m_commandIndex = 0;
-    m_formatOutput = Hexadecimal;
+    m_formatOutput = Auto;
     m_precision = 20;
 }
 
@@ -40,12 +40,13 @@ void CommandMngrClass::SetPrecision(int precision)
 
 QString CommandMngrClass::AddNewCommand(QString qsInput)
 {
+    QString retVal,tmpVal;
     CommandClass newCmd;
     newCmd.setInputStr(qsInput);
 
-    /* execute command */
-    QString retVal;
+    retVal = qsInput + QString("<br>");
 
+    /* execute command */
     if ((qsInput.contains("list"))||(qsInput.contains("ls")))
     {
         int i;
@@ -82,10 +83,10 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
         retVal.append("<b>->E12</b> to round to nearest E12 resitor values.<br>");
         retVal.append("<b>:</b> parallel operator between resistors.<br>");
     }
-    else if ((retVal = Parser()->UserDefineFunctionFormulaFromName(qsInput))!="")
+    else if ((tmpVal = Parser()->UserDefineFunctionFormulaFromName(qsInput))!="")
     {
         /* Append user defined formula if name is in qsInput */
-        retVal = FormatAnswer(retVal).append("<br>");
+        retVal.append(FormatAnswer(tmpVal).append("<br>"));
     }
     else
     {
@@ -189,14 +190,19 @@ QString CommandMngrClass::FormatOutput(void)
 QString CommandMngrClass::OutputPaneReprint(void)
 {
     QString retVal;
-    int i;
-    for (i = 0; i < m_commands.count(); i++)
+    int i,l;
+    l = m_commands.count();
+    for (i = 0; i < l; i++)
     {
         QString inputStr = m_commands[i].inputStr();
         retVal.append(inputStr);
         retVal.append("<br>");
         hfloat result = m_commands[i].result();
-        retVal.append(FormatAnswer(QString("%1%2<br><br>").arg("ans=").arg(result.toString(FormatOutput()))));
+        retVal.append(FormatAnswer(QString("%1%2<br>").arg("ans=").arg(result.toString(FormatOutput()))));
+        if (i < (l-1))
+        {
+            retVal.append("<br>");
+        }
     }
     return retVal;
 }
