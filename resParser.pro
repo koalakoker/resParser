@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     builtinfunction.cpp \
     functionwindow.cpp \
     aboutdialog.cpp \
-    userdefinedfunctions.cpp
+    userdefinedfunctions.cpp \
+    commandclass.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     builtinfunction.h \
     functionwindow.h \
     aboutdialog.h \
-    userdefinedfunctions.h
+    userdefinedfunctions.h \
+    commandclass.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \

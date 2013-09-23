@@ -5,7 +5,7 @@
 #include <QDebug>
 
 #define PRJ_NAME    "resParser"
-#define PRJ_VERSION "0.1.2"
+#define PRJ_VERSION "0.1.3"
 #define PRJ_WINDOWS_TITLE (QString("%1 - v%2").arg(QString(PRJ_NAME)).arg(QString(PRJ_VERSION)))
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -143,5 +143,7 @@ void MainWindow::updateOutputFormatSetting(void)
 
 void MainWindow::updateOutputPaneAndPreview(void)
 {
+    ui->output_pane->clear();
+    ui->output_pane->appendHtml(m_cmdMngr.OutputPaneReprint());
     on_line_input_textChanged(ui->line_input->text());
 }

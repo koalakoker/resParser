@@ -40,9 +40,8 @@ void CommandMngrClass::SetPrecision(int precision)
 
 QString CommandMngrClass::AddNewCommand(QString qsInput)
 {
-    m_commands.append(qsInput);
-    m_commandIndex = m_lastCommand;
-    m_lastCommand++;
+    CommandClass newCmd;
+    newCmd.setInputStr(qsInput);
 
     /* execute command */
     QString retVal;
@@ -96,9 +95,15 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
         {
             m_parser.StoreVariable("ans",result); // Store the last result
             ansStr = QString("ans=");
+            newCmd.setResult(result);
         }
         retVal.append(FormatAnswer(QString("%1%2<br>").arg(ansStr).arg(result.toString(FormatOutput()))));
     }
+
+    m_commands.append(newCmd);
+    m_commandIndex = m_lastCommand;
+    m_lastCommand++;
+
     return retVal;
 }
 
@@ -107,7 +112,7 @@ QString CommandMngrClass::GetPreviousCommand(void)
     QString retVal = "";
     if ((m_commandIndex < m_commands.count()) && (m_commandIndex >= 0))
     {
-        retVal = m_commands[m_commandIndex];
+        retVal = m_commands[m_commandIndex].inputStr();
         if (m_commandIndex > 0)
         {
             m_commandIndex--;
@@ -125,7 +130,7 @@ QString CommandMngrClass::GetNextCommand(void)
     }
     if ((m_commandIndex < m_commands.count()) && (m_commandIndex >= 0))
     {
-        retVal = m_commands[m_commandIndex];
+        retVal = m_commands[m_commandIndex].inputStr();
     }
     return  retVal;
 }
@@ -177,6 +182,21 @@ QString CommandMngrClass::FormatOutput(void)
         retVal = QString(AUTO).arg(m_precision);
     }
         break;
+    }
+    return retVal;
+}
+
+QString CommandMngrClass::OutputPaneReprint(void)
+{
+    QString retVal;
+    int i;
+    for (i = 0; i < m_commands.count(); i++)
+    {
+        QString inputStr = m_commands[i].inputStr();
+        retVal.append(inputStr);
+        retVal.append("<br>");
+        hfloat result = m_commands[i].result();
+        retVal.append(FormatAnswer(QString("%1%2<br><br>").arg("ans=").arg(result.toString(FormatOutput()))));
     }
     return retVal;
 }
