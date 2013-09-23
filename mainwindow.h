@@ -33,6 +33,10 @@ private slots:
     void on_actionScientific_toggled(bool arg1);
     void on_actionHexadecimal_toggled(bool arg1);
 
+    void on_action_Save_triggered();
+
+    void on_action_Load_triggered();
+
 private:
     Ui::MainWindow *ui;
     FunctionWindow m_funcWin;

@@ -1,5 +1,9 @@
 #include "commandmngrclass.h"
 
+#include <QFile>
+#include <QDataStream>
+
+#define FIXED_MAX_PRECISION "%.50Rf"
 #define FIXED "%.%1Rf"
 #define SCIENTIFIC "%.%1Re"
 #define AUTO "%.%1Rg"
@@ -205,4 +209,42 @@ QString CommandMngrClass::OutputPaneReprint(void)
         }
     }
     return retVal;
+}
+
+void CommandMngrClass::Save(QString fileName)
+{
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly);
+    QDataStream out(&file);
+    int l = m_commands.count();
+    out << (qint32)(l);
+    int i;
+    for (i = 0; i < l; i++)
+    {
+        out << m_commands[i].inputStr();
+        out << m_commands[i].result().toString(FIXED_MAX_PRECISION);
+    }
+}
+
+void CommandMngrClass::Load(QString fileName)
+{
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+    qint32 qil;
+    in >> qil;
+    int i;
+    m_commands.clear();
+    for (i = 0; i < (int)(qil); i++)
+    {
+        CommandClass newCmd;
+        QString inputStr;
+        QString resultStr;
+        in >> inputStr;
+        in >> resultStr;
+        newCmd.setInputStr(inputStr);
+        hfloat result(resultStr);
+        newCmd.setResult(result);
+        m_commands.append(newCmd);
+    }
 }

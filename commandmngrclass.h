@@ -32,6 +32,9 @@ public:
     QStringList BuiltInFunctionList(void);
     QString OutputPaneReprint(void);
 
+    void Save(QString fileName);
+    void Load(QString fileName);
+
     formatOutput_t Format(void); // Returns the current selected format
     int Precision(void); // Returns the current select precision in digit
     void SetFormat(formatOutput_t format); // Sets the format
