@@ -39,7 +39,8 @@ HEADERS  += mainwindow.h \
     functionwindow.h \
     aboutdialog.h \
     userdefinedfunctions.h \
-    commandclass.h
+    commandclass.h \
+    global.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \

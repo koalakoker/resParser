@@ -1,4 +1,5 @@
 - Use operator ^ instead of POW function
-- Save hystory between session
+- Save hystory between session <- To be completed (Function, Variables)
 - Variables window
 - Highlight parentesis !?!
+- Hexadecimal input

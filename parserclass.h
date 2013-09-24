@@ -56,6 +56,9 @@ public:
     QStringList builtInFunctionList(void);
     QString UserDefineFunctionFormulaFromName(QString name);
 
+    void Save(QDataStream& out);
+    void Load(QDataStream& in);
+
 signals:
     void functionListUpdate(QStringList list);
 

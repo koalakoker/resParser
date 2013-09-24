@@ -20,6 +20,9 @@ public:
     void setName(QString name);
     QString Name(void);
     QString ToString (void);
+
+    void Save(QDataStream& out);
+    void Load(QDataStream& in);
 };
 
 #endif // VARIABLE_H

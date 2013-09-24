@@ -696,3 +696,32 @@ QString ParserClass::UserDefineFunctionFormulaFromName(QString name)
     }
     return retVal;
 }
+
+void ParserClass::Save(QDataStream& out)
+{
+    int i;
+    // Save Variables
+    out << (qint32)(m_VariableCreated);
+    for (i = 0; i < m_VariableCreated; i++)
+    {
+        m_variables[i].Save(out);
+    }
+    // TBC
+}
+
+void ParserClass::Load(QDataStream& in)
+{
+    // Load Variables
+    Clear();
+    int i,l;
+    in >> l;
+    for (i = 0; i < l; i++)
+    {
+        QString name,valueStr;
+        in >> name;
+        in >> valueStr;
+        hfloat newValue = hfloat(valueStr);
+        StoreVariable(name,newValue);
+    }
+    // TBC
+}

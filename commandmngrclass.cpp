@@ -2,8 +2,8 @@
 
 #include <QFile>
 #include <QDataStream>
+#include "global.h"
 
-#define FIXED_MAX_PRECISION "%.50Rf"
 #define FIXED "%.%1Rf"
 #define SCIENTIFIC "%.%1Re"
 #define AUTO "%.%1Rg"
@@ -216,6 +216,8 @@ void CommandMngrClass::Save(QString fileName)
     QFile file(fileName);
     file.open(QIODevice::WriteOnly);
     QDataStream out(&file);
+
+    // Store commands
     int l = m_commands.count();
     out << (qint32)(l);
     int i;
@@ -224,6 +226,9 @@ void CommandMngrClass::Save(QString fileName)
         out << m_commands[i].inputStr();
         out << m_commands[i].result().toString(FIXED_MAX_PRECISION);
     }
+
+    // Store Parser state
+    m_parser.Save(out);;
 }
 
 void CommandMngrClass::Load(QString fileName)
@@ -231,6 +236,8 @@ void CommandMngrClass::Load(QString fileName)
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
+
+    // Load commands
     qint32 qil;
     in >> qil;
     int i;
@@ -247,4 +254,7 @@ void CommandMngrClass::Load(QString fileName)
         newCmd.setResult(result);
         m_commands.append(newCmd);
     }
+
+    // Load Parser state
+    m_parser.Load(in);
 }

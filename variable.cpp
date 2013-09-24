@@ -1,4 +1,5 @@
 #include "variable.h"
+#include "global.h"
 
 Variable::Variable()
 {
@@ -54,4 +55,18 @@ QString Variable::ToString (void)
         retVal = QString("[Variable: Name={%1}, Value={%2}]").arg(Name()).arg(Value().toString("%.50Rg"));
     }
     return retVal;
+}
+
+void Variable::Save(QDataStream& out)
+{
+    out << m_name;
+    out << m_value.toString(FIXED_MAX_PRECISION);
+}
+
+void Variable::Load(QDataStream& in)
+{
+    in >> m_name;
+    QString str;
+    in >> str;
+    m_value = hfloat(str);
 }
