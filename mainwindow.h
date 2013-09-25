@@ -32,10 +32,10 @@ private slots:
     void on_actionFloating_toggled(bool arg1);
     void on_actionScientific_toggled(bool arg1);
     void on_actionHexadecimal_toggled(bool arg1);
-
     void on_action_Save_triggered();
-
     void on_action_Load_triggered();
+
+    void closeEvent (QCloseEvent* event);
 
 private:
     Ui::MainWindow *ui;

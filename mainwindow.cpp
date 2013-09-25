@@ -5,7 +5,7 @@
 #include <QDebug>
 
 #define PRJ_NAME    "resParser"
-#define PRJ_VERSION "0.1.3"
+#define PRJ_VERSION "0.0.9"
 #define PRJ_WINDOWS_TITLE (QString("%1 - v%2").arg(QString(PRJ_NAME)).arg(QString(PRJ_VERSION)))
 #define HYST_FILENAME "hyst.rp"
 
@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (ui->line_input,SIGNAL(keyOperator()),this,SLOT(keyOperatorPress()));
     connect (ui->line_input,SIGNAL(keyEscPressed()),this,SLOT(close()));
     connect (m_cmdMngr.Parser(),SIGNAL(functionListUpdate(QStringList)),&m_funcWin,SLOT(functionListPopulate(QStringList)));
+
+    on_action_Load_triggered();
 }
 
 MainWindow::~MainWindow()
@@ -157,4 +159,10 @@ void MainWindow::on_action_Load_triggered()
 {
     m_cmdMngr.Load(HYST_FILENAME);
     updateOutputPaneAndPreview();
+}
+
+void MainWindow::closeEvent (QCloseEvent* event)
+{
+    on_action_Save_triggered();
+    event->setAccepted(true);
 }
