@@ -238,11 +238,10 @@ void CommandMngrClass::Load(QString fileName)
     QDataStream in(&file);
 
     // Load commands
-    qint32 qil;
-    in >> qil;
-    int i;
+    int i,l;
+    in >> l;
     m_commands.clear();
-    for (i = 0; i < (int)(qil); i++)
+    for (i = 0; i < l; i++)
     {
         CommandClass newCmd;
         QString inputStr;
@@ -254,6 +253,8 @@ void CommandMngrClass::Load(QString fileName)
         newCmd.setResult(result);
         m_commands.append(newCmd);
     }
+    m_commandIndex = l - 1;
+    m_lastCommand = l;
 
     // Load Parser state
     m_parser.Load(in);

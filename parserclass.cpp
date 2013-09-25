@@ -706,7 +706,13 @@ void ParserClass::Save(QDataStream& out)
     {
         m_variables[i].Save(out);
     }
-    // TBC
+    // Save User defined functions
+    int l = m_userdefinedFunctions.count();
+    out << (qint32)(l);
+    for (i = 0; i < l; i++)
+    {
+        m_userdefinedFunctions[i].Save(out);
+    }
 }
 
 void ParserClass::Load(QDataStream& in)
@@ -723,5 +729,13 @@ void ParserClass::Load(QDataStream& in)
         hfloat newValue = hfloat(valueStr);
         StoreVariable(name,newValue);
     }
-    // TBC
+    // Load User defined functions
+    m_userdefinedFunctions.clear();
+    in >> l;
+    for (i = 0; i < l; i++)
+    {
+        userdefinedFunctions newUDF;
+        newUDF.Load(in);
+        m_userdefinedFunctions.append(newUDF);
+    }
 }

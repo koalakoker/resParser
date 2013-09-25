@@ -20,6 +20,9 @@ public:
     QStringList args(void);
 
     QString toString(void);
+
+    void Save(QDataStream& out);
+    void Load(QDataStream& in);
 };
 
 #endif // USERDEFINEDFUNCTIONS_H

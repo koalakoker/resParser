@@ -50,3 +50,17 @@ QString userdefinedFunctions::toString(void)
     retVal.append(m_functionStr);
     return retVal;
 }
+
+void userdefinedFunctions::Save(QDataStream& out)
+{
+    out << m_functionStr;
+    out << m_name;
+    out << m_args;
+}
+
+void userdefinedFunctions::Load(QDataStream& in)
+{
+    in >> m_functionStr;
+    in >> m_name;
+    in >> m_args;
+}
