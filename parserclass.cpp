@@ -272,6 +272,10 @@ hfloat ParserClass::Parse(QString str, bool preview)
     {
         retVal = hfloat(str);
     }
+    else if (IsHexadecimal(str))
+    {
+        retVal = hfloat(EvaluateExadecimal(str));
+    }
     else if (IsVariableName(str))
     {
         retVal = LoadVariable(str);
@@ -297,6 +301,11 @@ hfloat ParserClass::Parse(QString str, bool preview)
     }
 
     return retVal;
+}
+
+bool ParserClass::IsHexadecimal(QString str)
+{
+    return (str.indexOf("0x") == 0);
 }
 
 bool ParserClass::IsNumeric(QString str)
@@ -535,6 +544,52 @@ hfloat ParserClass::EvaluateSumAndDifference(QString str)
         }
     }
     return tot;
+}
+
+long int ParserClass::FromAsciiHexDigitToNUmber(char digitA)
+{
+    long int retVal = 0;
+    if ((digitA >= '0') && (digitA <='9'))
+    {
+        retVal = digitA - '0';
+    }
+    else if ((digitA >= 'a') && (digitA <='f'))
+    {
+        retVal = 10 + (digitA - 'a');
+    }
+    return retVal;
+}
+
+long int ParserClass::pow(int base, int exponent)
+{
+    long int retVal = base;
+    if (exponent == 0)
+    {
+        retVal = 1;
+    }
+    else
+    {
+        int i;
+        for (i = 0;  i < (exponent - 1); i++)
+        {
+            retVal *= base;
+        }
+    }
+    return retVal;
+}
+
+QString ParserClass::EvaluateExadecimal(QString str)
+{
+    str = str.mid(2).toLower();
+    int i,l = str.length();
+    long int result = 0;
+    for (i = 0; i < l; i++)
+    {
+        char digitA = str[(l-1)-i].toAscii();
+        long int digit = FromAsciiHexDigitToNUmber(digitA);
+        result += digit * pow(16,i);
+    }
+    return QString("%1").arg(result);
 }
 
 int ParserClass::HasFunction(QString str)
