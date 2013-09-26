@@ -276,6 +276,10 @@ hfloat ParserClass::Parse(QString str, bool preview)
     {
         retVal = hfloat(EvaluateExadecimal(str));
     }
+    else if (IsBinary(str))
+    {
+        retVal = hfloat(EvaluateBinary(str));
+    }
     else if (IsVariableName(str))
     {
         retVal = LoadVariable(str);
@@ -306,6 +310,11 @@ hfloat ParserClass::Parse(QString str, bool preview)
 bool ParserClass::IsHexadecimal(QString str)
 {
     return (str.indexOf("0x") == 0);
+}
+
+bool ParserClass::IsBinary(QString str)
+{
+    return (str.indexOf("0b") == 0);
 }
 
 bool ParserClass::IsNumeric(QString str)
@@ -560,6 +569,16 @@ long int ParserClass::FromAsciiHexDigitToNUmber(char digitA)
     return retVal;
 }
 
+long int ParserClass::FromAsciiBinDigitToNUmber(char digitA)
+{
+    long int retVal = 0;
+    if ((digitA >= '0') && (digitA <='1'))
+    {
+        retVal = digitA - '0';
+    }
+    return retVal;
+}
+
 long int ParserClass::pow(int base, int exponent)
 {
     long int retVal = base;
@@ -588,6 +607,20 @@ QString ParserClass::EvaluateExadecimal(QString str)
         char digitA = str[(l-1)-i].toAscii();
         long int digit = FromAsciiHexDigitToNUmber(digitA);
         result += digit * pow(16,i);
+    }
+    return QString("%1").arg(result);
+}
+
+QString ParserClass::EvaluateBinary(QString str)
+{
+    str = str.mid(2).toLower();
+    int i,l = str.length();
+    long int result = 0;
+    for (i = 0; i < l; i++)
+    {
+        char digitA = str[(l-1)-i].toAscii();
+        long int digit = FromAsciiBinDigitToNUmber(digitA);
+        result += digit * pow(2,i);
     }
     return QString("%1").arg(result);
 }

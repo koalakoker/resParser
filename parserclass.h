@@ -27,6 +27,7 @@ private:
     bool IsVariableName(QString str);
     static bool IsNumeric(QString str);
     static bool IsHexadecimal(QString str);
+    static bool IsBinary(QString str);
     static bool IsAssignment(QString str);
     static bool HasParentesis(QString str);
     static bool HasOperand(QString str);
@@ -38,7 +39,9 @@ private:
     QString EvaluateDivision(QString str);
     QString EvaluateMultiply(QString str);
     static QString EvaluateExadecimal(QString str);
+    static QString EvaluateBinary(QString str);
     static long int FromAsciiHexDigitToNUmber(char digitA);
+    static long int FromAsciiBinDigitToNUmber(char digitA);
     static long int pow(int base, int exponent);
     hfloat EvaluateSumAndDifference(QString str);
     void ExtractBuiltInFunction(QString str, int biFuncOrder, QString& from, QString& to);
