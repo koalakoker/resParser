@@ -9,7 +9,8 @@
 #define AUTO "%.%1Rg"
 #define HEXADECIMAL "%lX"
 
-CommandMngrClass::CommandMngrClass()
+CommandMngrClass::CommandMngrClass(QObject *parent):
+    QObject(parent)
 {
     m_lastCommand = 0;
     m_commandIndex = 0;
@@ -258,4 +259,39 @@ void CommandMngrClass::Load(QString fileName)
 
     // Load Parser state
     m_parser.Load(in);
+}
+
+QList<TableInfoElement> CommandMngrClass::VariableInfo(void)
+{
+    QList<TableInfoElement> infoTable;
+    int i;
+    for (i = 0; i < m_parser.VariableCreated(); i++)
+    {
+        Variable* var = m_parser.GetVariableAtIndex(i);
+        TableInfoElement tab;
+        tab.m_name = var->Name();
+        tab.m_value = var->Value().toString(FormatOutput());
+        infoTable.append(tab);
+    }
+    return infoTable;
+}
+
+QList<TableInfoElement> CommandMngrClass::BuiltInFunctionInfo(void)
+{
+    QList<TableInfoElement> infoTable;
+    QStringList list = m_parser.builtInFunctionList();
+    int i;
+    for (i = 0; i < list.count(); i++)
+    {
+        TableInfoElement tab;
+        tab.m_name = list.at(i);
+        tab.m_value = "";
+        infoTable.append(tab);
+    }
+    return infoTable;
+}
+
+QList<TableInfoElement> CommandMngrClass::UserFunctionInfo(void)
+{
+    return m_parser.UserDefinedFunctionsInfo();
 }

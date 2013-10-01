@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>437</width>
+    <width>400</width>
     <height>605</height>
    </rect>
   </property>
@@ -47,7 +47,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>437</width>
+     <width>400</width>
      <height>29</height>
     </rect>
    </property>
@@ -79,6 +79,8 @@
      <addaction name="actionHexadecimal"/>
     </widget>
     <addaction name="actionFunctions"/>
+    <addaction name="actionUser_Functions"/>
+    <addaction name="actionVariables"/>
     <addaction name="menu_Output_format"/>
    </widget>
    <addaction name="menu_Session"/>
@@ -120,10 +122,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;Functions</string>
+    <string>&amp;Built-in Functions</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+F</string>
+    <string>Ctrl+Shift+F</string>
    </property>
   </action>
   <action name="actionAuto">
@@ -168,6 +170,28 @@
    </property>
    <property name="shortcut">
     <string>F8</string>
+   </property>
+  </action>
+  <action name="actionVariables">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Variables</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+V</string>
+   </property>
+  </action>
+  <action name="actionUser_Functions">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>User Functions</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+U</string>
    </property>
   </action>
  </widget>

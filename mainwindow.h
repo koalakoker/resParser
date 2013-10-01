@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "functionwindow.h"
+#include "docklistview.h"
 #include "commandmngrclass.h"
 
 namespace Ui {
@@ -37,10 +38,23 @@ private slots:
 
     void closeEvent (QCloseEvent* event);
 
+    // Dock
+    void dockVisibilityChange(bool visible);
+    void on_actionVariables_toggled(bool arg1);
+    void on_actionUser_Functions_toggled(bool arg1);
+
+    void variableUpdates(void);
+    void userDefinedFunctionUpdates(void);
+
 private:
     Ui::MainWindow *ui;
     FunctionWindow m_funcWin;
+    DockListView m_dockListVariables;
+    DockListView m_dockListUserDefinedFunctions;
+    DockListView m_dockListBuiltinFunctions;
     CommandMngrClass m_cmdMngr;
+
+    QRect m_geometryOrg;
 };
 
 #endif // MAINWINDOW_H

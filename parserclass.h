@@ -8,6 +8,7 @@
 #include "hfloat.h"
 #include "builtinfunction.h"
 #include "userdefinedfunctions.h"
+#include "tableinfoelement.h"
 
 #define MAX_VARIABLES 100
 #define MAX_BUILTINFUNCTIONS 40
@@ -62,6 +63,7 @@ public:
     void Clear(void);
     hfloat Parse(QString str,bool preview  = false);
     QStringList builtInFunctionList(void);
+    QList<TableInfoElement> UserDefinedFunctionsInfo(void);
     QString UserDefineFunctionFormulaFromName(QString name);
 
     void Save(QDataStream& out);
@@ -69,6 +71,7 @@ public:
 
 signals:
     void functionListUpdate(QStringList list);
+    void variablesUpdate(void);
 
 public slots:
 };

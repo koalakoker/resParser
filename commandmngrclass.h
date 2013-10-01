@@ -4,11 +4,13 @@
 #include "QStringList"
 #include "parserclass.h"
 #include "commandclass.h"
+#include "tableinfoelement.h"
 
 typedef enum {Fixed, Scientific, Auto, Hexadecimal} formatOutput_t;
 
-class CommandMngrClass
+class CommandMngrClass : public QObject
 {
+    Q_OBJECT
 private:
     ParserClass m_parser;
     QList<CommandClass> m_commands;
@@ -19,7 +21,7 @@ private:
 
     QString FormatAnswer(QString str);
 public:
-    CommandMngrClass();
+    explicit CommandMngrClass(QObject *parent = 0);
 
     ParserClass* Parser(void);
 
@@ -29,6 +31,9 @@ public:
 
     QString PreviewResult(QString qsInput);
 
+    QList<TableInfoElement> VariableInfo(void);
+    QList<TableInfoElement> BuiltInFunctionInfo(void);
+    QList<TableInfoElement> UserFunctionInfo(void);
     QStringList BuiltInFunctionList(void);
     QString OutputPaneReprint(void);
 
@@ -40,6 +45,8 @@ public:
     void SetFormat(formatOutput_t format); // Sets the format
     void SetPrecision(int precision); // Sets the precision in digit
     QString FormatOutput(void); // Return the format string to pass to hfloat::toString()
+signals:
+    void variablesUpdate(void);
 };
 
 #endif // COMMANDMNGRCLASS_H

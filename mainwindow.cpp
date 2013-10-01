@@ -5,7 +5,7 @@
 #include <QDebug>
 
 #define PRJ_NAME    "resParser"
-#define PRJ_VERSION "0.1.0"
+#define PRJ_VERSION "0.1.1"
 #define PRJ_WINDOWS_TITLE (QString("%1 - v%2").arg(QString(PRJ_NAME)).arg(QString(PRJ_VERSION)))
 #define HYST_FILENAME "hyst.rp"
 
@@ -30,8 +30,38 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (ui->line_input,SIGNAL(keyOperator()),this,SLOT(keyOperatorPress()));
     connect (ui->line_input,SIGNAL(keyEscPressed()),this,SLOT(close()));
     connect (m_cmdMngr.Parser(),SIGNAL(functionListUpdate(QStringList)),&m_funcWin,SLOT(functionListPopulate(QStringList)));
+    connect (m_cmdMngr.Parser(),SIGNAL(variablesUpdate()),this,SLOT(variableUpdates()));
+    connect (m_cmdMngr.Parser(),SIGNAL(functionListUpdate(QStringList)),this,SLOT(userDefinedFunctionUpdates()));
 
     on_action_Load_triggered();
+
+    // Prepare dock
+    m_geometryOrg = geometry();
+    connect (&m_dockListVariables,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
+    connect (&m_dockListUserDefinedFunctions,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
+    connect (&m_dockListBuiltinFunctions,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
+    addDockWidget(Qt::RightDockWidgetArea,&m_dockListVariables,Qt::Vertical);
+    tabifyDockWidget(&m_dockListVariables,&m_dockListUserDefinedFunctions);
+    tabifyDockWidget(&m_dockListVariables,&m_dockListBuiltinFunctions);
+
+    m_dockListVariables.setWindowTitle("Variables");
+    m_dockListUserDefinedFunctions.setWindowTitle("User functions");
+    m_dockListBuiltinFunctions.setWindowTitle("Built-in functions");
+    m_dockListVariables.raise();
+
+    m_dockListVariables.populate(m_cmdMngr.VariableInfo());
+    m_dockListBuiltinFunctions.populate(m_cmdMngr.BuiltInFunctionInfo());
+    m_dockListUserDefinedFunctions.populate(m_cmdMngr.UserFunctionInfo());
+}
+
+void MainWindow::variableUpdates(void)
+{
+    m_dockListVariables.populate(m_cmdMngr.VariableInfo());
+}
+
+void MainWindow::userDefinedFunctionUpdates(void)
+{
+    m_dockListUserDefinedFunctions.populate(m_cmdMngr.UserFunctionInfo());
 }
 
 MainWindow::~MainWindow()
@@ -68,20 +98,6 @@ void MainWindow::keyOperatorPress()
 void MainWindow::on_line_input_textChanged(const QString &arg1)
 {
     QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),m_cmdMngr.PreviewResult(arg1));
-}
-
-void MainWindow::on_actionFunctions_toggled(bool arg1)
-{
-    if (arg1)
-    {
-        m_funcWin.functionListPopulate(m_cmdMngr.BuiltInFunctionList());
-        m_funcWin.move(this->pos().x()+this->size().width()+20,this->pos().y()+10);
-        m_funcWin.show();
-    }
-    else
-    {
-        m_funcWin.hide();
-    }
 }
 
 void MainWindow::on_actionAbout_activated()
@@ -165,4 +181,38 @@ void MainWindow::closeEvent (QCloseEvent* event)
 {
     on_action_Save_triggered();
     event->setAccepted(true);
+}
+
+void MainWindow::dockVisibilityChange(bool visible)
+{
+    QRect rect = m_geometryOrg;
+    visible = (m_dockListVariables.isVisible()||m_dockListUserDefinedFunctions.isVisible()||m_dockListBuiltinFunctions.isVisible());
+    if (visible)
+    {
+        rect.setWidth(rect.width()+m_dockListVariables.geometry().width());
+        setGeometry(rect);
+    }
+    else
+    {
+        rect.setWidth(rect.width());
+        setGeometry(rect);
+    }
+}
+
+void MainWindow::on_actionVariables_toggled(bool arg1)
+{
+    m_dockListVariables.setVisible(arg1);
+    m_dockListVariables.raise();
+}
+
+void MainWindow::on_actionFunctions_toggled(bool arg1)
+{
+    m_dockListBuiltinFunctions.setVisible(arg1);
+    m_dockListBuiltinFunctions.raise();
+}
+
+void MainWindow::on_actionUser_Functions_toggled(bool arg1)
+{
+    m_dockListUserDefinedFunctions.setVisible(arg1);
+    m_dockListUserDefinedFunctions.raise();
 }

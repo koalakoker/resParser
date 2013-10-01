@@ -76,10 +76,19 @@ QStringList ParserClass::builtInFunctionList(void)
     {
         list.append(m_functions[i]->name());
     }
-    // TBF
+    return list;
+}
+
+QList<TableInfoElement> ParserClass::UserDefinedFunctionsInfo(void)
+{
+    QList<TableInfoElement> list;
+    int i;
     for (i = 0; i < m_userdefinedFunctions.count(); i++)
     {
-        list.append(m_userdefinedFunctions[i].toString());
+        TableInfoElement info;
+        info.m_name = m_userdefinedFunctions[i].Name();
+        info.m_value = m_userdefinedFunctions[i].functionSrt();
+        list.append(info);
     }
     return list;
 }
@@ -116,6 +125,7 @@ bool ParserClass::StoreVariable(QString name,hfloat newValue)
             var->setValue(newValue);
             found = true;
             retVal = true;
+            emit variablesUpdate();
         }
     }
     if (!found)
@@ -126,6 +136,7 @@ bool ParserClass::StoreVariable(QString name,hfloat newValue)
             m_variables[m_VariableCreated].setValue(newValue);
             m_VariableCreated++;
             retVal = true;
+            emit variablesUpdate();
         }
     }
     return retVal;
