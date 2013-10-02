@@ -194,6 +194,11 @@
     <string>Ctrl+Shift+U</string>
    </property>
   </action>
+  <action name="actionReset_windows">
+   <property name="text">
+    <string>Reset windows</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

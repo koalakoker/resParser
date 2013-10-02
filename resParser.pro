@@ -23,7 +23,6 @@ SOURCES += main.cpp\
     hystorylineedit.cpp \
     hfloat.cpp \
     builtinfunction.cpp \
-    functionwindow.cpp \
     aboutdialog.cpp \
     userdefinedfunctions.cpp \
     commandclass.cpp \
@@ -38,7 +37,6 @@ HEADERS  += mainwindow.h \
     hystorylineedit.h \
     hfloat.h \
     builtinfunction.h \
-    functionwindow.h \
     aboutdialog.h \
     userdefinedfunctions.h \
     commandclass.h \

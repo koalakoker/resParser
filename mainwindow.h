@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "functionwindow.h"
 #include "docklistview.h"
 #include "commandmngrclass.h"
 
@@ -48,13 +47,12 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    FunctionWindow m_funcWin;
     DockListView m_dockListVariables;
     DockListView m_dockListUserDefinedFunctions;
     DockListView m_dockListBuiltinFunctions;
     CommandMngrClass m_cmdMngr;
 
-    QRect m_geometryOrg;
+    bool m_isExtended;
 };
 
 #endif // MAINWINDOW_H
