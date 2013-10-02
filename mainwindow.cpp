@@ -50,8 +50,11 @@ MainWindow::MainWindow(QWidget *parent) :
     m_dockListUserDefinedFunctions.populate(m_cmdMngr.UserFunctionInfo());
 
     connect (&m_dockListVariables,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
+    connect (&m_dockListVariables,SIGNAL(DoubleClick(QString)),this,SLOT(addStrToLineInput(QString)));
     connect (&m_dockListUserDefinedFunctions,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
+    connect (&m_dockListUserDefinedFunctions,SIGNAL(DoubleClick(QString)),this,SLOT(addStrToLineInput(QString)));
     connect (&m_dockListBuiltinFunctions,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
+    connect (&m_dockListBuiltinFunctions,SIGNAL(DoubleClick(QString)),this,SLOT(addStrToLineInput(QString)));
 }
 
 void MainWindow::variableUpdates(void)
@@ -205,6 +208,12 @@ void MainWindow::dockVisibilityChange(bool visible)
             m_isExtended = false;
         }
     }
+}
+
+void MainWindow::addStrToLineInput(QString str)
+{
+    ui->line_input->insert(str);
+    ui->line_input->setFocus();
 }
 
 void MainWindow::on_actionVariables_toggled(bool arg1)

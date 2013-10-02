@@ -19,11 +19,17 @@ public:
 
     void populate(QList<TableInfoElement> List);
 
+private slots:
+    void on_tableWidget_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::DockListView *ui;
     bool m_empty;
 
     void EmptyTable(void);
+
+signals:
+    void DoubleClick(QString str);
 };
 
 #endif // DOCKLISTVIEW_H

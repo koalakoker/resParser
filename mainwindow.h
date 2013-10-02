@@ -24,6 +24,7 @@ private slots:
     void keyOperatorPress();
     void updateOutputFormatSetting(void);
     void updateOutputPaneAndPreview(void);
+    void addStrToLineInput(QString str);
 
     void on_line_input_textChanged(const QString &arg1);
     void on_actionFunctions_toggled(bool arg1);

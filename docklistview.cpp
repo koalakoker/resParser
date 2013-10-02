@@ -47,3 +47,8 @@ void DockListView::EmptyTable(void)
     ui->tableWidget->reset();
     m_empty = true;
 }
+
+void DockListView::on_tableWidget_doubleClicked(const QModelIndex &index)
+{
+    emit DoubleClick(ui->tableWidget->item(index.row(),0)->text());
+}
