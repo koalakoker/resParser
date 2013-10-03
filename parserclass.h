@@ -10,19 +10,12 @@
 #include "userdefinedfunctions.h"
 #include "tableinfoelement.h"
 
-#define MAX_VARIABLES 100
-#define MAX_BUILTINFUNCTIONS 40
-
 class ParserClass : public QObject
 {
     Q_OBJECT
 private:
-    Variable m_variables[MAX_VARIABLES];
-    int m_VariableCreated;
-
-    builtinFunction* m_functions[MAX_BUILTINFUNCTIONS];
-    int m_builtinfunctionCreated;
-
+    QList<Variable> m_variables;
+    QList<builtinFunction> m_functions;
     QList<userdefinedFunctions> m_userdefinedFunctions;
 
     bool IsVariableName(QString str);

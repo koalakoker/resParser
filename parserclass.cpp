@@ -9,9 +9,6 @@
 ParserClass::ParserClass(QObject *parent):
     QObject(parent)
 {
-    m_VariableCreated = 0;
-    m_builtinfunctionCreated = 0;
-
     addBuiltInFunction("sqrt",hfloat::sqrt);
     addBuiltInFunction("sqr",hfloat::sqr);
     addBuiltInFunction("cbrt",hfloat::cbrt);
@@ -52,29 +49,21 @@ ParserClass::ParserClass(QObject *parent):
 
 void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr1a)(hfloat a))
 {
-    if (m_builtinfunctionCreated < MAX_BUILTINFUNCTIONS)
-    {
-        m_functions[m_builtinfunctionCreated] = new builtinFunction(name,ptr1a);
-        m_builtinfunctionCreated++;
-    }
+    m_functions.append(builtinFunction(name,ptr1a));
 }
 
 void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr2a)(hfloat a,hfloat b))
 {
-    if (m_builtinfunctionCreated < MAX_BUILTINFUNCTIONS)
-    {
-        m_functions[m_builtinfunctionCreated] = new builtinFunction(name,ptr2a);
-        m_builtinfunctionCreated++;
-    }
+    m_functions.append(builtinFunction(name,ptr2a));
 }
 
 QStringList ParserClass::builtInFunctionList(void)
 {
     QStringList list;
     int i;
-    for (i = 0; i < m_builtinfunctionCreated; i++)
+    for (i = 0; i < m_functions.count(); i++)
     {
-        list.append(m_functions[i]->name());
+        list.append(m_functions[i].name());
     }
     return list;
 }
@@ -95,14 +84,14 @@ QList<TableInfoElement> ParserClass::UserDefinedFunctionsInfo(void)
 
 int ParserClass::VariableCreated(void)
 {
-    return m_VariableCreated;
+    return m_variables.count();
 }
 
 hfloat ParserClass::LoadVariable(QString name)
 {
     hfloat retVal;
     int i;
-    for (i = 0; i < m_VariableCreated; i++)
+    for (i = 0; i < m_variables.count(); i++)
     {
         Variable* var = &m_variables[i];
         if (var->Name() == name)
@@ -117,7 +106,7 @@ bool ParserClass::StoreVariable(QString name,hfloat newValue)
 {
     bool retVal = false, found = false;
     int i;
-    for (i = 0; i < m_VariableCreated; i++)
+    for (i = 0; i < m_variables.count(); i++)
     {
         Variable* var = &(m_variables[i]);
         if (var->Name() == name)
@@ -130,14 +119,12 @@ bool ParserClass::StoreVariable(QString name,hfloat newValue)
     }
     if (!found)
     {
-        if (m_VariableCreated < MAX_VARIABLES)
-        {
-            m_variables[m_VariableCreated].setName(name);
-            m_variables[m_VariableCreated].setValue(newValue);
-            m_VariableCreated++;
-            retVal = true;
-            emit variablesUpdate();
-        }
+        Variable newVar;
+        newVar.setName(name);
+        newVar.setValue(newValue);
+        m_variables.append(newVar);
+        retVal = true;
+        emit variablesUpdate();
     }
     return retVal;
 }
@@ -175,7 +162,7 @@ bool ParserClass::StoreFunction(QString name,QStringList args,QString newFuncStr
 Variable* ParserClass::GetVariableAtIndex(int i)
 {
     Variable* retVal = 0;
-    if (i < m_VariableCreated)
+    if (i < m_variables.count())
     {
         retVal = &(m_variables[i]);
     }
@@ -184,7 +171,7 @@ Variable* ParserClass::GetVariableAtIndex(int i)
 
 void ParserClass::Clear(void)
 {
-    m_VariableCreated = 0;
+    m_variables.clear();
 }
 
 hfloat ParserClass::Parse(QString str, bool preview)
@@ -354,7 +341,7 @@ bool ParserClass::IsNumeric(QString str)
 bool ParserClass::IsVariableName(QString str)
 {
     int i;
-    for (i = 0; i < m_VariableCreated; i++)
+    for (i = 0; i < m_variables.count(); i++)
     {
         Variable var = m_variables[i];
         if (var.Name() == str)
@@ -640,9 +627,9 @@ int ParserClass::HasFunction(QString str)
 {
     int retVal = -1;
     int i;
-    for (i = 0; i < m_builtinfunctionCreated; i++)
+    for (i = 0; i < m_functions.count(); i++)
     {
-        if (str.toLower().contains(m_functions[i]->name()+QString("(")))
+        if (str.toLower().contains(m_functions[i].name()+QString("(")))
         {
             retVal = i;
             break;
@@ -670,11 +657,11 @@ void ParserClass::ExtractBuiltInFunction(QString str, int biFuncOrder, QString& 
 {
     from=QString("");
     to=QString("");
-    if ((biFuncOrder >= 0)&&(biFuncOrder < m_builtinfunctionCreated))
+    if ((biFuncOrder >= 0)&&(biFuncOrder < m_functions.count()))
     {
-        builtinFunction* biFunc = m_functions[biFuncOrder];
-        biFunc->clearArgs();
-        QString functionName = biFunc->name() + QString("(");
+        builtinFunction biFunc = m_functions[biFuncOrder];
+        biFunc.clearArgs();
+        QString functionName = biFunc.name() + QString("(");
         int functionPos = str.indexOf(functionName);
         if (functionPos >= 0)
         {
@@ -685,12 +672,12 @@ void ParserClass::ExtractBuiltInFunction(QString str, int biFuncOrder, QString& 
                 int i;
                 for (i = 0; i < argumentStr.count(); i++)
                 {
-                    biFunc->addArg(Parse(argumentStr[i]));
+                    biFunc.addArg(Parse(argumentStr[i]));
                 }
-                hfloat result = biFunc->exec();
+                hfloat result = biFunc.exec();
                 if (!result.isNan())
                 {
-                    from = biFunc->name() + from;
+                    from = biFunc.name() + from;
                     to = result.toString("%.50Rf");
                 }
                 else
@@ -798,15 +785,15 @@ QString ParserClass::UserDefineFunctionFormulaFromName(QString name)
 
 void ParserClass::Save(QDataStream& out)
 {
-    int i;
+    int i, l = m_variables.count();
     // Save Variables
-    out << (qint32)(m_VariableCreated);
-    for (i = 0; i < m_VariableCreated; i++)
+    out << (qint32)(l);
+    for (i = 0; i < l; i++)
     {
         m_variables[i].Save(out);
     }
     // Save User defined functions
-    int l = m_userdefinedFunctions.count();
+    l = m_userdefinedFunctions.count();
     out << (qint32)(l);
     for (i = 0; i < l; i++)
     {
