@@ -18,7 +18,11 @@ private:
     QList<builtinFunction> m_functions;
     QList<userdefinedFunctions> m_userdefinedFunctions;
 
+public:
     bool IsVariableName(QString str);
+    bool IsUserDefinedFunctionName(QString str);
+
+private:
     static bool IsNumeric(QString str);
     static bool IsHexadecimal(QString str);
     static bool IsBinary(QString str);
@@ -51,6 +55,8 @@ public:
     int VariableCreated(void);
     hfloat LoadVariable(QString name);
     bool StoreVariable(QString name,hfloat newValue);
+    bool RemoveVariable(QString name);
+    bool RemoveUserDefinedFunction(QString name);
     bool StoreFunction(QString name,QStringList args,QString newValue);
     Variable *GetVariableAtIndex(int i);
     void Clear(void);

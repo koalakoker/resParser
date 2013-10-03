@@ -129,6 +129,40 @@ bool ParserClass::StoreVariable(QString name,hfloat newValue)
     return retVal;
 }
 
+bool ParserClass::RemoveVariable(QString name)
+{
+    bool retVal = false;
+    int i;
+    for (i = 0; i < m_variables.count(); i++)
+    {
+        if (m_variables[i].Name() == name)
+        {
+            m_variables.removeAt(i);
+            retVal = true;
+            emit variablesUpdate();
+            break;
+        }
+    }
+    return retVal;
+}
+
+bool ParserClass::RemoveUserDefinedFunction(QString name)
+{
+    bool retVal = false;
+    int i;
+    for (i = 0; i < m_userdefinedFunctions.count(); i++)
+    {
+        if (m_userdefinedFunctions[i].Name() == name)
+        {
+            m_userdefinedFunctions.removeAt(i);
+            retVal = true;
+            emit(functionListUpdate(builtInFunctionList()));
+            break;
+        }
+    }
+    return retVal;
+}
+
 bool ParserClass::StoreFunction(QString name,QStringList args,QString newFuncStr)
 {
     bool retVal = false, found = false;
@@ -345,6 +379,19 @@ bool ParserClass::IsVariableName(QString str)
     {
         Variable var = m_variables[i];
         if (var.Name() == str)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ParserClass::IsUserDefinedFunctionName(QString str)
+{
+    int i;
+    for (i = 0; i < m_userdefinedFunctions.count(); i++)
+    {
+        if (m_userdefinedFunctions[i].Name() == str)
         {
             return true;
         }

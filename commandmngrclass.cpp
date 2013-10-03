@@ -62,9 +62,22 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
             retVal.append("<br>");
         }
     }
-    else if (qsInput.contains("clear"))
+    else if (qsInput.toLower().contains("clear"))
     {
-        m_parser.Clear();
+        // Remove spaces
+        qsInput.replace(" ","");
+        if (m_parser.IsVariableName(qsInput.remove("clear")))
+        {
+            m_parser.RemoveVariable(qsInput);
+        }
+        else if (m_parser.IsUserDefinedFunctionName(qsInput))
+        {
+            m_parser.RemoveUserDefinedFunction(qsInput);
+        }
+        else if (qsInput.toLower() == "clear" )
+        {
+            m_parser.Clear();
+        }
     }
     else if (qsInput == "E12")
     {
