@@ -51,8 +51,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect (&m_dockListVariables,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
     connect (&m_dockListVariables,SIGNAL(DoubleClick(QString)),this,SLOT(addStrToLineInput(QString)));
+    connect (&m_dockListVariables,SIGNAL(Delete(QString)),this,SLOT(clearSelected(QString)));
     connect (&m_dockListUserDefinedFunctions,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
     connect (&m_dockListUserDefinedFunctions,SIGNAL(DoubleClick(QString)),this,SLOT(addStrToLineInput(QString)));
+    connect (&m_dockListUserDefinedFunctions,SIGNAL(Delete(QString)),this,SLOT(clearSelected(QString)));
     connect (&m_dockListBuiltinFunctions,SIGNAL(visibilityChanged(bool)),this,SLOT(dockVisibilityChange(bool)));
     connect (&m_dockListBuiltinFunctions,SIGNAL(DoubleClick(QString)),this,SLOT(addStrToLineInput(QString)));
 }
@@ -232,4 +234,9 @@ void MainWindow::on_actionUser_Functions_toggled(bool arg1)
 {
     m_dockListUserDefinedFunctions.setVisible(arg1);
     m_dockListUserDefinedFunctions.raise();
+}
+
+void MainWindow::clearSelected(QString str)
+{
+    m_cmdMngr.AddNewCommand(QString("clear %1").arg(str));
 }

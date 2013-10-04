@@ -1,5 +1,7 @@
 #include "docklistview.h"
 #include "ui_docklistview.h"
+#include <QMenu>
+#include <QDebug>
 
 DockListView::DockListView(QWidget *parent) :
     QDockWidget(parent),
@@ -7,6 +9,8 @@ DockListView::DockListView(QWidget *parent) :
 {
     ui->setupUi(this);
     m_empty = true;
+
+    ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 DockListView::~DockListView()
@@ -51,4 +55,22 @@ void DockListView::EmptyTable(void)
 void DockListView::on_tableWidget_doubleClicked(const QModelIndex &index)
 {
     emit DoubleClick(ui->tableWidget->item(index.row(),0)->text());
+}
+
+void DockListView::on_tableWidget_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = ui->tableWidget->mapToGlobal(pos);
+
+    QMenu myMenu;
+    myMenu.addAction("Delete");
+
+    QAction* selectedItem = myMenu.exec(globalPos);
+    if (selectedItem)
+    {
+        if (selectedItem->text() == "Delete")
+        {
+            int row = ui->tableWidget->itemAt(pos)->row();
+            emit Delete(ui->tableWidget->item(row,0)->text());
+        }
+    }
 }

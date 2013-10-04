@@ -22,6 +22,8 @@ public:
 private slots:
     void on_tableWidget_doubleClicked(const QModelIndex &index);
 
+    void on_tableWidget_customContextMenuRequested(const QPoint &pos);
+
 private:
     Ui::DockListView *ui;
     bool m_empty;
@@ -30,6 +32,7 @@ private:
 
 signals:
     void DoubleClick(QString str);
+    void Delete(QString str);
 };
 
 #endif // DOCKLISTVIEW_H

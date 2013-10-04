@@ -46,6 +46,8 @@ private slots:
     void variableUpdates(void);
     void userDefinedFunctionUpdates(void);
 
+    void clearSelected(QString str);
+
 private:
     Ui::MainWindow *ui;
     DockListView m_dockListVariables;
