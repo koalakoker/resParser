@@ -1,4 +1,1 @@
-- Use operator ^ instead of POW function
-- Variables window
 - Highlight parentesis !?!
-- Hexadecimal input

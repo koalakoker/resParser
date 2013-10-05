@@ -52,6 +52,7 @@ private:
     QString EvaluateParallel(QString str);
     QString EvaluateDivision(QString str);
     QString EvaluateMultiply(QString str);
+    QString EvaluatePow(QString str);
     static QString EvaluateExadecimal(QString str);
     static QString EvaluateBinary(QString str);
     static long int FromAsciiHexDigitToNUmber(char digitA);

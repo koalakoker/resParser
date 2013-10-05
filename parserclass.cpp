@@ -3,7 +3,7 @@
 #include "QStringList"
 //#include "QDebug"
 
-#define REGEXP5OPERAND "[-+*/:]"
+#define REGEXP6OPERAND "[-+*/:^]"
 #define REGEXP2OPERAND "[-+]"
 
 #define FIXED "%.%1Rf"
@@ -460,6 +460,7 @@ hfloat ParserClass::Parse(QString str, bool preview)
     }
     else if (HasOperand(str))
     {
+        str = EvaluatePow(str);
         str = EvaluateParallel(str);
         str = EvaluateDivision(str);
         str = EvaluateMultiply(str);
@@ -547,7 +548,7 @@ bool ParserClass::IsAssignment(QString str)
 
 bool ParserClass::HasOperand(QString str)
 {
-    QRegExp operand(REGEXP5OPERAND);
+    QRegExp operand(REGEXP6OPERAND);
     int i = str.indexOf(operand);
     if (i == -1)
     {
@@ -632,7 +633,7 @@ QString ParserClass::EvaluateParallel(QString str)
         QString beforeOp = str.mid(0,operandPos);
         QString afterOp = str.mid(operandPos+1,str.length()-operandPos-1);
 
-        QRegExp operand(REGEXP5OPERAND);
+        QRegExp operand(REGEXP6OPERAND);
         QStringList beforeOpSplitted = beforeOp.split(operand);
         QStringList afterOpSplitted = afterOp.split(operand);
         QString lastValueStr = beforeOpSplitted[beforeOpSplitted.count()-1];
@@ -641,6 +642,32 @@ QString ParserClass::EvaluateParallel(QString str)
 
         QString evaluated = str.replace(lastValueStr+":"+firstValueStr,result.toString("%.50Rf"));
         retVal = EvaluateParallel(evaluated);
+    }
+    else
+    {
+        retVal = str;
+    }
+    return retVal;
+}
+
+QString ParserClass::EvaluatePow(QString str)
+{
+    QString retVal;
+    if (HasOperand(str,'^'))
+    {
+        int operandPos = str.indexOf('^');
+        QString beforeOp = str.mid(0,operandPos);
+        QString afterOp = str.mid(operandPos+1,str.length()-operandPos-1);
+
+        QRegExp operand(REGEXP6OPERAND);
+        QStringList beforeOpSplitted = beforeOp.split(operand);
+        QStringList afterOpSplitted = afterOp.split(operand);
+        QString firstValueStr = beforeOpSplitted[beforeOpSplitted.count()-1];
+        QString lastValueStr = afterOpSplitted[0];
+        hfloat result = hfloat::pow(this->Parse(firstValueStr),this->Parse(lastValueStr));
+
+        QString evaluated = str.replace(firstValueStr+"^"+lastValueStr,result.toString("%.50Rf"));
+        retVal = EvaluatePow(evaluated);
     }
     else
     {
@@ -658,7 +685,7 @@ QString ParserClass::EvaluateMultiply(QString str)
         QString beforeOp = str.mid(0,operandPos);
         QString afterOp = str.mid(operandPos+1,str.length()-operandPos-1);
 
-        QRegExp operand("REGEXP5OPERAND");
+        QRegExp operand("REGEXP6OPERAND");
         QStringList beforeOpSplitted = beforeOp.split(operand);
         QStringList afterOpSplitted = afterOp.split(operand);
         QString lastValueStr = beforeOpSplitted[beforeOpSplitted.count()-1];
@@ -684,7 +711,7 @@ QString ParserClass::EvaluateDivision(QString str)
         QString beforeOp = str.mid(0,operandPos);
         QString afterOp = str.mid(operandPos+1,str.length()-operandPos-1);
 
-        QRegExp operand("REGEXP5OPERAND");
+        QRegExp operand("REGEXP6OPERAND");
         QStringList beforeOpSplitted = beforeOp.split(operand);
         QStringList afterOpSplitted = afterOp.split(operand);
         QString lastValueStr = beforeOpSplitted[beforeOpSplitted.count()-1];
