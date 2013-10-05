@@ -6,6 +6,43 @@
 #define REGEXP5OPERAND "[-+*/:]"
 #define REGEXP2OPERAND "[-+]"
 
+#define FIXED "%.%1Rf"
+#define SCIENTIFIC "%.%1Re"
+#define AUTO "%.%1Rg"
+#define HEXADECIMAL "%lX"
+
+keyWord::keyWord(keyWordCode_t code, QString str)
+{
+    m_code = code;
+    m_str = str;
+}
+
+bool ParserClass::IsKeyWord(QString str)
+{
+    int i;
+    for (i = 0; i < m_keyWord.count(); i++)
+    {
+        if (str.contains(m_keyWord.at(i).m_str))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+keyWordCode_t ParserClass::KeyWordCode(QString str)
+{
+    int i;
+    for (i = 0; i < m_keyWord.count(); i++)
+    {
+        if (str.contains(m_keyWord.at(i).m_str))
+        {
+            return m_keyWord.at(i).m_code;
+        }
+    }
+    return key_None;
+}
+
 ParserClass::ParserClass(QObject *parent):
     QObject(parent)
 {
@@ -45,6 +82,16 @@ ParserClass::ParserClass(QObject *parent):
     addBuiltInFunction("cosh",hfloat::cosh);
     addBuiltInFunction("sinh",hfloat::sinh);
     addBuiltInFunction("tanh",hfloat::tanh);
+
+    m_keyWord.append(keyWord(key_Clear,"clear"));
+    m_keyWord.append(keyWord(key_List,"list"));
+    m_keyWord.append(keyWord(key_List,"ls"));
+    m_keyWord.append(keyWord(key_E12,"E12"));
+    m_keyWord.append(keyWord(key_E24,"E24"));
+    m_keyWord.append(keyWord(key_Usage,"usage"));
+
+    m_formatOutput = Auto;
+    m_precision = 20;
 }
 
 void ParserClass::addBuiltInFunction(QString name, hfloat (*ptr1a)(hfloat a))
@@ -206,6 +253,92 @@ Variable* ParserClass::GetVariableAtIndex(int i)
 void ParserClass::Clear(void)
 {
     m_variables.clear();
+}
+
+QString ParserClass::Exec(QString str, hfloat &result)
+{
+    QString retVal = str + QString("<br>");
+
+    /* execute command */
+    switch (KeyWordCode(str.toLower()))
+    {
+    case key_List:
+    {
+        int i;
+        for (i = 0; i < VariableCreated(); i++)
+        {
+            Variable* var = GetVariableAtIndex(i);
+            retVal.append(var->ToString());
+            retVal.append("<br>");
+        }
+    }
+        break;
+    case key_Clear:
+    {
+        // Remove spaces
+        str.replace(" ","");
+        if (IsVariableName(str.remove("clear")))
+        {
+            RemoveVariable(str);
+        }
+        else if (IsUserDefinedFunctionName(str))
+        {
+            RemoveUserDefinedFunction(str);
+        }
+        else if (str.toLower() == "clear" )
+        {
+            Clear();
+        }
+    }
+        break;
+    case key_E12:
+    {
+        retVal.append(Resistor::E12ValuesToString());
+        retVal.append("<br>");
+    }
+        break;
+    case key_E24:
+    {
+        retVal.append(Resistor::E24ValuesToString());
+        retVal.append("<br>");
+    }
+        break;
+    case key_Usage:
+    {
+        retVal.append("<br>");
+        retVal.append("Using built-in function <b>function_name(arg,[arg])</b>.<br>");
+        retVal.append("Variable assignment: <b>var_name = expression</b>.<br>");
+        retVal.append("Show variables <b>list</b> or <b>ls</b>.<br>");
+        retVal.append("<b>clear</b> to delete all varaibles.<br>");
+        retVal.append("<b>E12</b> to show all E12 resitor values.<br>");
+        retVal.append("<b>E24</b> to show all E24 resitor values.<br>");
+        retVal.append("<b>->E12</b> to round to nearest E12 resitor values.<br>");
+        retVal.append("<b>:</b> parallel operator between resistors.<br>");
+    }
+        break;
+    default:
+    {
+        QString tmpVal;
+        if ((tmpVal = UserDefineFunctionFormulaFromName(str))!="")
+        {
+            /* Append user defined formula if name is in str */
+            retVal.append(FormatAnswer(tmpVal).append("<br>"));
+        }
+        else
+        {
+            result = Parse(str);
+            QString ansStr;
+            if (!result.isNan())
+            {
+                StoreVariable("ans",result); // Store the last result
+                ansStr = QString("ans=");
+            }
+            retVal.append(FormatAnswer(QString("%1%2<br>").arg(ansStr).arg(result.toString(FormatOutput()))));
+        }
+    }
+        break;
+    }
+    return retVal;
 }
 
 hfloat ParserClass::Parse(QString str, bool preview)
@@ -871,4 +1004,59 @@ void ParserClass::Load(QDataStream& in)
         newUDF.Load(in);
         m_userdefinedFunctions.append(newUDF);
     }
+}
+
+formatOutput_t ParserClass::Format(void)
+{
+    return m_formatOutput;
+}
+
+void ParserClass::SetFormat(formatOutput_t format)
+{
+    m_formatOutput = format;
+}
+
+int ParserClass::Precision(void)
+{
+    return m_precision;
+}
+
+void ParserClass::SetPrecision(int precision)
+{
+    m_precision = precision;
+}
+
+QString ParserClass::FormatAnswer(QString str)
+{
+    return QString("<font size=""4""><b>&nbsp;&nbsp;")+str+QString("</b></font>");
+}
+
+QString ParserClass::FormatOutput(void)
+{
+    QString retVal;
+    switch (m_formatOutput)
+    {
+    case Hexadecimal:
+    {
+        retVal = QString(HEXADECIMAL);
+    }
+        break;
+    case Fixed:
+    {
+        retVal = QString(FIXED).arg(m_precision);
+    }
+        break;
+    case Scientific:
+    {
+        retVal = QString(SCIENTIFIC).arg(m_precision);
+    }
+        break;
+    case Auto:
+    default:
+    {
+        retVal = QString(AUTO).arg(m_precision);
+    }
+        break;
+    }
+    return retVal;
 }

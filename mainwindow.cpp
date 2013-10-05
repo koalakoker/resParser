@@ -121,7 +121,7 @@ void MainWindow::on_actionAuto_toggled(bool arg1)
 {
     if (arg1)
     {
-        m_cmdMngr.SetFormat(Auto);
+        m_cmdMngr.Parser()->SetFormat(Auto);
     }
     updateOutputFormatSetting();
     ui->statusBar->showMessage(QString(tr("Switched to Decimal (Auto)")),10000);
@@ -131,7 +131,7 @@ void MainWindow::on_actionFloating_toggled(bool arg1)
 {
     if (arg1)
     {
-        m_cmdMngr.SetFormat(Fixed);
+        m_cmdMngr.Parser()->SetFormat(Fixed);
     }
     updateOutputFormatSetting();
     ui->statusBar->showMessage(QString(tr("Switched to Decimal (Floating)")),10000);
@@ -141,7 +141,7 @@ void MainWindow::on_actionScientific_toggled(bool arg1)
 {
     if (arg1)
     {
-        m_cmdMngr.SetFormat(Scientific);
+        m_cmdMngr.Parser()->SetFormat(Scientific);
     }
     updateOutputFormatSetting();
     ui->statusBar->showMessage(QString(tr("Switched to Decimal (Scientific)")),10000);
@@ -151,7 +151,7 @@ void MainWindow::on_actionHexadecimal_toggled(bool arg1)
 {
     if (arg1)
     {
-        m_cmdMngr.SetFormat(Hexadecimal);
+        m_cmdMngr.Parser()->SetFormat(Hexadecimal);
     }
     updateOutputFormatSetting();
     ui->statusBar->showMessage(QString(tr("Switched to Hexadecimal")),10000);
@@ -160,7 +160,7 @@ void MainWindow::on_actionHexadecimal_toggled(bool arg1)
 
 void MainWindow::updateOutputFormatSetting(void)
 {
-    formatOutput_t format = m_cmdMngr.Format();
+    formatOutput_t format = m_cmdMngr.Parser()->Format();
     ui->actionAuto->setChecked(format == Auto);
     ui->actionFloating->setChecked(format == Fixed);
     ui->actionScientific->setChecked(format == Scientific);
