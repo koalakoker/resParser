@@ -166,7 +166,7 @@ void MainWindow::updateOutputFormatSetting(void)
     ui->actionScientific->setChecked(format == Scientific);
     ui->actionHexadecimal->setChecked(format == Hexadecimal);
     updateOutputPaneAndPreview();
-
+    variableUpdates();
 }
 
 void MainWindow::updateOutputPaneAndPreview(void)
