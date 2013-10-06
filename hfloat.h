@@ -16,6 +16,7 @@ public:
     hfloat(const hfloat& val);
 
     QString toString(QString format);
+    float toFloat();
     bool isNan(void);
     bool isNumber(void);
     void setNan(void);

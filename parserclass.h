@@ -12,7 +12,7 @@
 
 typedef enum {Fixed, Scientific, Auto, Hexadecimal} formatOutput_t;
 
-typedef enum {key_None, key_Clear, key_List, key_E12, key_E24, key_Usage} keyWordCode_t;
+typedef enum {key_None, key_Clear, key_List, key_E12, key_E24, key_Usage, key_Plot} keyWordCode_t;
 
 class keyWord
 {
@@ -20,6 +20,19 @@ public:
     keyWord(keyWordCode_t code, QString str);
     keyWordCode_t m_code;
     QString m_str;
+};
+
+class Range
+{
+public:
+    Range();
+    Range(hfloat min,hfloat max, hfloat step);
+    Range(const Range& r);
+
+public:
+    hfloat m_min;
+    hfloat m_max;
+    hfloat m_step;
 };
 
 class ParserClass : public QObject
@@ -49,6 +62,8 @@ private:
     int HasFunction(QString str);
 
     static QString ExtractExpressionFromParentesis(QString str);
+    static QString ExtractRange(QString str);
+    Range EvaluateRange(QString str);
     QString EvaluateParallel(QString str);
     QString EvaluateDivision(QString str);
     QString EvaluateMultiply(QString str);

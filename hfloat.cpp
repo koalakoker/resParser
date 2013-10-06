@@ -43,6 +43,11 @@ QString hfloat::toString(QString format)
     return retVal;
 }
 
+float hfloat::toFloat()
+{
+    return mpfr_get_flt(this->value,ROUND);
+}
+
 bool hfloat::isNan(void)
 {
     return (mpfr_nan_p(this->value) != 0);

@@ -1,6 +1,7 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
+#include "drawwidget.h"
 //#include "QDebug"
 
 #define REGEXP6OPERAND "[-+*/:^]"
@@ -41,6 +42,24 @@ keyWordCode_t ParserClass::KeyWordCode(QString str)
         }
     }
     return key_None;
+}
+
+Range::Range()
+{
+}
+
+Range::Range(hfloat min, hfloat max, hfloat step)
+{
+    m_min = min;
+    m_max = max;
+    m_step = step;
+}
+
+Range::Range(const Range& r)
+{
+    m_min = r.m_min;
+    m_max = r.m_max;
+    m_step = r.m_step;
 }
 
 ParserClass::ParserClass(QObject *parent):
@@ -89,6 +108,7 @@ ParserClass::ParserClass(QObject *parent):
     m_keyWord.append(keyWord(key_E12,"E12"));
     m_keyWord.append(keyWord(key_E24,"E24"));
     m_keyWord.append(keyWord(key_Usage,"usage"));
+    m_keyWord.append(keyWord(key_Plot,"plot"));
 
     m_formatOutput = Auto;
     m_precision = 20;
@@ -314,6 +334,28 @@ QString ParserClass::Exec(QString str, hfloat &result)
         retVal.append("<b>E24</b> to show all E24 resitor values.<br>");
         retVal.append("<b>->E12</b> to round to nearest E12 resitor values.<br>");
         retVal.append("<b>:</b> parallel operator between resistors.<br>");
+    }
+        break;
+    case key_Plot:
+    {
+        // Remove spaces
+        str.replace(" ","");
+        str.remove("plot");
+        Range r = EvaluateRange(str);
+        str.remove(ExtractRange(str));
+        if (IsUserDefinedFunctionName(str))
+        {
+            QVector<FPoint> points;
+            DrawWidget* d = new DrawWidget();
+            float x;
+            for (x = r.m_min.toFloat(); x < r.m_max.toFloat(); x += r.m_step.toFloat())
+            {
+                QString func = QString("%1(%2)").arg(str).arg(x);
+                points.append(FPoint(x,Parse(func).toFloat()));
+            }
+            d->setPoints(points);
+            d->show();
+        }
     }
         break;
     default:
@@ -604,6 +646,37 @@ QString ParserClass::ExtractExpressionFromParentesis(QString str)
         }
     }
     return "";
+}
+
+QString ParserClass::ExtractRange(QString str)
+{
+    int indexOfFirstParentesis = str.indexOf('[');
+    int i;
+    for (i = indexOfFirstParentesis + 1; i < str.length(); i++)
+    {
+        if (str[i] == ']')
+        {
+            QString expression = str.mid(indexOfFirstParentesis, i - indexOfFirstParentesis + 1);
+            return expression;
+        }
+    }
+    return "";
+}
+
+Range ParserClass::EvaluateRange(QString str)
+{
+    hfloat min,max,step;
+    int j = str.indexOf('[');
+    int i = str.indexOf(':',j+1);
+    QString expression = str.mid(j + 1, i - j -1);
+    min = Parse(expression);
+    j = str.indexOf(':',i+1);
+    expression = str.mid(i + 1, j - i -1);
+    max = Parse(expression);
+    i = str.indexOf(']',j+1);
+    expression = str.mid(j + 1, i - j -1);
+    step = Parse(expression);
+    return Range(min,max,step);
 }
 
 bool ParserClass::HasOperand(QString str,char operand)

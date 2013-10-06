@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     userdefinedfunctions.cpp \
     commandclass.cpp \
     docklistview.cpp \
-    tableinfoelement.cpp
+    tableinfoelement.cpp \
+    drawwidget.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -42,12 +43,14 @@ HEADERS  += mainwindow.h \
     commandclass.h \
     global.h \
     docklistview.h \
-    tableinfoelement.h
+    tableinfoelement.h \
+    drawwidget.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \
     aboutdialog.ui \
-    docklistview.ui
+    docklistview.ui \
+    drawwidget.ui
 
 RC_FILE = resParser.rc
 
