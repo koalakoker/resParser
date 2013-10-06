@@ -74,6 +74,7 @@ void DrawWidget::paintEvent(QPaintEvent *)
 
     // Draw grid
     m_drawRect = QRect(QPoint(left,top),QPoint(right,bottom));
+    p.setBrush(QBrush(QColor(255,255,255)));
     p.drawRect(m_drawRect);
 
     // Draw points
