@@ -1035,6 +1035,7 @@ bool ParserClass::ExtractFunctionArguments(QString str, QStringList &args, QStri
                     args = extractStr.split(",");
                     from = QString("(") + extractStr + QString(")");
                     retVal = true;
+                    break;
                 }
             }
         }

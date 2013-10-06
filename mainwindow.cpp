@@ -5,7 +5,7 @@
 #include <QDebug>
 
 #define PRJ_NAME    "resParser"
-#define PRJ_VERSION "0.1.2"
+#define PRJ_VERSION "0.1.3"
 #define PRJ_WINDOWS_TITLE (QString("%1 - v%2").arg(QString(PRJ_NAME)).arg(QString(PRJ_VERSION)))
 #define HYST_FILENAME "hyst.rp"
 
