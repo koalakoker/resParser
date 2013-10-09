@@ -4,26 +4,7 @@
 #include <QWidget>
 #include "hfloat.h"
 #include <QVector>
-
-namespace Ui {
-class DrawWidget;
-}
-
-class FPoint
-{
-private:
-    float m_x, m_y;
-
-public:
-    FPoint();
-    FPoint(float x, float y);
-    FPoint(const FPoint& p);
-
-    float x(void);
-    float y(void);
-    void setX(float x);
-    void setY(float y);
-};
+#include "fpoint.h"
 
 class DrawWidget : public QWidget
 {
@@ -34,9 +15,10 @@ public:
     ~DrawWidget();
 
     void setPoints(QVector<FPoint> p);
-    
+    FPoint getXRange(void);
+    FPoint getYRange(void);
+
 private:
-    Ui::DrawWidget *ui;
 
     int m_marginX;
     int m_marginY;

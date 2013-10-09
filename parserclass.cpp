@@ -1,7 +1,7 @@
 #include "parserclass.h"
 #include "QRegExp"
 #include "QStringList"
-#include "drawwidget.h"
+#include "drawwidgetbrowse.h"
 //#include "QDebug"
 
 #define REGEXP6OPERAND "[-+*/:^]"
@@ -346,14 +346,20 @@ QString ParserClass::Exec(QString str, hfloat &result)
         if (IsUserDefinedFunctionName(str))
         {
             QVector<FPoint> points;
-            DrawWidget* d = new DrawWidget();
+            DrawWidgetBrowse* d = new DrawWidgetBrowse();
             float x;
-            for (x = r.m_min.toFloat(); x < r.m_max.toFloat(); x += r.m_step.toFloat())
+            for (x = r.m_min.toFloat(); x <= r.m_max.toFloat(); x += r.m_step.toFloat())
             {
                 QString func = QString("%1(%2)").arg(str).arg(x);
-                points.append(FPoint(x,Parse(func).toFloat()));
+                points.append(FPoint(x,Parse(func).toFloat())); // To be optimized
             }
-            d->setPoints(points);
+            // Just for last point
+            QString func = QString("%1(%2)").arg(str).arg(r.m_max.toFloat());
+            points.append(FPoint(r.m_max.toFloat(),Parse(func).toFloat())); // To be optimized
+
+            d->setXmin(r.m_min.toFloat());
+            d->setXmax(r.m_max.toFloat());
+            d->drawWidget()->setPoints(points);
             d->show();
         }
     }

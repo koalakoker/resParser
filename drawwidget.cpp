@@ -2,50 +2,9 @@
 #include "ui_drawwidget.h"
 #include "QPainter"
 
-FPoint::FPoint()
-{
-    m_x = 0.0;
-    m_y = 0.0;
-}
-
-FPoint::FPoint(float x, float y)
-{
-    m_x = x;
-    m_y = y;
-}
-
-FPoint::FPoint(const FPoint& p)
-{
-    m_x = p.m_x;
-    m_y = p.m_y;
-}
-
-float FPoint::x(void)
-{
-    return m_x;
-}
-
-float FPoint::y(void)
-{
-    return m_y;
-}
-
-void FPoint::setX(float x)
-{
-    m_x = x;
-}
-
-void FPoint::setY(float y)
-{
-    m_y = y;
-}
-
 DrawWidget::DrawWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::DrawWidget)
+    QWidget(parent)
 {
-    ui->setupUi(this);
-
     m_marginX = 40;
     m_marginY = 30;
 
@@ -57,7 +16,6 @@ DrawWidget::DrawWidget(QWidget *parent) :
 
 DrawWidget::~DrawWidget()
 {
-    delete ui;
 }
 
 void DrawWidget::paintEvent(QPaintEvent *)
@@ -156,4 +114,64 @@ FPoint DrawWidget::fromGlobalToLocal(FPoint global)
 void DrawWidget::setPoints(QVector<FPoint> p)
 {
     m_points = p;
+}
+
+FPoint DrawWidget::getXRange(void)
+{
+    FPoint retVal(0,0);
+    int l = m_points.count();
+    if (l > 0)
+    {
+        float xmin,xmax;
+        int i;
+        FPoint p = m_points.at(0);
+        xmin = p.x();
+        xmax = xmin;
+        for (i = 1; i < l; i ++)
+        {
+            p = m_points.at(i);
+            float x = p.x();
+            if (x < xmin)
+            {
+                xmin = x;
+            }
+            if (x > xmax)
+            {
+                xmax = x;
+            }
+        }
+        retVal.setX(xmin);
+        retVal.setY(xmax);
+    }
+    return retVal;
+}
+
+FPoint DrawWidget::getYRange(void)
+{
+    FPoint retVal(0,0);
+    int l = m_points.count();
+    if (l > 0)
+    {
+        float ymin,ymax;
+        int i;
+        FPoint p = m_points.at(0);
+        ymin = p.y();
+        ymax = ymin;
+        for (i = 1; i < l; i ++)
+        {
+            p = m_points.at(i);
+            float y = p.y();
+            if (y < ymin)
+            {
+                ymin = y;
+            }
+            if (y > ymax)
+            {
+                ymax = y;
+            }
+        }
+        retVal.setX(ymin);
+        retVal.setY(ymax);
+    }
+    return retVal;
 }
