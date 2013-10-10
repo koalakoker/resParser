@@ -34,6 +34,8 @@ private slots:
     void on_xmin_valueChanged(double arg1);
     void on_xmax_valueChanged(double arg1);
 
+    void on_cursor1x_valueChanged(double arg1);
+
 private:
     Ui::DrawWidgetBrowse *ui;
     static void setValueQuiet(QDoubleSpinBox* w,double value);

@@ -1,6 +1,9 @@
 #include "drawwidget.h"
 #include "ui_drawwidget.h"
 #include "QPainter"
+#include <QMouseEvent>
+
+#define DRAG_LOCAL_MARGIN 10
 
 DrawWidget::DrawWidget(QWidget *parent) :
     QWidget(parent)
@@ -12,6 +15,12 @@ DrawWidget::DrawWidget(QWidget *parent) :
     m_xmax = 10.0;
     m_ymin = -10.0;
     m_ymax = 10.0;
+
+    setCursor1x(0);
+    setCursor2x(0);
+    m_cursor1dragged = false;
+    m_cursor2dragged = false;
+    setMouseTracking(true);
 }
 
 DrawWidget::~DrawWidget()
@@ -97,18 +106,47 @@ void DrawWidget::paintEvent(QPaintEvent *)
     p.setPen(QPen(Qt::SolidLine));
     for (i = 0; i < m_points.count() - 1; i++)
     {
-        FPoint la = fromGlobalToLocal(m_points.at(i));
-        FPoint lb = fromGlobalToLocal(m_points.at(i+1));
+        QPoint la = fromGlobalToLocal(m_points.at(i));
+        QPoint lb = fromGlobalToLocal(m_points.at(i+1));
         p.drawLine(la.x(),la.y(),lb.x(),lb.y());
     }
+
+    // Draw cursor
+    p.setPen(QPen(QColor(Qt::darkBlue)));
+    QPoint la = fromGlobalToLocal(FPoint(m_cursor1x,m_ymax));
+    QPoint lb = fromGlobalToLocal(FPoint(m_cursor1x,m_ymin));
+    p.drawLine(la.x(),la.y(),lb.x(),lb.y());
+    la = fromGlobalToLocal(FPoint(m_cursor2x,m_ymax));
+    lb = fromGlobalToLocal(FPoint(m_cursor2x,m_ymin));
+    p.drawLine(la.x(),la.y(),lb.x(),lb.y());
+    QPoint lc = fromGlobalToLocal(FPoint(m_cursor1x,m_cursor1y));
+    p.setPen(QPen(QColor(Qt::red)));
+    p.drawEllipse(QPoint(lc.x(),lc.y()),2,2);
+    lc = fromGlobalToLocal(FPoint(m_cursor2x,m_cursor2y));
+    p.drawEllipse(QPoint(lc.x(),lc.y()),2,2);
 }
 
-FPoint DrawWidget::fromGlobalToLocal(FPoint global)
+QPoint DrawWidget::fromGlobalToLocal(FPoint global)
 {
-    float locX, locY;
-    locX = m_drawRect.left()+((m_drawRect.right() - m_drawRect.left())/(m_xmax-m_xmin))*(global.x()-m_xmin);
-    locY = m_drawRect.top()+((m_drawRect.bottom() - m_drawRect.top())/(m_ymax-m_ymin))*(m_ymax-global.y());
-    return FPoint(locX,locY);
+    int locX, locY;
+    locX = (int)(m_drawRect.left()+((m_drawRect.right() - m_drawRect.left())/(m_xmax-m_xmin))*(global.x()-m_xmin));
+    locY = (int)(m_drawRect.top()+((m_drawRect.bottom() - m_drawRect.top())/(m_ymax-m_ymin))*(m_ymax-global.y()));
+    return QPoint(locX,locY);
+}
+
+int DrawWidget::fromGlobalToLocalX(float x)
+{
+    int locX;
+    locX = (int)(m_drawRect.left()+((m_drawRect.right() - m_drawRect.left())/(m_xmax-m_xmin))*(x-m_xmin));
+    return locX;
+}
+
+FPoint DrawWidget::fromLocalToGlobal(QPoint local)
+{
+    float globX, globY;
+    globX = m_xmin+((m_xmax-m_xmin)/(m_drawRect.right() - m_drawRect.left()))*((float)(local.x())-m_drawRect.left());
+    globY = m_ymax-((m_ymax-m_ymin)/(m_drawRect.bottom() - m_drawRect.top()))*(m_drawRect.top()-(float)(local.y()));
+    return FPoint(globX,globY);
 }
 
 void DrawWidget::setPoints(QVector<FPoint> p)
@@ -174,4 +212,108 @@ FPoint DrawWidget::getYRange(void)
         retVal.setY(ymax);
     }
     return retVal;
+}
+
+void DrawWidget::setCursor1x(float x)
+{
+    m_cursor1x = x;
+    m_cursor1y = 0;
+    int l = m_points.count();
+    int i;
+    FPoint p;
+    for (i = 0; i < l; i++)
+    {
+        p = m_points.at(i);
+        if (p.x() >= x)
+        {
+            m_cursor1y = p.y();
+            break;
+        }
+    }
+}
+
+float DrawWidget::Cursor2y(void)
+{
+    return m_cursor2y;
+}
+
+void DrawWidget::setCursor2x(float x)
+{
+    m_cursor2x = x;
+    m_cursor2y = 0;
+    int l = m_points.count();
+    int i;
+    FPoint p;
+    for (i = 0; i < l; i++)
+    {
+        p = m_points.at(i);
+        if (p.x() >= x)
+        {
+            m_cursor2y = p.y();
+            break;
+        }
+    }
+}
+
+float DrawWidget::Cursor1y(void)
+{
+    return m_cursor1y;
+}
+
+bool DrawWidget::cursor1Near(QPoint p)
+{
+    bool retVal = false;
+    int x = fromGlobalToLocalX(m_cursor1x);
+    if (abs(p.x()-x)<DRAG_LOCAL_MARGIN)
+    {
+        retVal = true;
+    }
+    return retVal;
+}
+
+bool DrawWidget::cursor2Near(QPoint p)
+{
+    bool retVal = false;
+    int x = fromGlobalToLocalX(m_cursor2x);
+    if (abs(p.x()-x)<DRAG_LOCAL_MARGIN)
+    {
+        retVal = true;
+    }
+    return retVal;
+}
+
+void DrawWidget::mousePressEvent(QMouseEvent* event)
+{
+    if (!(m_cursor1dragged = cursor1Near(event->pos())))
+    {
+        m_cursor2dragged = cursor2Near(event->pos());
+    }
+}
+
+void DrawWidget::mouseMoveEvent(QMouseEvent* event)
+{
+    if (m_cursor1dragged)
+    {
+        setCursor1x(fromLocalToGlobal(event->pos()).x());
+        repaint();
+    }
+    if (m_cursor2dragged)
+    {
+        setCursor2x(fromLocalToGlobal(event->pos()).x());
+        repaint();
+    }
+    if ((cursor1Near(event->pos()))||(cursor2Near(event->pos())))
+    {
+        setCursor(QCursor(Qt::SizeHorCursor));
+    }
+    else
+    {
+        setCursor(QCursor(Qt::ArrowCursor));
+    }
+}
+
+void DrawWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    m_cursor1dragged = false;
+    m_cursor2dragged = false;
 }

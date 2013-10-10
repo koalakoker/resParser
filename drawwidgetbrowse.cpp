@@ -111,3 +111,10 @@ void DrawWidgetBrowse::on_xmax_valueChanged(double arg1)
     ui->drawWidget->repaint();
     ui->autoXCheck->setCheckState(Qt::Unchecked);
 }
+
+void DrawWidgetBrowse::on_cursor1x_valueChanged(double arg1)
+{
+    ui->drawWidget->setCursor1x(arg1);
+    ui->cursor1y->setValue(ui->drawWidget->Cursor1y());
+    ui->drawWidget->repaint();
+}
