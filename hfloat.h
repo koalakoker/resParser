@@ -23,9 +23,11 @@ public:
 
     hfloat& operator=(hfloat a);
     hfloat operator+(const hfloat& a) const;
+    hfloat operator+=(const hfloat& a);
     hfloat operator-(const hfloat& a) const;
     hfloat operator*(const hfloat& a) const;
     hfloat operator/(const hfloat& a) const;
+    bool operator<=(const hfloat& a) const;
 
     static hfloat sqrt(const hfloat a);
     static hfloat sqr(const hfloat a);

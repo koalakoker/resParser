@@ -1,5 +1,6 @@
 #include "drawwidgetbrowse.h"
 #include "ui_drawwidgetbrowse.h"
+#include "datainspectorwidget.h"
 
 DrawWidgetBrowse::DrawWidgetBrowse(QWidget *parent) :
     QMainWindow(parent),
@@ -140,4 +141,11 @@ void DrawWidgetBrowse::cursorValueChanged(int cursor, float x, float y)
         ui->cursor2x->setValue(x);
         ui->cursor2y->setValue(y);
     }
+}
+
+void DrawWidgetBrowse::on_action_Data_triggered()
+{
+    DataInspectorWidget* d = new DataInspectorWidget;
+    d->show();
+    d->setDataPoints(ui->drawWidget->Points());
 }

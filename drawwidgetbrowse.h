@@ -34,9 +34,10 @@ private slots:
     void on_xmin_valueChanged(double arg1);
     void on_xmax_valueChanged(double arg1);
     void on_cursor1x_valueChanged(double arg1);
-    void cursorValueChanged(int cursor, float x, float y);
-
     void on_cursor2x_valueChanged(double arg1);
+    void on_action_Data_triggered();
+
+    void cursorValueChanged(int cursor, float x, float y);
 
 private:
     Ui::DrawWidgetBrowse *ui;

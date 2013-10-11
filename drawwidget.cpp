@@ -154,6 +154,11 @@ void DrawWidget::setPoints(QVector<FPoint> p)
     m_points = p;
 }
 
+QVector<FPoint>* DrawWidget::Points(void)
+{
+    return &m_points;
+}
+
 FPoint DrawWidget::getXRange(void)
 {
     FPoint retVal(0,0);

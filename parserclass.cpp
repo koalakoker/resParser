@@ -12,6 +12,8 @@
 #define AUTO "%.%1Rg"
 #define HEXADECIMAL "%lX"
 
+#define HF_MAXRES "%.50Rf"
+
 keyWord::keyWord(keyWordCode_t code, QString str)
 {
     m_code = code;
@@ -343,19 +345,27 @@ QString ParserClass::Exec(QString str, hfloat &result)
         str.remove("plot");
         Range r = EvaluateRange(str);
         str.remove(ExtractRange(str));
-        if (IsUserDefinedFunctionName(str))
+        int udFuncOrder;
+        if ((udFuncOrder = HasUserDefinedFunction(str+"("))!= -1)
         {
             QVector<FPoint> points;
             DrawWidgetBrowse* d = new DrawWidgetBrowse();
-            float x;
-            for (x = r.m_min.toFloat(); x <= r.m_max.toFloat(); x += r.m_step.toFloat())
+
+            // Prepare for function computation
+            userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
+            QString functionStr = udFunc.functionSrt();
+            QStringList funcionArgs = udFunc.args();
+
+            hfloat x;
+            for (x = r.m_min; x <= r.m_max; x += r.m_step)
             {
-                QString func = QString("%1(%2)").arg(str).arg(x);
-                points.append(FPoint(x,Parse(func).toFloat())); // To be optimized
+                QString tmpStr = functionStr;
+                tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
+                points.append(FPoint(x.toFloat(),Parse(tmpStr).toFloat()));
             }
             // Just for last point
-            QString func = QString("%1(%2)").arg(str).arg(r.m_max.toFloat());
-            points.append(FPoint(r.m_max.toFloat(),Parse(func).toFloat())); // To be optimized
+            functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
+            points.append(FPoint(r.m_max.toFloat(),Parse(functionStr).toFloat()));
 
             d->setXmin(r.m_min.toFloat());
             d->setXmax(r.m_max.toFloat());

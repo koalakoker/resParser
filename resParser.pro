@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     tableinfoelement.cpp \
     drawwidget.cpp \
     drawwidgetbrowse.cpp \
-    fpoint.cpp
+    fpoint.cpp \
+    datainspectorwidget.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -48,13 +49,15 @@ HEADERS  += mainwindow.h \
     tableinfoelement.h \
     drawwidget.h \
     drawwidgetbrowse.h \
-    fpoint.h
+    fpoint.h \
+    datainspectorwidget.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \
     aboutdialog.ui \
     docklistview.ui \
-    drawwidgetbrowse.ui
+    drawwidgetbrowse.ui \
+    datainspectorwidget.ui
 
 RC_FILE = resParser.rc
 

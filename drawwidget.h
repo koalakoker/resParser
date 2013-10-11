@@ -17,6 +17,8 @@ public:
     ~DrawWidget();
 
     void setPoints(QVector<FPoint> p);
+    QVector<FPoint>* Points(void);
+
     FPoint getXRange(void);
     FPoint getYRange(void);
 

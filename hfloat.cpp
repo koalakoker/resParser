@@ -70,6 +70,14 @@ hfloat hfloat::operator+(const hfloat& a) const
     return result;
 }
 
+hfloat hfloat::operator+=(const hfloat& a)
+{
+    hfloat result;
+    mpfr_add(result.value, this->value, a.value,ROUND);
+    mpfr_set(this->value,result.value,ROUND);
+    return *this;
+}
+
 hfloat hfloat::operator-(const hfloat& a) const
 {
     hfloat result;
@@ -95,6 +103,11 @@ hfloat& hfloat::operator=(hfloat a)
 {
     mpfr_set(this->value,a.value,ROUND);
     return *this;
+}
+
+bool hfloat::operator<=(const hfloat& a) const
+{
+    return (bool)(mpfr_lessequal_p(this->value,a.value));
 }
 
 hfloat hfloat::sqrt(const hfloat a)
