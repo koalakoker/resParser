@@ -1,2 +1,9 @@
 *.pro.user
 *~
+gmp.h
+libgmp.lib
+mpf2mpfr.h
+mpfr.dll
+mpfr.h
+mpfr.lib
+mpir.dll

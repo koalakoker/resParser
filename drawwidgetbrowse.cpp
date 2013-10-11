@@ -6,6 +6,8 @@ DrawWidgetBrowse::DrawWidgetBrowse(QWidget *parent) :
     ui(new Ui::DrawWidgetBrowse)
 {
     ui->setupUi(this);
+
+    connect (ui->drawWidget,SIGNAL(cursorPositionChanged(int,float,float)),this,SLOT(cursorValueChanged(int,float,float)));
 }
 
 DrawWidgetBrowse::~DrawWidgetBrowse()
@@ -114,7 +116,28 @@ void DrawWidgetBrowse::on_xmax_valueChanged(double arg1)
 
 void DrawWidgetBrowse::on_cursor1x_valueChanged(double arg1)
 {
-    ui->drawWidget->setCursor1x(arg1);
-    ui->cursor1y->setValue(ui->drawWidget->Cursor1y());
+    ui->drawWidget->setCursorX(0,arg1);
+    ui->cursor1y->setValue(ui->drawWidget->CursorY(0));
     ui->drawWidget->repaint();
+}
+
+void DrawWidgetBrowse::on_cursor2x_valueChanged(double arg1)
+{
+    ui->drawWidget->setCursorX(1,arg1);
+    ui->cursor2y->setValue(ui->drawWidget->CursorY(1));
+    ui->drawWidget->repaint();
+}
+
+void DrawWidgetBrowse::cursorValueChanged(int cursor, float x, float y)
+{
+    if (cursor == 0)
+    {
+        ui->cursor1x->setValue(x);
+        ui->cursor1y->setValue(y);
+    }
+    else if (cursor == 1)
+    {
+        ui->cursor2x->setValue(x);
+        ui->cursor2y->setValue(y);
+    }
 }

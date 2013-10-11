@@ -6,6 +6,8 @@
 #include <QVector>
 #include "fpoint.h"
 
+#define CURSOR_NUM 2
+
 class DrawWidget : public QWidget
 {
     Q_OBJECT
@@ -18,10 +20,8 @@ public:
     FPoint getXRange(void);
     FPoint getYRange(void);
 
-    void setCursor1x(float x);
-    float Cursor1y(void);
-    void setCursor2x(float x);
-    float Cursor2y(void);
+    void setCursorX(int cursor, float x);
+    float CursorY(int cursor);
 
 private:
 
@@ -31,13 +31,9 @@ private:
 
     QVector<FPoint> m_points;
 
-    float m_cursor1x;
-    float m_cursor1y;
-    bool m_cursor1dragged;
-
-    float m_cursor2x;
-    float m_cursor2y;
-    bool m_cursor2dragged;
+    float m_cursorX[CURSOR_NUM];
+    float m_cursorY[CURSOR_NUM];
+    bool m_cursorDragged[CURSOR_NUM];
 
 public:
     float m_xmin;
@@ -55,8 +51,11 @@ private:
     int fromGlobalToLocalX(float x);
     FPoint fromLocalToGlobal(QPoint local);
 
-    bool cursor1Near(QPoint p);
-    bool cursor2Near(QPoint p);
+    bool cursorNear(int cursor, QPoint p);
+    void int_setCursorX(int cursor, float x);
+
+signals:
+    void cursorPositionChanged(int cursor, float x, float y);
 };
 
 #endif // DRAWWIDGET_H
