@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     drawwidget.cpp \
     drawwidgetbrowse.cpp \
     fpoint.cpp \
-    datainspectorwidget.cpp
+    datainspectorwidget.cpp \
+    qrecthf.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -50,7 +51,8 @@ HEADERS  += mainwindow.h \
     drawwidget.h \
     drawwidgetbrowse.h \
     fpoint.h \
-    datainspectorwidget.h
+    datainspectorwidget.h \
+    qrecthf.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \

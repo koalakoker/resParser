@@ -20,7 +20,7 @@ DataInspectorWidget::~DataInspectorWidget()
     delete ui;
 }
 
-void DataInspectorWidget::setDataPoints(QVector<FPoint>* pData)
+void DataInspectorWidget::setDataPoints(QVector<HPoint>* pData)
 {
     m_points = pData;
     int row = pData->count();
@@ -29,12 +29,12 @@ void DataInspectorWidget::setDataPoints(QVector<FPoint>* pData)
     int i;
     for (i = 0; i < row; i++)
     {
-        FPoint p = m_points->at(i);
+        HPoint p = m_points->at(i);
         QTableWidgetItem* item = new QTableWidgetItem;
-        item->setText(QString("%1").arg(p.x()));
+        item->setText(p.x().toString("%.5Rf"));
         ui->tableWidget->setItem(i,0,item);
         item = new QTableWidgetItem;
-        item->setText(QString("%1").arg(p.y()));
+        item->setText(p.y().toString("%.5Rf"));
         ui->tableWidget->setItem(i,1,item);
     }
 }

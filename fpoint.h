@@ -1,20 +1,23 @@
 #ifndef FPOINT_H
 #define FPOINT_H
 
-class FPoint
+#include "hfloat.h"
+
+class HPoint
 {
 private:
-    float m_x, m_y;
+    hfloat m_x, m_y;
 
 public:
-    FPoint();
-    FPoint(float x, float y);
-    FPoint(const FPoint& p);
+    HPoint();
+    HPoint(hfloat x, hfloat y);
+    HPoint(float x, float y);
+    HPoint(const HPoint& p);
 
-    float x(void);
-    float y(void);
-    void setX(float x);
-    void setY(float y);
+    hfloat x(void);
+    hfloat y(void);
+    void setX(hfloat x);
+    void setY(hfloat y);
 };
 
 #endif // FPOINT_H

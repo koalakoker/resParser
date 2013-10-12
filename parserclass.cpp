@@ -348,7 +348,7 @@ QString ParserClass::Exec(QString str, hfloat &result)
         int udFuncOrder;
         if ((udFuncOrder = HasUserDefinedFunction(str+"("))!= -1)
         {
-            QVector<FPoint> points;
+            QVector<HPoint> points;
             DrawWidgetBrowse* d = new DrawWidgetBrowse();
 
             // Prepare for function computation
@@ -361,11 +361,11 @@ QString ParserClass::Exec(QString str, hfloat &result)
             {
                 QString tmpStr = functionStr;
                 tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
-                points.append(FPoint(x.toFloat(),Parse(tmpStr).toFloat()));
+                points.append(HPoint(x,Parse(tmpStr)));
             }
             // Just for last point
             functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
-            points.append(FPoint(r.m_max.toFloat(),Parse(functionStr).toFloat()));
+            points.append(HPoint(r.m_max,Parse(functionStr)));
 
             d->setXmin(r.m_min.toFloat());
             d->setXmax(r.m_max.toFloat());

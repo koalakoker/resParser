@@ -15,6 +15,12 @@ hfloat::hfloat(QString str)
     mpfr_set_str(value, str.toLocal8Bit().data(), 10, ROUND);
 }
 
+hfloat::hfloat(float val)
+{
+    mpfr_init2(value,PRECISION);
+    mpfr_set_flt(value, val,ROUND);
+}
+
 hfloat::hfloat(const hfloat &val)
 {
     mpfr_init2(value,PRECISION);
@@ -47,6 +53,11 @@ QString hfloat::toString(QString format)
 float hfloat::toFloat()
 {
     return mpfr_get_flt(this->value,ROUND);
+}
+
+int hfloat::toInt()
+{
+    return mpfr_get_si(this->value,ROUND);
 }
 
 bool hfloat::isNan(void)
@@ -104,6 +115,20 @@ hfloat& hfloat::operator=(hfloat a)
 {
     mpfr_set(this->value,a.value,ROUND);
     return *this;
+}
+
+bool hfloat::operator<(const hfloat& a) const
+{
+    return (bool)(mpfr_less_p(this->value,a.value));
+}
+bool hfloat::operator>(const hfloat& a) const
+{
+    return (bool)(mpfr_greater_p(this->value,a.value));
+}
+
+bool hfloat::operator>=(const hfloat& a) const
+{
+    return (bool)(mpfr_greaterequal_p(this->value,a.value));
 }
 
 bool hfloat::operator<=(const hfloat& a) const

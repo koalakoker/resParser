@@ -8,7 +8,7 @@ DrawWidgetBrowse::DrawWidgetBrowse(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect (ui->drawWidget,SIGNAL(cursorPositionChanged(int,float,float)),this,SLOT(cursorValueChanged(int,float,float)));
+    connect (ui->drawWidget,SIGNAL(cursorPositionChanged(int,hfloat,hfloat)),this,SLOT(cursorValueChanged(int,hfloat,hfloat)));
 }
 
 DrawWidgetBrowse::~DrawWidgetBrowse()
@@ -65,9 +65,9 @@ void DrawWidgetBrowse::on_autoXCheck_stateChanged(int arg1)
 {
     if (arg1)
     {
-        FPoint xrange = ui->drawWidget->getXRange();
-        setValueQuiet(ui->xmin,xrange.x());
-        setValueQuiet(ui->xmax,xrange.y());
+        HPoint xrange = ui->drawWidget->getXRange();
+        setValueQuiet(ui->xmin,xrange.x().toFloat());
+        setValueQuiet(ui->xmax,xrange.y().toFloat());
         ui->drawWidget->m_xmin = xrange.x();
         ui->drawWidget->m_xmax = xrange.y();
         ui->drawWidget->repaint();
@@ -78,9 +78,9 @@ void DrawWidgetBrowse::on_autoYCheck_stateChanged(int arg1)
 {
     if (arg1)
     {
-        FPoint yrange = ui->drawWidget->getYRange();
-        setValueQuiet(ui->ymin,yrange.x());
-        setValueQuiet(ui->ymax,yrange.y());
+        HPoint yrange = ui->drawWidget->getYRange();
+        setValueQuiet(ui->ymin,yrange.x().toFloat());
+        setValueQuiet(ui->ymax,yrange.y().toFloat());
         ui->drawWidget->m_ymin = yrange.x();
         ui->drawWidget->m_ymax = yrange.y();
         ui->drawWidget->repaint();
@@ -118,28 +118,28 @@ void DrawWidgetBrowse::on_xmax_valueChanged(double arg1)
 void DrawWidgetBrowse::on_cursor1x_valueChanged(double arg1)
 {
     ui->drawWidget->setCursorX(0,arg1);
-    ui->cursor1y->setValue(ui->drawWidget->CursorY(0));
+    ui->cursor1y->setValue(ui->drawWidget->CursorY(0).toFloat());
     ui->drawWidget->repaint();
 }
 
 void DrawWidgetBrowse::on_cursor2x_valueChanged(double arg1)
 {
     ui->drawWidget->setCursorX(1,arg1);
-    ui->cursor2y->setValue(ui->drawWidget->CursorY(1));
+    ui->cursor2y->setValue(ui->drawWidget->CursorY(1).toFloat());
     ui->drawWidget->repaint();
 }
 
-void DrawWidgetBrowse::cursorValueChanged(int cursor, float x, float y)
+void DrawWidgetBrowse::cursorValueChanged(int cursor, hfloat x, hfloat y)
 {
     if (cursor == 0)
     {
-        ui->cursor1x->setValue(x);
-        ui->cursor1y->setValue(y);
+        ui->cursor1x->setValue(x.toFloat());
+        ui->cursor1y->setValue(y.toFloat());
     }
     else if (cursor == 1)
     {
-        ui->cursor2x->setValue(x);
-        ui->cursor2y->setValue(y);
+        ui->cursor2x->setValue(x.toFloat());
+        ui->cursor2y->setValue(y.toFloat());
     }
 }
 

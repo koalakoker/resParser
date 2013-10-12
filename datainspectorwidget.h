@@ -15,11 +15,11 @@ class DataInspectorWidget : public QDialog
 public:
     explicit DataInspectorWidget(QWidget *parent = 0);
     ~DataInspectorWidget();
-    void setDataPoints(QVector<FPoint>* pData);
+    void setDataPoints(QVector<HPoint>* pData);
     
 private:
     Ui::DataInspectorWidget *ui;
-    QVector<FPoint>* m_points;
+    QVector<HPoint>* m_points;
 };
 
 #endif // DATAINSPECTORWIDGET_H

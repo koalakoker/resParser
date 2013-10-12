@@ -13,10 +13,12 @@ public:
     ~hfloat();
     hfloat();
     hfloat(QString str);
+    hfloat(float val);
     hfloat(const hfloat& val);
 
     QString toString(QString format);
     float toFloat();
+    int toInt();
     bool isNan(void);
     bool isNumber(void);
     void setNan(void);
@@ -27,7 +29,10 @@ public:
     hfloat operator-(const hfloat& a) const;
     hfloat operator*(const hfloat& a) const;
     hfloat operator/(const hfloat& a) const;
+    bool operator<(const hfloat& a) const;
+    bool operator>(const hfloat& a) const;
     bool operator<=(const hfloat& a) const;
+    bool operator>=(const hfloat& a) const;
 
     static hfloat sqrt(const hfloat a);
     static hfloat sqr(const hfloat a);

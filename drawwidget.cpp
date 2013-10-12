@@ -46,15 +46,15 @@ void DrawWidget::paintEvent(QPaintEvent *)
     int right = w - m_marginX;
 
     // Draw rect
-    m_drawRect = QRect(QPoint(left,top),QPoint(right,bottom));
+    m_drawRect = QRectHF(QPoint(left,top),QPoint(right,bottom));
     p.setBrush(QBrush(QColor(255,255,255)));
     p.drawRect(m_drawRect);
 
     // Draw vertical elements
     int fontW;
     int delta = m_drawRect.width() / 10;
-    float deltaLabelX = (m_xmax-m_xmin)/10;
-    float deltaLabelY = (m_ymax-m_ymin)/10;
+    hfloat deltaLabelX = (m_xmax-m_xmin)/10;
+    hfloat deltaLabelY = (m_ymax-m_ymin)/10;
     for (i = 0;  i < 11; i++)
     {
         int x = left+(delta*i);
@@ -73,7 +73,8 @@ void DrawWidget::paintEvent(QPaintEvent *)
             p.drawLine(x,top,x,bottom);
         }
         // Orizontal labels
-        QString label = QString("%1").arg(m_xmin + (deltaLabelX * i));
+        hfloat tmp = m_xmin + (deltaLabelX * i);
+        QString label = tmp.toString("%.2Rf");
         fontW = p.fontMetrics().width(label);
         p.drawText(x-(fontW/2),bottom+fontH,label);
     }
@@ -98,7 +99,8 @@ void DrawWidget::paintEvent(QPaintEvent *)
             p.drawLine(left,y,right,y);
         }
         // Vertical labels
-        QString label = QString("%1").arg(m_ymax - (deltaLabelY * i));
+        hfloat tmp = m_ymax - (deltaLabelY * i);
+        QString label = tmp.toString("%.2Rf");
         fontW = p.fontMetrics().width(label);
         p.drawText(left-fontW-5,y+(fontH/4),label);
     }
@@ -117,63 +119,66 @@ void DrawWidget::paintEvent(QPaintEvent *)
     p.setPen(QPen(QColor(Qt::darkBlue)));
     for (i = 0; i < CURSOR_NUM; i++)
     {
-        QPoint la = fromGlobalToLocal(FPoint(m_cursorX[i],m_ymax));
-        QPoint lb = fromGlobalToLocal(FPoint(m_cursorX[i],m_ymin));
+        QPoint la = fromGlobalToLocal(HPoint(m_cursorX[i],m_ymax));
+        QPoint lb = fromGlobalToLocal(HPoint(m_cursorX[i],m_ymin));
         p.drawLine(la.x(),la.y(),lb.x(),lb.y());
-        QPoint lc = fromGlobalToLocal(FPoint(m_cursorX[i],m_cursorY[i]));
+        QPoint lc = fromGlobalToLocal(HPoint(m_cursorX[i],m_cursorY[i]));
         p.setPen(QPen(QColor(Qt::red)));
         p.drawEllipse(QPoint(lc.x(),lc.y()),2,2);
     }
 }
 
-QPoint DrawWidget::fromGlobalToLocal(FPoint global)
+QPoint DrawWidget::fromGlobalToLocal(HPoint global)
 {
     int locX, locY;
-    locX = (int)(m_drawRect.left()+((m_drawRect.right() - m_drawRect.left())/(m_xmax-m_xmin))*(global.x()-m_xmin));
-    locY = (int)(m_drawRect.top()+((m_drawRect.bottom() - m_drawRect.top())/(m_ymax-m_ymin))*(m_ymax-global.y()));
+    hfloat tmp = (m_drawRect.leftHF()+((m_drawRect.rightHF() - m_drawRect.leftHF())/(m_xmax-m_xmin))*(global.x()-m_xmin));
+    locX = (int)tmp.toInt();
+    tmp = (m_drawRect.topHF()+((m_drawRect.bottomHF() - m_drawRect.topHF())/(m_ymax-m_ymin))*(m_ymax-global.y()));
+    locY = (int)tmp.toInt();
     return QPoint(locX,locY);
 }
 
-int DrawWidget::fromGlobalToLocalX(float x)
+int DrawWidget::fromGlobalToLocalX(hfloat x)
 {
     int locX;
-    locX = (int)(m_drawRect.left()+((m_drawRect.right() - m_drawRect.left())/(m_xmax-m_xmin))*(x-m_xmin));
+    hfloat tmp = m_drawRect.leftHF()+((m_drawRect.rightHF() - m_drawRect.leftHF())/(m_xmax-m_xmin))*(x-m_xmin);
+    locX = (int)(tmp.toInt());
     return locX;
 }
 
-FPoint DrawWidget::fromLocalToGlobal(QPoint local)
+HPoint DrawWidget::fromLocalToGlobal(QPoint local)
 {
-    float globX, globY;
-    globX = m_xmin+((m_xmax-m_xmin)/(m_drawRect.right() - m_drawRect.left()))*((float)(local.x())-m_drawRect.left());
-    globY = m_ymax-((m_ymax-m_ymin)/(m_drawRect.bottom() - m_drawRect.top()))*(m_drawRect.top()-(float)(local.y()));
-    return FPoint(globX,globY);
+    hfloat globX, globY;
+    globX = m_xmin+((m_xmax-m_xmin)/(m_drawRect.rightHF() - m_drawRect.leftHF()))*(hfloat(local.x())-m_drawRect.leftHF());
+    globY = m_ymax-((m_ymax-m_ymin)/(m_drawRect.bottomHF() - m_drawRect.topHF()))*(m_drawRect.topHF()-hfloat(local.y()));
+    return HPoint(globX,globY);
 }
 
-void DrawWidget::setPoints(QVector<FPoint> p)
+void DrawWidget::setPoints(QVector<HPoint> p)
 {
     m_points = p;
 }
 
-QVector<FPoint>* DrawWidget::Points(void)
+QVector<HPoint>* DrawWidget::Points(void)
 {
     return &m_points;
 }
 
-FPoint DrawWidget::getXRange(void)
+HPoint DrawWidget::getXRange(void)
 {
-    FPoint retVal(0,0);
+    HPoint retVal(0,0);
     int l = m_points.count();
     if (l > 0)
     {
-        float xmin,xmax;
+        hfloat xmin,xmax;
         int i;
-        FPoint p = m_points.at(0);
+        HPoint p = m_points.at(0);
         xmin = p.x();
         xmax = xmin;
         for (i = 1; i < l; i ++)
         {
             p = m_points.at(i);
-            float x = p.x();
+            hfloat x = p.x();
             if (x < xmin)
             {
                 xmin = x;
@@ -189,21 +194,21 @@ FPoint DrawWidget::getXRange(void)
     return retVal;
 }
 
-FPoint DrawWidget::getYRange(void)
+HPoint DrawWidget::getYRange(void)
 {
-    FPoint retVal(0,0);
+    HPoint retVal(0,0);
     int l = m_points.count();
     if (l > 0)
     {
-        float ymin,ymax;
+        hfloat ymin,ymax;
         int i;
-        FPoint p = m_points.at(0);
+        HPoint p = m_points.at(0);
         ymin = p.y();
         ymax = ymin;
         for (i = 1; i < l; i ++)
         {
             p = m_points.at(i);
-            float y = p.y();
+            hfloat y = p.y();
             if (y < ymin)
             {
                 ymin = y;
@@ -219,7 +224,7 @@ FPoint DrawWidget::getYRange(void)
     return retVal;
 }
 
-void DrawWidget::setCursorX(int cursor, float x)
+void DrawWidget::setCursorX(int cursor, hfloat x)
 {
     if (x < m_xmin)
     {
@@ -233,7 +238,7 @@ void DrawWidget::setCursorX(int cursor, float x)
     m_cursorY[cursor] = 0;
     int l = m_points.count();
     int i;
-    FPoint p;
+    HPoint p;
     for (i = 0; i < l; i++)
     {
         p = m_points.at(i);
@@ -245,13 +250,13 @@ void DrawWidget::setCursorX(int cursor, float x)
     }
 }
 
-void DrawWidget::int_setCursorX(int cursor, float x)
+void DrawWidget::int_setCursorX(int cursor, hfloat x)
 {
     setCursorX(cursor,x);
     emit cursorPositionChanged(cursor, m_cursorX[cursor],m_cursorY[cursor]);
 }
 
-float DrawWidget::CursorY(int cursor)
+hfloat DrawWidget::CursorY(int cursor)
 {
     return m_cursorY[cursor];
 }
