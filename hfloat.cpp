@@ -39,6 +39,7 @@ QString hfloat::toString(QString format)
     {
         mpfr_sprintf(out,format.toLocal8Bit().data(),value);
         retVal = QString(out);
+        retVal.replace(",",".");
     }
     return retVal;
 }
