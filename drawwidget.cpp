@@ -15,6 +15,8 @@ DrawWidget::DrawWidget(QWidget *parent) :
     m_ymin = -10.0;
     m_ymax = 10.0;
 
+    m_dataPointUpdate = true;
+
     int_setCursorX(0,0);
     int_setCursorX(1,0);
     int i;
@@ -27,6 +29,30 @@ DrawWidget::DrawWidget(QWidget *parent) :
 
 DrawWidget::~DrawWidget()
 {
+}
+
+void DrawWidget::setXmin(hfloat val)
+{
+    m_xmin = val;
+    m_dataPointUpdate = true;
+}
+
+void DrawWidget::setXmax(hfloat val)
+{
+    m_xmax = val;
+    m_dataPointUpdate = true;
+}
+
+void DrawWidget::setYmin(hfloat val)
+{
+    m_ymin = val;
+    m_dataPointUpdate = true;
+}
+
+void DrawWidget::setYmax(hfloat val)
+{
+    m_ymax = val;
+    m_dataPointUpdate = true;
 }
 
 void DrawWidget::paintEvent(QPaintEvent *)
@@ -108,14 +134,17 @@ void DrawWidget::paintEvent(QPaintEvent *)
     }
 
     // Draw points
+    if (m_dataPointUpdate)
+    {
+        updateDataPoint();
+    }
     p.setClipRegion(QRegion(m_drawRect));
     p.setPen(QPen(Qt::SolidLine));
-    QPoint la = fromGlobalToLocal(m_points.at(0));
     for (i = 0; i < m_points.count() - 1; i++)
     {
-        QPoint lb = fromGlobalToLocal(m_points.at(i+1));
+        QPoint la = m_pointsFloat.at(i);
+        QPoint lb = m_pointsFloat.at(i+1);
         p.drawLine(la.x(),la.y(),lb.x(),lb.y());
-        la = lb;
     }
 
     // Draw cursor
@@ -160,11 +189,24 @@ HPoint DrawWidget::fromLocalToGlobal(QPoint local)
 void DrawWidget::setPoints(QVector<HPoint> p)
 {
     m_points = p;
+    m_dataPointUpdate = true;
 }
 
 QVector<HPoint>* DrawWidget::Points(void)
 {
     return &m_points;
+}
+
+void DrawWidget::updateDataPoint()
+{
+    // Update points
+    m_pointsFloat.clear();
+    int i;
+    for (i = 0; i < m_points.count(); i++)
+    {
+        m_pointsFloat.append(fromGlobalToLocal(m_points.at(i)));
+    }
+    m_dataPointUpdate = false;
 }
 
 HPoint DrawWidget::getXRange(void)
@@ -320,4 +362,9 @@ void DrawWidget::mouseReleaseEvent(QMouseEvent* event)
     {
         m_cursorDragged[i] = false;
     }
+}
+
+void DrawWidget::resizeEvent(QResizeEvent *)
+{
+    m_dataPointUpdate = true;
 }

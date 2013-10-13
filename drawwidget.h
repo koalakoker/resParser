@@ -35,23 +35,33 @@ private:
     hfloat m_yFactor;
 
     QVector<HPoint> m_points;
+    QVector<QPoint> m_pointsFloat;
+    bool m_dataPointUpdate;
 
     hfloat m_cursorX[CURSOR_NUM];
     hfloat m_cursorY[CURSOR_NUM];
     bool m_cursorDragged[CURSOR_NUM];
 
-public:
+private:
     hfloat m_xmin;
     hfloat m_xmax;
     hfloat m_ymin;
     hfloat m_ymax;
+
+public:
+    void setXmin(hfloat val);
+    void setXmax(hfloat val);
+    void setYmin(hfloat val);
+    void setYmax(hfloat val);
 
 private:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
+    void resizeEvent(QResizeEvent *);
 
+    void updateDataPoint(void);
     QPoint fromGlobalToLocal(HPoint global);
     int fromGlobalToLocalX(hfloat x);
     HPoint fromLocalToGlobal(QPoint local);

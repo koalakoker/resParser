@@ -68,8 +68,8 @@ void DrawWidgetBrowse::on_autoXCheck_stateChanged(int arg1)
         HPoint xrange = ui->drawWidget->getXRange();
         setValueQuiet(ui->xmin,xrange.x().toFloat());
         setValueQuiet(ui->xmax,xrange.y().toFloat());
-        ui->drawWidget->m_xmin = xrange.x();
-        ui->drawWidget->m_xmax = xrange.y();
+        ui->drawWidget->setXmin(xrange.x());
+        ui->drawWidget->setXmax(xrange.y());
         ui->drawWidget->repaint();
     }
 }
@@ -81,36 +81,36 @@ void DrawWidgetBrowse::on_autoYCheck_stateChanged(int arg1)
         HPoint yrange = ui->drawWidget->getYRange();
         setValueQuiet(ui->ymin,yrange.x().toFloat());
         setValueQuiet(ui->ymax,yrange.y().toFloat());
-        ui->drawWidget->m_ymin = yrange.x();
-        ui->drawWidget->m_ymax = yrange.y();
+        ui->drawWidget->setYmin(yrange.x());
+        ui->drawWidget->setYmax(yrange.y());
         ui->drawWidget->repaint();
     }
 }
 
 void DrawWidgetBrowse::on_ymin_valueChanged(double arg1)
 {
-    ui->drawWidget->m_ymin = arg1;
+    ui->drawWidget->setYmin(arg1);
     ui->drawWidget->repaint();
     ui->autoYCheck->setCheckState(Qt::Unchecked);
 }
 
 void DrawWidgetBrowse::on_ymax_valueChanged(double arg1)
 {
-    ui->drawWidget->m_ymax = arg1;
+    ui->drawWidget->setYmax(arg1);
     ui->drawWidget->repaint();
     ui->autoYCheck->setCheckState(Qt::Unchecked);
 }
 
 void DrawWidgetBrowse::on_xmin_valueChanged(double arg1)
 {
-    ui->drawWidget->m_xmin = arg1;
+    ui->drawWidget->setXmin(arg1);
     ui->drawWidget->repaint();
     ui->autoXCheck->setCheckState(Qt::Unchecked);
 }
 
 void DrawWidgetBrowse::on_xmax_valueChanged(double arg1)
 {
-    ui->drawWidget->m_xmax = arg1;
+    ui->drawWidget->setXmax(arg1);
     ui->drawWidget->repaint();
     ui->autoXCheck->setCheckState(Qt::Unchecked);
 }
