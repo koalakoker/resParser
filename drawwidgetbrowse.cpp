@@ -1,6 +1,7 @@
 #include "drawwidgetbrowse.h"
 #include "ui_drawwidgetbrowse.h"
 #include "datainspectorwidget.h"
+#include "math.h"
 
 DrawWidgetBrowse::DrawWidgetBrowse(QWidget *parent) :
     QMainWindow(parent),
@@ -9,6 +10,8 @@ DrawWidgetBrowse::DrawWidgetBrowse(QWidget *parent) :
     ui->setupUi(this);
 
     connect (ui->drawWidget,SIGNAL(cursorPositionChanged(int,hfloat,hfloat)),this,SLOT(cursorValueChanged(int,hfloat,hfloat)));
+    connect (ui->xmin,SIGNAL(userStepBy(int)),this,SLOT(spin_xmin(int)));
+    connect (ui->ymin,SIGNAL(userStepBy(int)),this,SLOT(spin_ymin(int)));
 }
 
 DrawWidgetBrowse::~DrawWidgetBrowse()
@@ -92,6 +95,7 @@ void DrawWidgetBrowse::on_ymin_valueChanged(double arg1)
     ui->drawWidget->setYmin(arg1);
     ui->drawWidget->repaint();
     ui->autoYCheck->setCheckState(Qt::Unchecked);
+    ui->ymin->setSingleStep(fabs(arg1)/10);
 }
 
 void DrawWidgetBrowse::on_ymax_valueChanged(double arg1)
@@ -99,6 +103,7 @@ void DrawWidgetBrowse::on_ymax_valueChanged(double arg1)
     ui->drawWidget->setYmax(arg1);
     ui->drawWidget->repaint();
     ui->autoYCheck->setCheckState(Qt::Unchecked);
+    ui->ymax->setSingleStep(fabs(arg1)/10);
 }
 
 void DrawWidgetBrowse::on_xmin_valueChanged(double arg1)
@@ -106,6 +111,7 @@ void DrawWidgetBrowse::on_xmin_valueChanged(double arg1)
     ui->drawWidget->setXmin(arg1);
     ui->drawWidget->repaint();
     ui->autoXCheck->setCheckState(Qt::Unchecked);
+    ui->xmin->setSingleStep(fabs(arg1)/10);
 }
 
 void DrawWidgetBrowse::on_xmax_valueChanged(double arg1)
@@ -113,6 +119,7 @@ void DrawWidgetBrowse::on_xmax_valueChanged(double arg1)
     ui->drawWidget->setXmax(arg1);
     ui->drawWidget->repaint();
     ui->autoXCheck->setCheckState(Qt::Unchecked);
+    ui->xmax->setSingleStep(fabs(arg1)/10);
 }
 
 void DrawWidgetBrowse::on_cursor1x_valueChanged(double arg1)
@@ -148,4 +155,28 @@ void DrawWidgetBrowse::on_action_Data_triggered()
     DataInspectorWidget* d = new DataInspectorWidget;
     d->show();
     d->setDataPoints(ui->drawWidget->Points());
+}
+
+void DrawWidgetBrowse::spin_ymin(int step)
+{
+    if (step > 0)
+    {
+        ui->ymax->stepDown();
+    }
+    else if (step < 0)
+    {
+        ui->ymax->stepUp();
+    }
+}
+
+void DrawWidgetBrowse::spin_xmin(int step)
+{
+    if (step > 0)
+    {
+        ui->xmax->stepDown();
+    }
+    else if (step < 0)
+    {
+        ui->xmax->stepUp();
+    }
 }

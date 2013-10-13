@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>828</width>
     <height>600</height>
    </rect>
   </property>
@@ -65,7 +65,10 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QDoubleSpinBox" name="xmin">
+        <widget class="DoubleSpinBox" name="xmin">
+         <property name="decimals">
+          <number>5</number>
+         </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
          </property>
@@ -76,6 +79,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QDoubleSpinBox" name="xmax">
+         <property name="decimals">
+          <number>5</number>
+         </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
          </property>
@@ -107,7 +113,10 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QDoubleSpinBox" name="ymin">
+        <widget class="DoubleSpinBox" name="ymin">
+         <property name="decimals">
+          <number>5</number>
+         </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
          </property>
@@ -118,6 +127,9 @@
        </item>
        <item row="1" column="1">
         <widget class="QDoubleSpinBox" name="ymax">
+         <property name="decimals">
+          <number>5</number>
+         </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
          </property>
@@ -151,6 +163,9 @@
       <layout class="QFormLayout" name="formLayout">
        <item row="0" column="1">
         <widget class="QDoubleSpinBox" name="cursor1x">
+         <property name="decimals">
+          <number>5</number>
+         </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
          </property>
@@ -170,6 +185,9 @@
         <widget class="QDoubleSpinBox" name="cursor1y">
          <property name="readOnly">
           <bool>true</bool>
+         </property>
+         <property name="decimals">
+          <number>5</number>
          </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
@@ -197,6 +215,9 @@
       <layout class="QFormLayout" name="formLayout_2">
        <item row="0" column="1">
         <widget class="QDoubleSpinBox" name="cursor2x">
+         <property name="decimals">
+          <number>5</number>
+         </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
          </property>
@@ -216,6 +237,9 @@
         <widget class="QDoubleSpinBox" name="cursor2y">
          <property name="readOnly">
           <bool>true</bool>
+         </property>
+         <property name="decimals">
+          <number>5</number>
          </property>
          <property name="minimum">
           <double>-999999999.000000000000000</double>
@@ -255,8 +279,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>21</height>
+     <width>828</width>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_View">
@@ -280,6 +304,11 @@
    <extends>QWidget</extends>
    <header>drawwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>doublespinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -369,6 +369,8 @@ QString ParserClass::Exec(QString str, hfloat &result)
 
             d->setXmin(r.m_min.toFloat());
             d->setXmax(r.m_max.toFloat());
+            d->setYmin(-10);
+            d->setYmax(10);
             d->drawWidget()->setPoints(points);
             d->show();
         }

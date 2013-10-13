@@ -37,6 +37,9 @@ private slots:
     void on_cursor2x_valueChanged(double arg1);
     void on_action_Data_triggered();
 
+    void spin_ymin(int step);
+    void spin_xmin(int step);
+
     void cursorValueChanged(int cursor, hfloat x, hfloat y);
 
 private:
