@@ -47,6 +47,8 @@ void DrawWidget::paintEvent(QPaintEvent *)
 
     // Draw rect
     m_drawRect = QRectHF(QPoint(left,top),QPoint(right,bottom));
+    m_xFactor = (m_drawRect.rightHF() - m_drawRect.leftHF())/(m_xmax-m_xmin); // Speed up plot
+    m_yFactor = (m_drawRect.bottomHF() - m_drawRect.topHF())/(m_ymax-m_ymin); // Speed up plot
     p.setBrush(QBrush(QColor(255,255,255)));
     p.drawRect(m_drawRect);
 
@@ -108,11 +110,12 @@ void DrawWidget::paintEvent(QPaintEvent *)
     // Draw points
     p.setClipRegion(QRegion(m_drawRect));
     p.setPen(QPen(Qt::SolidLine));
+    QPoint la = fromGlobalToLocal(m_points.at(0));
     for (i = 0; i < m_points.count() - 1; i++)
     {
-        QPoint la = fromGlobalToLocal(m_points.at(i));
         QPoint lb = fromGlobalToLocal(m_points.at(i+1));
         p.drawLine(la.x(),la.y(),lb.x(),lb.y());
+        la = lb;
     }
 
     // Draw cursor
@@ -131,9 +134,9 @@ void DrawWidget::paintEvent(QPaintEvent *)
 QPoint DrawWidget::fromGlobalToLocal(HPoint global)
 {
     int locX, locY;
-    hfloat tmp = (m_drawRect.leftHF()+((m_drawRect.rightHF() - m_drawRect.leftHF())/(m_xmax-m_xmin))*(global.x()-m_xmin));
+    hfloat tmp = (m_drawRect.leftHF()+m_xFactor*(global.x()-m_xmin));
     locX = (int)tmp.toInt();
-    tmp = (m_drawRect.topHF()+((m_drawRect.bottomHF() - m_drawRect.topHF())/(m_ymax-m_ymin))*(m_ymax-global.y()));
+    tmp = (m_drawRect.topHF()+m_yFactor*(m_ymax-global.y()));
     locY = (int)tmp.toInt();
     return QPoint(locX,locY);
 }

@@ -31,6 +31,8 @@ private:
     int m_marginX;
     int m_marginY;
     QRectHF m_drawRect;
+    hfloat m_xFactor;
+    hfloat m_yFactor;
 
     QVector<HPoint> m_points;
 
