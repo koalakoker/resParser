@@ -33,6 +33,8 @@ public:
 
     // Options
     void setHighlightPoints(bool state);
+    void setShowLabelX(bool state);
+    void setShowLabelY(bool state);
 
 signals:
     void cursorPositionChanged(int cursor, hfloat x, hfloat y);
@@ -59,6 +61,8 @@ private:
 
     // Options
     bool m_highlightPoints;
+    bool m_showLabelsX;
+    bool m_showLabelsY;
 
 private:
     void paintEvent(QPaintEvent *);

@@ -44,6 +44,10 @@ private slots:
 
     void on_actionHiglight_Points_toggled(bool arg1);
 
+    void on_actionLabel_X_axe_toggled(bool arg1);
+
+    void on_actionShow_labels_Y_axe_toggled(bool arg1);
+
 private:
     Ui::DrawWidgetBrowse *ui;
     static void setValueQuiet(QDoubleSpinBox* w,double value);

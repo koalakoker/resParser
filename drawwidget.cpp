@@ -115,11 +115,14 @@ void DrawWidget::paintEvent(QPaintEvent *)
         {
             p.drawLine(x,top,x,bottom);
         }
-        // Orizontal labels
-        hfloat tmp = m_xmin + (deltaLabelX * i);
-        QString label = tmp.toString("%.2Rf");
-        fontW = p.fontMetrics().width(label);
-        p.drawText(x-(fontW/2),bottom+fontH,label);
+        if (m_showLabelsX)
+        {
+            // Orizontal labels
+            hfloat tmp = m_xmin + (deltaLabelX * i);
+            QString label = tmp.toString("%.2Rf");
+            fontW = p.fontMetrics().width(label);
+            p.drawText(x-(fontW/2),bottom+fontH,label);
+        }
     }
 
     // Draw orizzontal elements
@@ -141,11 +144,14 @@ void DrawWidget::paintEvent(QPaintEvent *)
         {
             p.drawLine(left,y,right,y);
         }
-        // Vertical labels
-        hfloat tmp = m_ymax - (deltaLabelY * i);
-        QString label = tmp.toString("%.2Rf");
-        fontW = p.fontMetrics().width(label);
-        p.drawText(left-fontW-5,y+(fontH/4),label);
+        if (m_showLabelsY)
+        {
+            // Vertical labels
+            hfloat tmp = m_ymax - (deltaLabelY * i);
+            QString label = tmp.toString("%.2Rf");
+            fontW = p.fontMetrics().width(label);
+            p.drawText(left-fontW-5,y+(fontH/4),label);
+        }
     }
 
     // Draw points
@@ -181,19 +187,22 @@ void DrawWidget::paintEvent(QPaintEvent *)
 
 int DrawWidget::getXMarginRequiredByLabels(QPainter* p)
 {
-    int fontW;
     int maxFontWidth = 0;
-    int i;
-    hfloat deltaLabelY = (m_ymax-m_ymin)/10;
-    for (i = 0;  i < 11; i++)
+    if (m_showLabelsY)
     {
-        // Vertical labels
-        hfloat tmp = m_ymax - (deltaLabelY * i);
-        QString label = tmp.toString("%.2Rf");
-        fontW = p->fontMetrics().width(label);
-        if (fontW > maxFontWidth)
+        int fontW;
+        int i;
+        hfloat deltaLabelY = (m_ymax-m_ymin)/10;
+        for (i = 0;  i < 11; i++)
         {
-            maxFontWidth = fontW;
+            // Vertical labels
+            hfloat tmp = m_ymax - (deltaLabelY * i);
+            QString label = tmp.toString("%.2Rf");
+            fontW = p->fontMetrics().width(label);
+            if (fontW > maxFontWidth)
+            {
+                maxFontWidth = fontW;
+            }
         }
     }
     return maxFontWidth;
@@ -413,6 +422,25 @@ void DrawWidget::setHighlightPoints(bool state)
     if (m_highlightPoints != state)
     {
         m_highlightPoints = state;
+        repaint();
+    }
+}
+
+void DrawWidget::setShowLabelX(bool state)
+{
+    if (m_showLabelsX != state)
+    {
+        m_showLabelsX = state;
+        repaint();
+    }
+}
+
+void DrawWidget::setShowLabelY(bool state)
+{
+    if (m_showLabelsY != state)
+    {
+        m_showLabelsY = state;
+        m_dataPointUpdate = true;
         repaint();
     }
 }

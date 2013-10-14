@@ -289,6 +289,8 @@
     </property>
     <addaction name="action_Data"/>
     <addaction name="actionHiglight_Points"/>
+    <addaction name="actionLabel_X_axe"/>
+    <addaction name="actionShow_labels_Y_axe"/>
    </widget>
    <addaction name="menu_View"/>
   </widget>
@@ -304,6 +306,22 @@
    </property>
    <property name="text">
     <string>Higlight Points</string>
+   </property>
+  </action>
+  <action name="actionLabel_X_axe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show labels X-axe</string>
+   </property>
+  </action>
+  <action name="actionShow_labels_Y_axe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show labels Y-axe</string>
    </property>
   </action>
  </widget>
