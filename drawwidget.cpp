@@ -58,6 +58,16 @@ void DrawWidget::setYmax(hfloat val)
     m_dataPointUpdate = true;
 }
 
+void DrawWidget::setMarginX(int marginX)
+{
+    m_marginX = marginX;
+}
+
+void DrawWidget::setMarginY(int marginY)
+{
+    m_marginY = marginY;
+}
+
 void DrawWidget::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
@@ -68,6 +78,8 @@ void DrawWidget::paintEvent(QPaintEvent *)
     int h = geometry().height();
 
     int fontH = p.fontMetrics().boundingRect("0").height();
+
+    m_marginX = getXMarginRequiredByLabels(&p) + 5;
 
     int top = m_marginY;
     int left = m_marginX;
@@ -165,6 +177,26 @@ void DrawWidget::paintEvent(QPaintEvent *)
         p.setPen(QPen(QColor(Qt::red)));
         p.drawEllipse(QPoint(lc.x(),lc.y()),2,2);
     }
+}
+
+int DrawWidget::getXMarginRequiredByLabels(QPainter* p)
+{
+    int fontW;
+    int maxFontWidth = 0;
+    int i;
+    hfloat deltaLabelY = (m_ymax-m_ymin)/10;
+    for (i = 0;  i < 11; i++)
+    {
+        // Vertical labels
+        hfloat tmp = m_ymax - (deltaLabelY * i);
+        QString label = tmp.toString("%.2Rf");
+        fontW = p->fontMetrics().width(label);
+        if (fontW > maxFontWidth)
+        {
+            maxFontWidth = fontW;
+        }
+    }
+    return maxFontWidth;
 }
 
 QPoint DrawWidget::fromGlobalToLocal(HPoint global)

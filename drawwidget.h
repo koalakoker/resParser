@@ -74,6 +74,10 @@ private:
 
     bool cursorNear(int cursor, QPoint p);
     void int_setCursorX(int cursor, hfloat x);
+
+    void setMarginX(int marginX);
+    void setMarginY(int marginY);
+    int getXMarginRequiredByLabels(QPainter *p);
 };
 
 #endif // DRAWWIDGET_H
