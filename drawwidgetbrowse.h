@@ -42,6 +42,8 @@ private slots:
 
     void cursorValueChanged(int cursor, hfloat x, hfloat y);
 
+    void on_actionHiglight_Points_toggled(bool arg1);
+
 private:
     Ui::DrawWidgetBrowse *ui;
     static void setValueQuiet(QDoubleSpinBox* w,double value);

@@ -180,3 +180,8 @@ void DrawWidgetBrowse::spin_xmin(int step)
         ui->xmax->stepUp();
     }
 }
+
+void DrawWidgetBrowse::on_actionHiglight_Points_toggled(bool arg1)
+{
+    ui->drawWidget->setHighlightPoints(arg1);
+}

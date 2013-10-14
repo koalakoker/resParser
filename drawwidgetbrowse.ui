@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>828</width>
+    <width>936</width>
     <height>600</height>
    </rect>
   </property>
@@ -279,7 +279,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>828</width>
+     <width>936</width>
      <height>29</height>
     </rect>
    </property>
@@ -288,6 +288,7 @@
      <string>&amp;View</string>
     </property>
     <addaction name="action_Data"/>
+    <addaction name="actionHiglight_Points"/>
    </widget>
    <addaction name="menu_View"/>
   </widget>
@@ -295,6 +296,14 @@
   <action name="action_Data">
    <property name="text">
     <string>&amp;Data</string>
+   </property>
+  </action>
+  <action name="actionHiglight_Points">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Higlight Points</string>
    </property>
   </action>
  </widget>

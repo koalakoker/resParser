@@ -17,6 +17,9 @@ DrawWidget::DrawWidget(QWidget *parent) :
 
     m_dataPointUpdate = true;
 
+    // Options
+    m_highlightPoints = false;
+
     int_setCursorX(0,0);
     int_setCursorX(1,0);
     int i;
@@ -145,6 +148,10 @@ void DrawWidget::paintEvent(QPaintEvent *)
         QPoint la = m_pointsFloat.at(i);
         QPoint lb = m_pointsFloat.at(i+1);
         p.drawLine(la.x(),la.y(),lb.x(),lb.y());
+        if (m_highlightPoints)
+        {
+            p.drawEllipse(lb,3,3);
+        }
     }
 
     // Draw cursor
@@ -367,4 +374,13 @@ void DrawWidget::mouseReleaseEvent(QMouseEvent* event)
 void DrawWidget::resizeEvent(QResizeEvent *)
 {
     m_dataPointUpdate = true;
+}
+
+void DrawWidget::setHighlightPoints(bool state)
+{
+    if (m_highlightPoints != state)
+    {
+        m_highlightPoints = state;
+        repaint();
+    }
 }

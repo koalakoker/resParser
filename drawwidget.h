@@ -26,8 +26,18 @@ public:
     void setCursorX(int cursor, hfloat x);
     hfloat CursorY(int cursor);
 
-private:
+    void setXmin(hfloat val);
+    void setXmax(hfloat val);
+    void setYmin(hfloat val);
+    void setYmax(hfloat val);
 
+    // Options
+    void setHighlightPoints(bool state);
+
+signals:
+    void cursorPositionChanged(int cursor, hfloat x, hfloat y);
+
+private:
     int m_marginX;
     int m_marginY;
     QRectHF m_drawRect;
@@ -42,17 +52,13 @@ private:
     hfloat m_cursorY[CURSOR_NUM];
     bool m_cursorDragged[CURSOR_NUM];
 
-private:
     hfloat m_xmin;
     hfloat m_xmax;
     hfloat m_ymin;
     hfloat m_ymax;
 
-public:
-    void setXmin(hfloat val);
-    void setXmax(hfloat val);
-    void setYmin(hfloat val);
-    void setYmax(hfloat val);
+    // Options
+    bool m_highlightPoints;
 
 private:
     void paintEvent(QPaintEvent *);
@@ -68,9 +74,6 @@ private:
 
     bool cursorNear(int cursor, QPoint p);
     void int_setCursorX(int cursor, hfloat x);
-
-signals:
-    void cursorPositionChanged(int cursor, hfloat x, hfloat y);
 };
 
 #endif // DRAWWIDGET_H
