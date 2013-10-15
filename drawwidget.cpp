@@ -101,19 +101,22 @@ void DrawWidget::paintEvent(QPaintEvent *)
     for (i = 0;  i < 11; i++)
     {
         int x = left+(delta*i);
-        // Vertical Axe
-        if (i == 5)
+        if (m_showGridVertical)
         {
-            p.setPen(QPen(Qt::SolidLine));
-        }
-        else
-        {
-            p.setPen(QPen(Qt::DotLine));
-        }
-        // Grid
-        if ((i > 0) && (i < 10))
-        {
-            p.drawLine(x,top,x,bottom);
+            // Vertical Axe
+            if (i == 5)
+            {
+                p.setPen(QPen(Qt::SolidLine));
+            }
+            else
+            {
+                p.setPen(QPen(Qt::DotLine));
+            }
+            // Grid
+            if ((i > 0) && (i < 10))
+            {
+                p.drawLine(x,top,x,bottom);
+            }
         }
         if (m_showLabelsX)
         {
@@ -130,19 +133,22 @@ void DrawWidget::paintEvent(QPaintEvent *)
     for (i = 0;  i < 11; i++)
     {
         int y = top+(delta*i);
-        // Orizontal axe
-        if (i == 5)
+        if (m_showGridOrizzontal)
         {
-            p.setPen(QPen(Qt::SolidLine));
-        }
-        else
-        {
-            p.setPen(QPen(Qt::DotLine));
-        }
-        // Grid
-        if ((i > 0) && (i < 10))
-        {
-            p.drawLine(left,y,right,y);
+            // Orizontal axe
+            if (i == 5)
+            {
+                p.setPen(QPen(Qt::SolidLine));
+            }
+            else
+            {
+                p.setPen(QPen(Qt::DotLine));
+            }
+            // Grid
+            if ((i > 0) && (i < 10))
+            {
+                p.drawLine(left,y,right,y);
+            }
         }
         if (m_showLabelsY)
         {
@@ -441,6 +447,24 @@ void DrawWidget::setShowLabelY(bool state)
     {
         m_showLabelsY = state;
         m_dataPointUpdate = true;
+        repaint();
+    }
+}
+
+void DrawWidget::setShowGridOrizzontal(bool state)
+{
+    if (m_showGridOrizzontal != state)
+    {
+        m_showGridOrizzontal = state;
+        repaint();
+    }
+}
+
+void DrawWidget::setShowGridVertical(bool state)
+{
+    if (m_showGridVertical != state)
+    {
+        m_showGridVertical = state;
         repaint();
     }
 }

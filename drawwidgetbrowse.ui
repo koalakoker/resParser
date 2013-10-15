@@ -291,6 +291,8 @@
     <addaction name="actionHiglight_Points"/>
     <addaction name="actionLabel_X_axe"/>
     <addaction name="actionShow_labels_Y_axe"/>
+    <addaction name="actionShow_grid_orizzontal"/>
+    <addaction name="actionShow_grid_vertical"/>
    </widget>
    <addaction name="menu_View"/>
   </widget>
@@ -322,6 +324,22 @@
    </property>
    <property name="text">
     <string>Show labels Y-axe</string>
+   </property>
+  </action>
+  <action name="actionShow_grid_orizzontal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show grid orizzontal</string>
+   </property>
+  </action>
+  <action name="actionShow_grid_vertical">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show grid vertical</string>
    </property>
   </action>
  </widget>

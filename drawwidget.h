@@ -35,6 +35,8 @@ public:
     void setHighlightPoints(bool state);
     void setShowLabelX(bool state);
     void setShowLabelY(bool state);
+    void setShowGridOrizzontal(bool state);
+    void setShowGridVertical(bool state);
 
 signals:
     void cursorPositionChanged(int cursor, hfloat x, hfloat y);
@@ -63,6 +65,8 @@ private:
     bool m_highlightPoints;
     bool m_showLabelsX;
     bool m_showLabelsY;
+    bool m_showGridOrizzontal;
+    bool m_showGridVertical;
 
 private:
     void paintEvent(QPaintEvent *);

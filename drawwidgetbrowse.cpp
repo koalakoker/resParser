@@ -11,6 +11,8 @@ DrawWidgetBrowse::DrawWidgetBrowse(QWidget *parent) :
 
     ui->actionLabel_X_axe->setChecked(true);
     ui->actionShow_labels_Y_axe->setChecked(true);
+    ui->actionShow_grid_orizzontal->setChecked(true);
+    ui->actionShow_grid_vertical->setChecked(true);
 
     connect (ui->drawWidget,SIGNAL(cursorPositionChanged(int,hfloat,hfloat)),this,SLOT(cursorValueChanged(int,hfloat,hfloat)));
     connect (ui->xmin,SIGNAL(userStepBy(int)),this,SLOT(spin_xmin(int)));
@@ -197,4 +199,14 @@ void DrawWidgetBrowse::on_actionLabel_X_axe_toggled(bool arg1)
 void DrawWidgetBrowse::on_actionShow_labels_Y_axe_toggled(bool arg1)
 {
     ui->drawWidget->setShowLabelY(arg1);
+}
+
+void DrawWidgetBrowse::on_actionShow_grid_orizzontal_toggled(bool arg1)
+{
+    ui->drawWidget->setShowGridOrizzontal(arg1);
+}
+
+void DrawWidgetBrowse::on_actionShow_grid_vertical_toggled(bool arg1)
+{
+    ui->drawWidget->setShowGridVertical(arg1);
 }

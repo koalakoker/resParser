@@ -48,6 +48,10 @@ private slots:
 
     void on_actionShow_labels_Y_axe_toggled(bool arg1);
 
+    void on_actionShow_grid_orizzontal_toggled(bool arg1);
+
+    void on_actionShow_grid_vertical_toggled(bool arg1);
+
 private:
     Ui::DrawWidgetBrowse *ui;
     static void setValueQuiet(QDoubleSpinBox* w,double value);
