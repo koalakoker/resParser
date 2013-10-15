@@ -9,6 +9,7 @@
 #include "builtinfunction.h"
 #include "userdefinedfunctions.h"
 #include "tableinfoelement.h"
+#include "range.h"
 
 typedef enum {Fixed, Scientific, Auto, Hexadecimal} formatOutput_t;
 
@@ -20,19 +21,6 @@ public:
     keyWord(keyWordCode_t code, QString str);
     keyWordCode_t m_code;
     QString m_str;
-};
-
-class Range
-{
-public:
-    Range();
-    Range(hfloat min,hfloat max, hfloat step);
-    Range(const Range& r);
-
-public:
-    hfloat m_min;
-    hfloat m_max;
-    hfloat m_step;
 };
 
 class ParserClass : public QObject

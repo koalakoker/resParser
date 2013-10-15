@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     fpoint.cpp \
     datainspectorwidget.cpp \
     qrecthf.cpp \
-    doublespinbox.cpp
+    doublespinbox.cpp \
+    range.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     fpoint.h \
     datainspectorwidget.h \
     qrecthf.h \
-    doublespinbox.h
+    doublespinbox.h \
+    range.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \

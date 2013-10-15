@@ -14,10 +14,13 @@ public:
     HPoint(float x, float y);
     HPoint(const HPoint& p);
 
-    hfloat x(void);
-    hfloat y(void);
+    hfloat x(void) const;
+    hfloat y(void) const;
     void setX(hfloat x);
     void setY(hfloat y);
 };
+
+QDataStream &operator<<(QDataStream &ds, const HPoint &obj);
+QDataStream &operator>>(QDataStream &ds, HPoint &obj);
 
 #endif // FPOINT_H

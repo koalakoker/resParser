@@ -24,12 +24,12 @@ HPoint::HPoint(const HPoint& p)
     m_y = p.m_y;
 }
 
-hfloat HPoint::x(void)
+hfloat HPoint::x(void) const
 {
     return m_x;
 }
 
-hfloat HPoint::y(void)
+hfloat HPoint::y(void) const
 {
     return m_y;
 }
@@ -42,4 +42,21 @@ void HPoint::setX(hfloat x)
 void HPoint::setY(hfloat y)
 {
     m_y = y;
+}
+
+QDataStream &operator<<(QDataStream &ds, const HPoint &obj)
+{
+    ds << obj.x();
+    ds << obj.y();
+    return ds;
+}
+
+QDataStream &operator>>(QDataStream &ds, HPoint &obj)
+{
+    hfloat in;
+    ds >> in;
+    obj.setX(in);
+    ds >> in;
+    obj.setY(in);
+    return ds;
 }

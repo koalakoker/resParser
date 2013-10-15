@@ -1,4 +1,5 @@
 #include "hfloat.h"
+#include "global.h"
 
 #define ROUND MPFR_RNDN
 #define PRECISION 256
@@ -32,7 +33,7 @@ hfloat::~hfloat()
     mpfr_clear(value);
 }
 
-QString hfloat::toString(QString format)
+QString hfloat::toString(QString format) const
 {
     QString retVal;
     char out[200];
@@ -134,6 +135,11 @@ bool hfloat::operator>=(const hfloat& a) const
 bool hfloat::operator<=(const hfloat& a) const
 {
     return (bool)(mpfr_lessequal_p(this->value,a.value));
+}
+
+bool hfloat::operator==(const hfloat& a) const
+{
+    return (bool)(mpfr_equal_p(this->value,a.value));
 }
 
 hfloat hfloat::sqrt(const hfloat a)
@@ -344,4 +350,18 @@ hfloat hfloat::atanh(const hfloat a)
     hfloat retVal;
     mpfr_atanh(retVal.value,a.value,ROUND);
     return retVal;
+}
+
+QDataStream &operator<<(QDataStream &ds, const hfloat &obj)
+{
+    ds << obj.toString(FIXED_MAX_PRECISION);
+    return ds;
+}
+
+QDataStream &operator>>(QDataStream &ds, hfloat &obj)
+{
+    QString in;
+    ds >> in;
+    obj = hfloat(in);
+    return ds;
 }

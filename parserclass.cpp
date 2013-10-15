@@ -46,24 +46,6 @@ keyWordCode_t ParserClass::KeyWordCode(QString str)
     return key_None;
 }
 
-Range::Range()
-{
-}
-
-Range::Range(hfloat min, hfloat max, hfloat step)
-{
-    m_min = min;
-    m_max = max;
-    m_step = step;
-}
-
-Range::Range(const Range& r)
-{
-    m_min = r.m_min;
-    m_max = r.m_max;
-    m_step = r.m_step;
-}
-
 ParserClass::ParserClass(QObject *parent):
     QObject(parent)
 {
@@ -348,24 +330,34 @@ QString ParserClass::Exec(QString str, hfloat &result)
         int udFuncOrder;
         if ((udFuncOrder = HasUserDefinedFunction(str+"("))!= -1)
         {
-            QVector<HPoint> points;
             DrawWidgetBrowse* d = new DrawWidgetBrowse();
-
-            // Prepare for function computation
-            userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
-            QString functionStr = udFunc.functionSrt();
-            QStringList funcionArgs = udFunc.args();
-
-            hfloat x;
-            for (x = r.m_min; x <= r.m_max; x += r.m_step)
+            QVector<HPoint> points;
+            if ((m_userdefinedFunctions[udFuncOrder].RawData())&&(r == m_userdefinedFunctions[udFuncOrder].RawRange()))
             {
-                QString tmpStr = functionStr;
-                tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
-                points.append(HPoint(x,Parse(tmpStr)));
+                points = m_userdefinedFunctions[udFuncOrder].RawPoints();
             }
-            // Just for last point
-            functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
-            points.append(HPoint(r.m_max,Parse(functionStr)));
+            else
+            {
+                // Prepare for function computation
+                userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
+                QString functionStr = udFunc.functionSrt();
+                QStringList funcionArgs = udFunc.args();
+
+                hfloat x;
+                for (x = r.m_min; x <= r.m_max; x += r.m_step)
+                {
+                    QString tmpStr = functionStr;
+                    tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
+                    points.append(HPoint(x,Parse(tmpStr)));
+                }
+                // Just for last point
+                functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
+                points.append(HPoint(r.m_max,Parse(functionStr)));
+
+                // Store RAW data in function
+                m_userdefinedFunctions[udFuncOrder].setRawRange(r);
+                m_userdefinedFunctions[udFuncOrder].setRawPoints(points);
+            }
 
             d->setXmin(r.m_min.toFloat());
             d->setXmax(r.m_max.toFloat());

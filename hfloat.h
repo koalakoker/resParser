@@ -1,6 +1,7 @@
 #ifndef HFLOAT_H
 #define HFLOAT_H
 
+#include <QDataStream>
 #include "gmp.h"
 #include "mpfr.h"
 #include "QString"
@@ -16,7 +17,7 @@ public:
     hfloat(float val);
     hfloat(const hfloat& val);
 
-    QString toString(QString format);
+    QString toString(QString format) const;
     float toFloat();
     int toInt();
     bool isNan(void);
@@ -33,6 +34,7 @@ public:
     bool operator>(const hfloat& a) const;
     bool operator<=(const hfloat& a) const;
     bool operator>=(const hfloat& a) const;
+    bool operator==(const hfloat& a) const;
 
     static hfloat sqrt(const hfloat a);
     static hfloat sqr(const hfloat a);
@@ -65,5 +67,8 @@ public:
     static hfloat asinh(const hfloat a);
     static hfloat atanh(const hfloat a);
 };
+
+QDataStream &operator<<(QDataStream &ds, const hfloat &obj);
+QDataStream &operator>>(QDataStream &ds, hfloat &obj);
 
 #endif // HFLOAT_H
