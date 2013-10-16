@@ -148,37 +148,39 @@ void CommandMngrClass::Load(QString fileName)
     m_parser.Load(in);
 }
 
-QList<TableInfoElement> CommandMngrClass::VariableInfo(void)
+TableInfo CommandMngrClass::VariableInfo(void)
 {
-    QList<TableInfoElement> infoTable;
+    TableInfo infoTable;
+    infoTable.setColumn(2);
     int i;
     for (i = 0; i < m_parser.VariableCreated(); i++)
     {
         Variable* var = m_parser.GetVariableAtIndex(i);
         TableInfoElement tab;
-        tab.m_name = var->Name();
-        tab.m_value = var->Value().toString(m_parser.FormatOutput());
+        tab.m_value.append(var->Name());
+        tab.m_value.append(var->Value().toString(m_parser.FormatOutput()));
         infoTable.append(tab);
     }
     return infoTable;
 }
 
-QList<TableInfoElement> CommandMngrClass::BuiltInFunctionInfo(void)
+TableInfo CommandMngrClass::BuiltInFunctionInfo(void)
 {
-    QList<TableInfoElement> infoTable;
+    TableInfo infoTable;
+    infoTable.setColumn(2);
     QStringList list = m_parser.builtInFunctionList();
     int i;
     for (i = 0; i < list.count(); i++)
     {
         TableInfoElement tab;
-        tab.m_name = list.at(i);
-        tab.m_value = "";
+        tab.m_value.append(list.at(i));
+        tab.m_value.append("");
         infoTable.append(tab);
     }
     return infoTable;
 }
 
-QList<TableInfoElement> CommandMngrClass::UserFunctionInfo(void)
+TableInfo CommandMngrClass::UserFunctionInfo(void)
 {
     return m_parser.UserDefinedFunctionsInfo();
 }

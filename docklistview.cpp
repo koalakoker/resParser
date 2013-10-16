@@ -18,31 +18,42 @@ DockListView::~DockListView()
     delete ui;
 }
 
-void DockListView::populate(QList<TableInfoElement> List)
+void DockListView::populate(TableInfo List)
 {
     if (!m_empty)
     {
         EmptyTable();
     }
-    ui->tableWidget->setRowCount(List.count());
-    ui->tableWidget->setColumnCount(2);
+    ui->tableWidget->setRowCount(List.row());
+    ui->tableWidget->setColumnCount(List.column());
     int i;
-    for (i = 0; i < List.count(); i++)
+    for (i = 0; i < List.row(); i++)
     {
         TableInfoElement info = List.at(i);
-        QTableWidgetItem* item = new QTableWidgetItem(info.m_name);
-        item->setToolTip(info.m_name);
-        QFont font;
-        font.setBold(true);
-        item->setFont(font);
-        ui->tableWidget->setItem(i,0,item);
-        item = new QTableWidgetItem(info.m_value);
-        item->setToolTip(info.m_value);
-        item->setFont(font);
-        ui->tableWidget->setItem(i,1,item);
+        int j;
+        for (j = 0;  j < List.column(); j++)
+        {
+            QString str;
+            if (j  < info.m_value.count())
+            {
+                str = info.m_value.at(j);
+            }
+            else
+            {
+                str = "";
+            }
+            QTableWidgetItem* item = new QTableWidgetItem(str);
+            item->setToolTip(str);
+            QFont font;
+            font.setBold(true);
+            item->setFont(font);
+            ui->tableWidget->setItem(i,j,item);
+        }
     }
-    ui->tableWidget->resizeColumnToContents(0);
-    ui->tableWidget->resizeColumnToContents(1);
+    for (i = 0; i < List.column(); i++)
+    {
+        ui->tableWidget->resizeColumnToContents(i);
+    }
     m_empty = false;
 }
 

@@ -86,7 +86,7 @@ public:
     hfloat Parse(QString str,bool preview  = false);
     QString Exec(QString str,hfloat& result);
     QStringList builtInFunctionList(void);
-    QList<TableInfoElement> UserDefinedFunctionsInfo(void);
+    TableInfo UserDefinedFunctionsInfo(void);
     QString UserDefineFunctionFormulaFromName(QString name);
 
     formatOutput_t Format(void); // Returns the current selected format

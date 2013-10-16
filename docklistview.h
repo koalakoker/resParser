@@ -17,7 +17,7 @@ public:
     explicit DockListView(QWidget *parent = 0);
     ~DockListView();
 
-    void populate(QList<TableInfoElement> List);
+    void populate(TableInfo List);
 
 private slots:
     void on_tableWidget_doubleClicked(const QModelIndex &index);

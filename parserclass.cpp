@@ -119,15 +119,19 @@ QStringList ParserClass::builtInFunctionList(void)
     return list;
 }
 
-QList<TableInfoElement> ParserClass::UserDefinedFunctionsInfo(void)
+TableInfo ParserClass::UserDefinedFunctionsInfo(void)
 {
-    QList<TableInfoElement> list;
+    TableInfo list;
+    list.setColumn(4);
     int i;
     for (i = 0; i < m_userdefinedFunctions.count(); i++)
     {
         TableInfoElement info;
-        info.m_name = m_userdefinedFunctions[i].Name();
-        info.m_value = m_userdefinedFunctions[i].functionSrt();
+        userdefinedFunctions func = m_userdefinedFunctions[i];
+        info.m_value.append(func.Name());
+        info.m_value.append(func.functionSrt());
+        info.m_value.append(func.RawData()?QString("RAW"):QString(""));
+        info.m_value.append(func.RawRange().toString());
         list.append(info);
     }
     return list;

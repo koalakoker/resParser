@@ -20,7 +20,7 @@ public:
     QString toString(QString format) const;
     float toFloat();
     int toInt();
-    bool isNan(void);
+    bool isNan(void) const;
     bool isNumber(void);
     void setNan(void);
 

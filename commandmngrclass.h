@@ -26,9 +26,9 @@ public:
 
     QString PreviewResult(QString qsInput);
 
-    QList<TableInfoElement> VariableInfo(void);
-    QList<TableInfoElement> BuiltInFunctionInfo(void);
-    QList<TableInfoElement> UserFunctionInfo(void);
+    TableInfo VariableInfo(void);
+    TableInfo BuiltInFunctionInfo(void);
+    TableInfo UserFunctionInfo(void);
     QStringList BuiltInFunctionList(void);
     QString OutputPaneReprint(void);
 

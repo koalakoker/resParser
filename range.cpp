@@ -2,6 +2,9 @@
 
 Range::Range()
 {
+    m_min = 0;
+    m_max = 0;
+    m_step = 0;
 }
 
 Range::Range(hfloat min, hfloat max, hfloat step)
@@ -20,7 +23,19 @@ Range::Range(const Range& r)
 
 QString Range::toString(void) const
 {
-    QString retVal = QString("[%1:%2:%3]").arg(m_min.toString("%.5Rg")).arg(m_max.toString("%.5Rg")).arg(m_step.toString("%.5Rg"));
+    QString retVal;
+    if ((m_min==0)&&(m_max==0)&&(m_step==0))
+    {
+        retVal = "";
+    }
+    else if ((m_min.isNan())||(m_min.isNan())||m_step.isNan())
+    {
+        retVal = "";
+    }
+    else
+    {
+        retVal = QString("[%1:%2:%3]").arg(m_min.toString("%.5Rg")).arg(m_max.toString("%.5Rg")).arg(m_step.toString("%.5Rg"));
+    }
     return retVal;
 }
 

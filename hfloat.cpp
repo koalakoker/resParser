@@ -61,7 +61,7 @@ int hfloat::toInt()
     return mpfr_get_si(this->value,ROUND);
 }
 
-bool hfloat::isNan(void)
+bool hfloat::isNan(void) const
 {
     return (mpfr_nan_p(this->value) != 0);
 }
