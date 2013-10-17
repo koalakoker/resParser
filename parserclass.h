@@ -72,6 +72,7 @@ private:
 
     bool IsKeyWord(QString str);
     keyWordCode_t KeyWordCode(QString str);
+    QString RemoveKeyWord(QString str,keyWordCode_t code);
 
 public:
     explicit ParserClass(QObject *parent = 0);

@@ -46,6 +46,20 @@ keyWordCode_t ParserClass::KeyWordCode(QString str)
     return key_None;
 }
 
+QString ParserClass::RemoveKeyWord(QString str,keyWordCode_t code)
+{
+    QString retVal = str;
+    int i;
+    for (i = 0; i < m_keyWord.count(); i++)
+    {
+        if ((str.contains(m_keyWord.at(i).m_str))&&(m_keyWord.at(i).m_code==code))
+        {
+            retVal = str.remove(m_keyWord.at(i).m_str);
+        }
+    }
+    return retVal;
+}
+
 ParserClass::ParserClass(QObject *parent):
     QObject(parent)
 {
@@ -87,6 +101,8 @@ ParserClass::ParserClass(QObject *parent):
     addBuiltInFunction("tanh",hfloat::tanh);
 
     m_keyWord.append(keyWord(key_Clear,"clear"));
+    m_keyWord.append(keyWord(key_Clear,"delete"));
+    m_keyWord.append(keyWord(key_Clear,"del"));
     m_keyWord.append(keyWord(key_List,"list"));
     m_keyWord.append(keyWord(key_List,"ls"));
     m_keyWord.append(keyWord(key_E12,"E12"));
@@ -285,17 +301,21 @@ QString ParserClass::Exec(QString str, hfloat &result)
     {
         // Remove spaces
         str.replace(" ","");
-        if (IsVariableName(str.remove("clear")))
-        {
-            RemoveVariable(str);
-        }
-        else if (IsUserDefinedFunctionName(str))
-        {
-            RemoveUserDefinedFunction(str);
-        }
-        else if (str.toLower() == "clear" )
+        if (str.toLower() == "clear" )
         {
             Clear();
+        }
+        else
+        {
+            str = RemoveKeyWord(str,key_Clear);
+            if (IsVariableName(str))
+            {
+                RemoveVariable(str);
+            }
+            else if (IsUserDefinedFunctionName(str))
+            {
+                RemoveUserDefinedFunction(str);
+            }
         }
     }
         break;
