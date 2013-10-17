@@ -100,6 +100,7 @@ ParserClass::ParserClass(QObject *parent):
     addBuiltInFunction("sinh",hfloat::sinh);
     addBuiltInFunction("tanh",hfloat::tanh);
 
+    m_keyWord.append(keyWord(key_ClearRaw,"clearraw"));
     m_keyWord.append(keyWord(key_Clear,"clear"));
     m_keyWord.append(keyWord(key_Clear,"delete"));
     m_keyWord.append(keyWord(key_Clear,"del"));
@@ -235,6 +236,26 @@ bool ParserClass::RemoveUserDefinedFunction(QString name)
     return retVal;
 }
 
+bool ParserClass::RemoveUserDefinedFunctionRawData(QString name)
+{
+    bool retVal = false;
+    int i;
+    for (i = 0; i < m_userdefinedFunctions.count(); i++)
+    {
+        if (m_userdefinedFunctions[i].Name() == name)
+        {
+            userdefinedFunctions func = m_userdefinedFunctions.at(i);
+            func.setRawPoints(QVector<HPoint>());
+            func.setRawRange(Range());
+            m_userdefinedFunctions.replace(i,func);
+            retVal = true;
+            emit(functionListUpdate(builtInFunctionList()));
+            break;
+        }
+    }
+    return retVal;
+}
+
 bool ParserClass::StoreFunction(QString name,QStringList args,QString newFuncStr)
 {
     bool retVal = false, found = false;
@@ -317,6 +338,17 @@ QString ParserClass::Exec(QString str, hfloat &result)
             {
                 RemoveUserDefinedFunction(str);
             }
+        }
+    }
+        break;
+    case key_ClearRaw:
+    {
+        // Remove spaces
+        str.replace(" ","");
+        str = RemoveKeyWord(str,key_ClearRaw);
+        if (IsUserDefinedFunctionName(str))
+        {
+            RemoveUserDefinedFunctionRawData(str);
         }
     }
         break;

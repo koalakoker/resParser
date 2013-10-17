@@ -13,7 +13,7 @@
 
 typedef enum {Fixed, Scientific, Auto, Hexadecimal} formatOutput_t;
 
-typedef enum {key_None, key_Clear, key_List, key_E12, key_E24, key_Usage, key_Plot} keyWordCode_t;
+typedef enum {key_None, key_Clear, key_ClearRaw, key_List, key_E12, key_E24, key_Usage, key_Plot} keyWordCode_t;
 
 class keyWord
 {
@@ -81,6 +81,7 @@ public:
     bool StoreVariable(QString name,hfloat newValue);
     bool RemoveVariable(QString name);
     bool RemoveUserDefinedFunction(QString name);
+    bool RemoveUserDefinedFunctionRawData(QString name);
     bool StoreFunction(QString name,QStringList args,QString newValue);
     Variable *GetVariableAtIndex(int i);
     void Clear(void);
