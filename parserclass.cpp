@@ -2,7 +2,7 @@
 #include "QRegExp"
 #include "QStringList"
 #include "drawwidgetbrowse.h"
-//#include "QDebug"
+#include "QDebug"
 
 #define REGEXP6OPERAND "[-+*/:^]"
 #define REGEXP2OPERAND "[-+]"
@@ -330,18 +330,28 @@ QString ParserClass::Exec(QString str, hfloat &result)
         str.replace(" ","");
         str.remove("plot");
         Range r = EvaluateRange(str);
-        str.remove(ExtractRange(str));
+        if (r.isValid())
+        {
+            str.remove(ExtractRange(str));
+        }
         int udFuncOrder;
         if ((udFuncOrder = HasUserDefinedFunction(str+"("))!= -1)
         {
             DrawWidgetBrowse* d = new DrawWidgetBrowse();
             QVector<HPoint> points;
-            if ((m_userdefinedFunctions[udFuncOrder].RawData())&&(r == m_userdefinedFunctions[udFuncOrder].RawRange()))
+            if ((m_userdefinedFunctions[udFuncOrder].RawData())&&
+                    ((r == m_userdefinedFunctions[udFuncOrder].RawRange())||
+                    (!r.isValid())))
             {
                 points = m_userdefinedFunctions[udFuncOrder].RawPoints();
             }
             else
             {
+                if (!r.isValid())
+                {
+                    // Set default range
+                    r = Range(-10,10,0.1);
+                }
                 // Prepare for function computation
                 userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
                 QString functionStr = udFunc.functionSrt();
@@ -361,6 +371,7 @@ QString ParserClass::Exec(QString str, hfloat &result)
                 // Store RAW data in function
                 m_userdefinedFunctions[udFuncOrder].setRawRange(r);
                 m_userdefinedFunctions[udFuncOrder].setRawPoints(points);
+                emit(functionListUpdate(builtInFunctionList()));
             }
 
             d->setXmin(r.m_min.toFloat());
@@ -679,18 +690,29 @@ QString ParserClass::ExtractRange(QString str)
 
 Range ParserClass::EvaluateRange(QString str)
 {
+    Range retVal = Range();
     hfloat min,max,step;
     int j = str.indexOf('[');
     int i = str.indexOf(':',j+1);
-    QString expression = str.mid(j + 1, i - j -1);
-    min = Parse(expression);
-    j = str.indexOf(':',i+1);
-    expression = str.mid(i + 1, j - i -1);
-    max = Parse(expression);
-    i = str.indexOf(']',j+1);
-    expression = str.mid(j + 1, i - j -1);
-    step = Parse(expression);
-    return Range(min,max,step);
+    if ((j != -1)&&(i != -1)&&(i>j))
+    {
+        QString expression = str.mid(j + 1, i - j -1);
+        min = Parse(expression);
+        j = str.indexOf(':',i+1);
+        if (j != -1)
+        {
+            expression = str.mid(i + 1, j - i -1);
+            max = Parse(expression);
+            i = str.indexOf(']',j+1);
+            if (i != -1)
+            {
+                expression = str.mid(j + 1, i - j -1);
+                step = Parse(expression);
+                retVal = Range(min,max,step);
+            }
+        }
+    }
+    return retVal;
 }
 
 bool ParserClass::HasOperand(QString str,char operand)

@@ -39,6 +39,20 @@ QString Range::toString(void) const
     return retVal;
 }
 
+bool Range::isValid(void) const
+{
+    bool retVal = true;
+    if ((m_min==0)&&(m_max==0)&&(m_step==0))
+    {
+        retVal = false;
+    }
+    if (((m_min.isNan())||(m_min.isNan())||m_step.isNan()))
+    {
+        retVal = false;
+    }
+    return retVal;
+}
+
 bool Range::operator==(const Range& op)
 {
     return ((op.m_min == this->m_min)&&(op.m_max == this->m_max)&&(op.m_step == this->m_step));

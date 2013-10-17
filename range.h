@@ -13,6 +13,7 @@ public:
     Range(const Range& r);
 
     QString toString(void) const;
+    bool isValid(void) const;
 
 public:
     hfloat m_min;
