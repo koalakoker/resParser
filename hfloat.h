@@ -18,10 +18,10 @@ public:
     hfloat(const hfloat& val);
 
     QString toString(QString format) const;
-    float toFloat();
-    int toInt();
+    float toFloat() const;
+    int toInt() const;
     bool isNan(void) const;
-    bool isNumber(void);
+    bool isNumber(void) const;
     void setNan(void);
 
     hfloat& operator=(hfloat a);

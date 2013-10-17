@@ -51,12 +51,12 @@ QString hfloat::toString(QString format) const
     return retVal;
 }
 
-float hfloat::toFloat()
+float hfloat::toFloat() const
 {
     return mpfr_get_flt(this->value,ROUND);
 }
 
-int hfloat::toInt()
+int hfloat::toInt() const
 {
     return mpfr_get_si(this->value,ROUND);
 }
@@ -66,7 +66,7 @@ bool hfloat::isNan(void) const
     return (mpfr_nan_p(this->value) != 0);
 }
 
-bool hfloat::isNumber(void)
+bool hfloat::isNumber(void) const
 {
     return (mpfr_number_p(this->value) != 0);
 }
