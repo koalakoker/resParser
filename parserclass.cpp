@@ -105,10 +105,11 @@ ParserClass::ParserClass(QObject *parent):
     m_keyWord.append(keyWord(key_Clear,"del"));
     m_keyWord.append(keyWord(key_List,"list"));
     m_keyWord.append(keyWord(key_List,"ls"));
-    m_keyWord.append(keyWord(key_E12,"E12"));
-    m_keyWord.append(keyWord(key_E24,"E24"));
+    m_keyWord.append(keyWord(key_E12,"e12"));
+    m_keyWord.append(keyWord(key_E24,"e24"));
     m_keyWord.append(keyWord(key_Usage,"usage"));
     m_keyWord.append(keyWord(key_Plot,"plot"));
+    m_keyWord.append(keyWord(key_Plot,"draw"));
 
     m_formatOutput = Auto;
     m_precision = 20;
