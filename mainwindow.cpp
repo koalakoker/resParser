@@ -251,6 +251,7 @@ void MainWindow::clearSelected(QString str)
 void MainWindow::on_actionClear_Hystory_triggered()
 {
     m_cmdMngr.ClearHistorySlot();
+    ui->line_input->setText("");
 }
 
 void MainWindow::on_actionClear_All_triggered()

@@ -7,7 +7,6 @@
 CommandMngrClass::CommandMngrClass(QObject *parent):
     QObject(parent)
 {
-    m_lastCommand = 0;
     m_commandIndex = 0;
 
     connect(&m_parser,SIGNAL(ClearHistory()),this,SLOT(ClearHistorySlot()));
@@ -30,9 +29,22 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     {
         newCmd.setResult(result);
     }
-    m_commands.append(newCmd);
-    m_commandIndex = m_lastCommand;
-    m_lastCommand++;
+    // Check if it is a new command
+    bool isNewCmd = true;
+    int i;
+    for (i = 0; i < m_commands.count(); i++)
+    {
+        CommandClass cmd = m_commands.at(i);
+        if (cmd.inputStr() == qsInput)
+        {
+            isNewCmd = false;
+        }
+    }
+    if (isNewCmd)
+    {
+        m_commands.append(newCmd);
+        m_commandIndex = m_commands.count();
+    }
 
     return retVal;
 }
@@ -40,13 +52,14 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
 QString CommandMngrClass::GetPreviousCommand(void)
 {
     QString retVal = "";
-    if ((m_commandIndex < m_commands.count()) && (m_commandIndex >= 0))
+    m_commandIndex--;
+    if (m_commandIndex < 0)
+    {
+        m_commandIndex = 0;
+    }
+    if (m_commandIndex < m_commands.count())
     {
         retVal = m_commands[m_commandIndex].inputStr();
-        if (m_commandIndex > 0)
-        {
-            m_commandIndex--;
-        }
     }
     return  retVal;
 }
@@ -54,13 +67,15 @@ QString CommandMngrClass::GetPreviousCommand(void)
 QString CommandMngrClass::GetNextCommand(void)
 {
     QString retVal = "";
-    if (m_commandIndex < m_lastCommand - 1)
-    {
-        m_commandIndex++;
-    }
+    m_commandIndex++;
+
     if ((m_commandIndex < m_commands.count()) && (m_commandIndex >= 0))
     {
         retVal = m_commands[m_commandIndex].inputStr();
+    }
+    else
+    {
+        m_commandIndex = m_commands.count();
     }
     return  retVal;
 }
@@ -143,8 +158,7 @@ void CommandMngrClass::Load(QString fileName)
         newCmd.setResult(result);
         m_commands.append(newCmd);
     }
-    m_commandIndex = l - 1;
-    m_lastCommand = l;
+    m_commandIndex = l;
 
     // Load Parser state
     m_parser.Load(in);

@@ -12,7 +12,6 @@ class CommandMngrClass : public QObject
 private:
     ParserClass m_parser;
     QList<CommandClass> m_commands;
-    int m_lastCommand;
     int m_commandIndex;
 
 public:
