@@ -57,6 +57,9 @@
     </property>
     <addaction name="action_Load"/>
     <addaction name="action_Save"/>
+    <addaction name="separator"/>
+    <addaction name="actionClear_Hystory"/>
+    <addaction name="actionClear_All"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -197,6 +200,16 @@
   <action name="actionReset_windows">
    <property name="text">
     <string>Reset windows</string>
+   </property>
+  </action>
+  <action name="actionClear_Hystory">
+   <property name="text">
+    <string>Clear &amp;Hystory</string>
+   </property>
+  </action>
+  <action name="actionClear_All">
+   <property name="text">
+    <string>Clear &amp;All</string>
    </property>
   </action>
  </widget>

@@ -13,7 +13,7 @@
 
 typedef enum {Fixed, Scientific, Auto, Hexadecimal} formatOutput_t;
 
-typedef enum {key_None, key_Clear, key_ClearRaw, key_List, key_E12, key_E24, key_Usage, key_Plot} keyWordCode_t;
+typedef enum {key_None, key_Clear, key_ClearRaw, key_ClearHistory, key_List, key_E12, key_E24, key_Usage, key_Plot} keyWordCode_t;
 
 class keyWord
 {
@@ -104,6 +104,7 @@ public:
 signals:
     void functionListUpdate(QStringList list);
     void variablesUpdate(void);
+    void ClearHistory(void);
 
 public slots:
 };

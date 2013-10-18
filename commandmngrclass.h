@@ -37,6 +37,10 @@ public:
 
 signals:
     void variablesUpdate(void);
+    void ClearHistorySignal(void);
+
+public slots:
+    void ClearHistorySlot(void);
 };
 
 #endif // COMMANDMNGRCLASS_H

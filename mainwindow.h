@@ -47,6 +47,11 @@ private slots:
     void userDefinedFunctionUpdates(void);
 
     void clearSelected(QString str);
+    void clearHistorySlot(void);
+
+    void on_actionClear_Hystory_triggered();
+
+    void on_actionClear_All_triggered();
 
 private:
     Ui::MainWindow *ui;

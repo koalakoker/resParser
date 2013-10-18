@@ -9,6 +9,8 @@ CommandMngrClass::CommandMngrClass(QObject *parent):
 {
     m_lastCommand = 0;
     m_commandIndex = 0;
+
+    connect(&m_parser,SIGNAL(ClearHistory()),this,SLOT(ClearHistorySlot()));
 }
 
 ParserClass* CommandMngrClass::Parser(void)
@@ -183,4 +185,10 @@ TableInfo CommandMngrClass::BuiltInFunctionInfo(void)
 TableInfo CommandMngrClass::UserFunctionInfo(void)
 {
     return m_parser.UserDefinedFunctionsInfo();
+}
+
+void CommandMngrClass::ClearHistorySlot(void)
+{
+    m_commands.clear();
+    emit ClearHistorySignal();
 }

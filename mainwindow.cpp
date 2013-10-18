@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (ui->line_input,SIGNAL(keyEscPressed()),this,SLOT(close()));
     connect (m_cmdMngr.Parser(),SIGNAL(variablesUpdate()),this,SLOT(variableUpdates()));
     connect (m_cmdMngr.Parser(),SIGNAL(functionListUpdate(QStringList)),this,SLOT(userDefinedFunctionUpdates()));
+    connect (&m_cmdMngr,SIGNAL(ClearHistorySignal()),this,SLOT(clearHistorySlot()));
 
     on_action_Load_triggered();
 
@@ -157,6 +158,12 @@ void MainWindow::on_actionHexadecimal_toggled(bool arg1)
     ui->statusBar->showMessage(QString(tr("Switched to Hexadecimal")),10000);
 }
 
+void MainWindow::clearHistorySlot(void)
+{
+    updateOutputPaneAndPreview();
+    ui->statusBar->showMessage(QString(tr("History cleared")),10000);
+}
+
 
 void MainWindow::updateOutputFormatSetting(void)
 {
@@ -239,4 +246,14 @@ void MainWindow::on_actionUser_Functions_toggled(bool arg1)
 void MainWindow::clearSelected(QString str)
 {
     m_cmdMngr.AddNewCommand(QString("clear %1").arg(str));
+}
+
+void MainWindow::on_actionClear_Hystory_triggered()
+{
+    m_cmdMngr.ClearHistorySlot();
+}
+
+void MainWindow::on_actionClear_All_triggered()
+{
+    m_cmdMngr.Parser()->Clear();
 }

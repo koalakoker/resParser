@@ -100,6 +100,7 @@ ParserClass::ParserClass(QObject *parent):
     addBuiltInFunction("sinh",hfloat::sinh);
     addBuiltInFunction("tanh",hfloat::tanh);
 
+    m_keyWord.append(keyWord(key_ClearHistory,"clearhistory"));
     m_keyWord.append(keyWord(key_ClearRaw,"clearraw"));
     m_keyWord.append(keyWord(key_Clear,"clear"));
     m_keyWord.append(keyWord(key_Clear,"delete"));
@@ -350,6 +351,11 @@ QString ParserClass::Exec(QString str, hfloat &result)
         {
             RemoveUserDefinedFunctionRawData(str);
         }
+    }
+        break;
+    case key_ClearHistory:
+    {
+        emit ClearHistory();
     }
         break;
     case key_E12:
