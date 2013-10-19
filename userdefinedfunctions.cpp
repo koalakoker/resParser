@@ -2,6 +2,7 @@
 
 userdefinedFunctions::userdefinedFunctions()
 {
+    m_points = NULL;
 }
 
 void userdefinedFunctions::setName(QString name)
@@ -48,15 +49,18 @@ QString userdefinedFunctions::toString(void)
     }
     retVal.append(")=");
     retVal.append(m_functionStr);
-    if (m_points.count())
+    if (m_points)
     {
-        retVal.append(" RAW");
-        retVal.append(m_range.toString());
+        if (m_points->count())
+        {
+            retVal.append(" RAW");
+            retVal.append(m_range.toString());
+        }
     }
     return retVal;
 }
 
-void userdefinedFunctions::setRawPoints(QVector<HPoint> points)
+void userdefinedFunctions::setRawPoints(QVector<HPoint> *points)
 {
     m_points = points;
 }
@@ -68,12 +72,18 @@ void userdefinedFunctions::setRawRange(Range range)
 
 bool userdefinedFunctions::RawData(void) const
 {
-    if (m_points.count())
-        return true;
-    return false;
+    bool retVal = false;
+    if (m_points)
+    {
+        if (m_points->count() > 0)
+        {
+            retVal = true;
+        }
+    }
+    return retVal;
 }
 
-QVector<HPoint> userdefinedFunctions::RawPoints(void) const
+QVector<HPoint> *userdefinedFunctions::RawPoints(void) const
 {
     return m_points;
 }
@@ -88,7 +98,7 @@ void userdefinedFunctions::Save(QDataStream& out)
     out << m_functionStr;
     out << m_name;
     out << m_args;
-    out << m_points;
+    out << *m_points;
     out << m_range;
 }
 
@@ -97,6 +107,7 @@ void userdefinedFunctions::Load(QDataStream& in)
     in >> m_functionStr;
     in >> m_name;
     in >> m_args;
-    in >> m_points;
+    m_points = new (QVector<HPoint>);
+    in >> *m_points;
     in >> m_range;
 }

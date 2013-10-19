@@ -17,7 +17,7 @@ public:
     explicit DrawWidget(QWidget *parent = 0);
     ~DrawWidget();
 
-    void setPoints(QVector<HPoint> p);
+    void setPoints(QVector<HPoint> *p);
     QVector<HPoint>* Points(void);
 
     HPoint getXRange(void);
@@ -48,7 +48,7 @@ private:
     hfloat m_xFactor;
     hfloat m_yFactor;
 
-    QVector<HPoint> m_points;
+    QVector<HPoint> *m_points;
     QVector<QPoint> m_pointsFloat;
     bool m_dataPointUpdate;
 

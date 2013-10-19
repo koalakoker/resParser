@@ -247,7 +247,8 @@ bool ParserClass::RemoveUserDefinedFunctionRawData(QString name)
         if (m_userdefinedFunctions[i].Name() == name)
         {
             userdefinedFunctions func = m_userdefinedFunctions.at(i);
-            func.setRawPoints(QVector<HPoint>());
+            delete func.RawPoints();
+            func.setRawPoints(NULL);
             func.setRawRange(Range());
             m_userdefinedFunctions.replace(i,func);
             retVal = true;
@@ -398,7 +399,7 @@ QString ParserClass::Exec(QString str, hfloat &result)
         if ((udFuncOrder = HasUserDefinedFunction(str+"("))!= -1)
         {
             DrawWidgetBrowse* d = new DrawWidgetBrowse();
-            QVector<HPoint> points;
+            QVector<HPoint>* points = new(QVector<HPoint>);
             if ((m_userdefinedFunctions[udFuncOrder].RawData())&&
                     ((r == m_userdefinedFunctions[udFuncOrder].RawRange())||
                     (!r.isValid())))
@@ -422,11 +423,11 @@ QString ParserClass::Exec(QString str, hfloat &result)
                 {
                     QString tmpStr = functionStr;
                     tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
-                    points.append(HPoint(x,Parse(tmpStr)));
+                    points->append(HPoint(x,Parse(tmpStr)));
                 }
                 // Just for last point
                 functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
-                points.append(HPoint(r.m_max,Parse(functionStr)));
+                points->append(HPoint(r.m_max,Parse(functionStr)));
 
                 // Store RAW data in function
                 m_userdefinedFunctions[udFuncOrder].setRawRange(r);
@@ -1212,7 +1213,7 @@ void ParserClass::ImportRawData(QString fileName)
     qint64 maxLen = 1000;
     char buff[maxLen];
     int readByte = 1;
-    QVector<HPoint> points;
+    QVector<HPoint>* points = new(QVector<HPoint>);
     while (readByte > 0)
     {
         readByte = file.readLine(buff,maxLen);
@@ -1231,7 +1232,7 @@ void ParserClass::ImportRawData(QString fileName)
                     hfloat y(yStr);
                     if ((!x.isNan())&&(!y.isNan()))
                     {
-                        points.append(HPoint(x,y));
+                        points->append(HPoint(x,y));
                     }
                 }
             }
@@ -1240,7 +1241,7 @@ void ParserClass::ImportRawData(QString fileName)
 
     // Store RAW data in function
     userdefinedFunctions funct;
-    Range r(points.at(0).x(),points.at(points.count()-1).x(),points.at(1).x()-points.at(0).x());
+    Range r(points->at(0).x(),points->at(points->count()-1).x(),points->at(1).x()-points->at(0).x());
     funct.setRawRange(r);
     funct.setRawPoints(points);
     funct.setName("Imported");

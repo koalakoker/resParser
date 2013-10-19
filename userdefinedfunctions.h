@@ -13,7 +13,7 @@ private:
     QString m_functionStr;
     QString m_name;
     QStringList m_args;
-    QVector<HPoint> m_points;
+    QVector<HPoint> *m_points;
     Range m_range;
 
 public:
@@ -24,10 +24,10 @@ public:
     QString Name(void);
     QString functionSrt(void);
     QStringList args(void);
-    void setRawPoints(QVector<HPoint> points);
+    void setRawPoints(QVector<HPoint> *points);
     void setRawRange(Range range);
     bool RawData(void) const;
-    QVector<HPoint> RawPoints(void) const;
+    QVector<HPoint>* RawPoints(void) const;
     Range RawRange(void) const;
 
     QString toString(void);

@@ -17,9 +17,15 @@ public:
     ~DataInspectorWidget();
     void setDataPoints(QVector<HPoint>* pData);
     
+private slots:
+    void on_tableWidget_customContextMenuRequested(const QPoint &pos);
+
 private:
     Ui::DataInspectorWidget *ui;
     QVector<HPoint>* m_points;
+
+private:
+    void UpdateTable(void);
 };
 
 #endif // DATAINSPECTORWIDGET_H

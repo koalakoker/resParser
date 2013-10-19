@@ -7,6 +7,8 @@
 DrawWidget::DrawWidget(QWidget *parent) :
     QWidget(parent)
 {
+    m_points = NULL;
+
     m_marginX = 40;
     m_marginY = 30;
 
@@ -167,7 +169,7 @@ void DrawWidget::paintEvent(QPaintEvent *)
     }
     p.setClipRegion(QRegion(m_drawRect));
     p.setPen(QPen(Qt::SolidLine));
-    for (i = 0; i < m_points.count() - 1; i++)
+    for (i = 0; i < m_points->count() - 1; i++)
     {
         QPoint la = m_pointsFloat.at(i);
         QPoint lb = m_pointsFloat.at(i+1);
@@ -240,7 +242,7 @@ HPoint DrawWidget::fromLocalToGlobal(QPoint local)
     return HPoint(globX,globY);
 }
 
-void DrawWidget::setPoints(QVector<HPoint> p)
+void DrawWidget::setPoints(QVector<HPoint> *p)
 {
     m_points = p;
     m_dataPointUpdate = true;
@@ -248,7 +250,7 @@ void DrawWidget::setPoints(QVector<HPoint> p)
 
 QVector<HPoint>* DrawWidget::Points(void)
 {
-    return &m_points;
+    return m_points;
 }
 
 void DrawWidget::updateDataPoint()
@@ -256,9 +258,9 @@ void DrawWidget::updateDataPoint()
     // Update points
     m_pointsFloat.clear();
     int i;
-    for (i = 0; i < m_points.count(); i++)
+    for (i = 0; i < m_points->count(); i++)
     {
-        m_pointsFloat.append(fromGlobalToLocal(m_points.at(i)));
+        m_pointsFloat.append(fromGlobalToLocal(m_points->at(i)));
     }
     m_dataPointUpdate = false;
 }
@@ -266,17 +268,17 @@ void DrawWidget::updateDataPoint()
 HPoint DrawWidget::getXRange(void)
 {
     HPoint retVal(0,0);
-    int l = m_points.count();
+    int l = m_points->count();
     if (l > 0)
     {
         hfloat xmin,xmax;
         int i;
-        HPoint p = m_points.at(0);
+        HPoint p = m_points->at(0);
         xmin = p.x();
         xmax = xmin;
         for (i = 1; i < l; i ++)
         {
-            p = m_points.at(i);
+            p = m_points->at(i);
             hfloat x = p.x();
             if (x < xmin)
             {
@@ -296,17 +298,17 @@ HPoint DrawWidget::getXRange(void)
 HPoint DrawWidget::getYRange(void)
 {
     HPoint retVal(0,0);
-    int l = m_points.count();
+    int l = m_points->count();
     if (l > 0)
     {
         hfloat ymin,ymax;
         int i;
-        HPoint p = m_points.at(0);
+        HPoint p = m_points->at(0);
         ymin = p.y();
         ymax = ymin;
         for (i = 1; i < l; i ++)
         {
-            p = m_points.at(i);
+            p = m_points->at(i);
             hfloat y = p.y();
             if (y < ymin)
             {
@@ -335,16 +337,19 @@ void DrawWidget::setCursorX(int cursor, hfloat x)
     }
     m_cursorX[cursor] = x;
     m_cursorY[cursor] = 0;
-    int l = m_points.count();
-    int i;
-    HPoint p;
-    for (i = 0; i < l; i++)
+    if (m_points)
     {
-        p = m_points.at(i);
-        if (p.x() >= x)
+        int l = m_points->count();
+        int i;
+        HPoint p;
+        for (i = 0; i < l; i++)
         {
-            m_cursorY[cursor] = p.y();
-            break;
+            p = m_points->at(i);
+            if (p.x() >= x)
+            {
+                m_cursorY[cursor] = p.y();
+                break;
+            }
         }
     }
 }
