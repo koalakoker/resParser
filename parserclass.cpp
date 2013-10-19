@@ -2,6 +2,7 @@
 #include "QRegExp"
 #include "QStringList"
 #include "drawwidgetbrowse.h"
+#include <QFile>
 #include "QDebug"
 
 #define REGEXP6OPERAND "[-+*/:^]"
@@ -1019,7 +1020,7 @@ int ParserClass::HasUserDefinedFunction(QString str)
     int i;
     for (i = 0; i < m_userdefinedFunctions.count(); i++)
     {
-        if (str.toLower().contains(m_userdefinedFunctions[i].Name()+QString("(")))
+        if (str.contains(m_userdefinedFunctions[i].Name()+QString("(")))
         {
             retVal = i;
             break;
@@ -1200,6 +1201,52 @@ void ParserClass::Load(QDataStream& in)
         newUDF.Load(in);
         m_userdefinedFunctions.append(newUDF);
     }
+}
+
+void ParserClass::ImportRawData(QString fileName)
+{
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+
+    qint64 maxLen = 1000;
+    char buff[maxLen];
+    int readByte = 1;
+    QVector<HPoint> points;
+    while (readByte > 0)
+    {
+        readByte = file.readLine(buff,maxLen);
+        if (readByte > 0)
+        {
+            QString str(buff);
+            if (str.indexOf(";")!=-1)
+            {
+                QStringList strSplit = str.split(";");
+                if (strSplit.count()==2)
+                {
+                    hfloat x(strSplit.at(0));
+                    QString yStr = strSplit.at(1);
+                    yStr.remove('\r');
+                    yStr.remove('\n');
+                    hfloat y(yStr);
+                    if ((!x.isNan())&&(!y.isNan()))
+                    {
+                        points.append(HPoint(x,y));
+                    }
+                }
+            }
+        }
+    }
+
+    // Store RAW data in function
+    userdefinedFunctions funct;
+    Range r(points.at(0).x(),points.at(points.count()-1).x(),points.at(1).x()-points.at(0).x());
+    funct.setRawRange(r);
+    funct.setRawPoints(points);
+    funct.setName("Imported");
+    funct.setFunctionStr("RAW");
+    m_userdefinedFunctions.append(funct);
+    emit(functionListUpdate(builtInFunctionList()));
 }
 
 formatOutput_t ParserClass::Format(void)

@@ -53,6 +53,8 @@ private slots:
 
     void on_actionClear_All_triggered();
 
+    void on_action_Import_raw_data_triggered();
+
 private:
     Ui::MainWindow *ui;
     DockListView m_dockListVariables;

@@ -35,11 +35,6 @@ private:
     formatOutput_t m_formatOutput;
     int m_precision;
 
-public:
-    bool IsVariableName(QString str);
-    bool IsUserDefinedFunctionName(QString str);
-
-private:
     static bool IsNumeric(QString str);
     static bool IsHexadecimal(QString str);
     static bool IsBinary(QString str);
@@ -76,6 +71,10 @@ private:
 
 public:
     explicit ParserClass(QObject *parent = 0);
+
+    bool IsVariableName(QString str);
+    bool IsUserDefinedFunctionName(QString str);
+
     int VariableCreated(void);
     hfloat LoadVariable(QString name);
     bool StoreVariable(QString name,hfloat newValue);
@@ -100,6 +99,7 @@ public:
 
     void Save(QDataStream& out);
     void Load(QDataStream& in);
+    void ImportRawData(QString fileName);
 
 signals:
     void functionListUpdate(QStringList list);

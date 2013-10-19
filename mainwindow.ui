@@ -60,6 +60,8 @@
     <addaction name="separator"/>
     <addaction name="actionClear_Hystory"/>
     <addaction name="actionClear_All"/>
+    <addaction name="separator"/>
+    <addaction name="action_Import_raw_data"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -210,6 +212,11 @@
   <action name="actionClear_All">
    <property name="text">
     <string>Clear &amp;All</string>
+   </property>
+  </action>
+  <action name="action_Import_raw_data">
+   <property name="text">
+    <string>&amp;Import RAW data</string>
    </property>
   </action>
  </widget>

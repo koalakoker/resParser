@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "QToolTip"
 #include "aboutdialog.h"
+#include <QFileDialog>
 #include <QDebug>
 
 #define PRJ_NAME    "resParser"
@@ -257,4 +258,18 @@ void MainWindow::on_actionClear_Hystory_triggered()
 void MainWindow::on_actionClear_All_triggered()
 {
     m_cmdMngr.Parser()->Clear();
+}
+
+void MainWindow::on_action_Import_raw_data_triggered()
+{
+    QFileDialog d(this,tr("Select RAW data to import"));
+    if (d.exec())
+    {
+        QStringList sel = d.selectedFiles();
+        int i;
+        for (i = 0;  i < sel.count(); i++)
+        {
+            m_cmdMngr.Parser()->ImportRawData(d.selectedFiles().at(i));
+        }
+    }
 }
