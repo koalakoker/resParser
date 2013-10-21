@@ -32,21 +32,25 @@ DrawWidget* DrawWidgetBrowse::drawWidget(void)
 void DrawWidgetBrowse::setXmin(float value)
 {
     ui->xmin->setValue(value);
+    on_xmin_valueChanged(value);
 }
 
 void DrawWidgetBrowse::setYmin(float value)
 {
     ui->ymin->setValue(value);
+    on_ymin_valueChanged(value);
 }
 
 void DrawWidgetBrowse::setXmax(float value)
 {
     ui->xmax->setValue(value);
+    on_xmax_valueChanged(value);
 }
 
 void DrawWidgetBrowse::setYmax(float value)
 {
     ui->ymax->setValue(value);
+    on_ymax_valueChanged(value);
 }
 
 void DrawWidgetBrowse::checkAutoX(void)

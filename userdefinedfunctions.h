@@ -6,6 +6,7 @@
 #include <QVector>
 #include "fpoint.h"
 #include "range.h"
+#include "rawdata.h"
 
 class userdefinedFunctions
 {
@@ -13,7 +14,7 @@ private:
     QString m_functionStr;
     QString m_name;
     QStringList m_args;
-    QVector<HPoint> *m_points;
+    RawData *m_points;
     Range m_range;
 
 public:
@@ -24,10 +25,10 @@ public:
     QString Name(void);
     QString functionSrt(void);
     QStringList args(void);
-    void setRawPoints(QVector<HPoint> *points);
+    void setRawPoints(RawData *points);
     void setRawRange(Range range);
-    bool RawData(void) const;
-    QVector<HPoint>* RawPoints(void) const;
+    bool HasRawData(void) const;
+    RawData* RawPoints(void) const;
     Range RawRange(void) const;
 
     QString toString(void);

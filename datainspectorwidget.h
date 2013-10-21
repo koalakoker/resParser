@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "fpoint.h"
+#include "rawdata.h"
 
 namespace Ui {
 class DataInspectorWidget;
@@ -15,14 +16,14 @@ class DataInspectorWidget : public QDialog
 public:
     explicit DataInspectorWidget(QWidget *parent = 0);
     ~DataInspectorWidget();
-    void setDataPoints(QVector<HPoint>* pData);
+    void setDataPoints(RawData* pData);
     
 private slots:
     void on_tableWidget_customContextMenuRequested(const QPoint &pos);
 
 private:
     Ui::DataInspectorWidget *ui;
-    QVector<HPoint>* m_points;
+    RawData* m_points;
 
 private:
     void UpdateTable(void);

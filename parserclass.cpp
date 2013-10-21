@@ -150,7 +150,7 @@ TableInfo ParserClass::UserDefinedFunctionsInfo(void)
         userdefinedFunctions func = m_userdefinedFunctions[i];
         info.m_value.append(func.Name());
         info.m_value.append(func.functionSrt());
-        info.m_value.append(func.RawData()?QString("RAW"):QString(""));
+        info.m_value.append(func.HasRawData()?QString("RAW"):QString(""));
         info.m_value.append(func.RawRange().toString());
         list.append(info);
     }
@@ -399,12 +399,13 @@ QString ParserClass::Exec(QString str, hfloat &result)
         if ((udFuncOrder = HasUserDefinedFunction(str+"("))!= -1)
         {
             DrawWidgetBrowse* d = new DrawWidgetBrowse();
-            QVector<HPoint>* points = new(QVector<HPoint>);
-            if ((m_userdefinedFunctions[udFuncOrder].RawData())&&
+            RawData* points = new(RawData);
+            if ((m_userdefinedFunctions[udFuncOrder].HasRawData())&&
                     ((r == m_userdefinedFunctions[udFuncOrder].RawRange())||
                     (!r.isValid())))
             {
                 points = m_userdefinedFunctions[udFuncOrder].RawPoints();
+                r = points->RawRange();
             }
             else
             {
@@ -435,11 +436,13 @@ QString ParserClass::Exec(QString str, hfloat &result)
                 emit(functionListUpdate(builtInFunctionList()));
             }
 
-            d->setXmin(r.m_min.toFloat());
-            d->setXmax(r.m_max.toFloat());
-            d->setYmin(-10);
-            d->setYmax(10);
+            qDebug() << QString("points xmin:%1 xmax:%2 ymin:%3 ymax:%4").arg(points->xMin().toFloat()).
+                        arg(points->xMax().toFloat()).arg(points->yMin().toFloat()).arg(points->yMax().toFloat());
             d->drawWidget()->setPoints(points);
+            d->setXmin(points->xMin().toFloat());
+            d->setXmax(points->xMax().toFloat());
+            d->setYmin(points->yMin().toFloat());
+            d->setYmax(points->yMax().toFloat());
             d->show();
         }
     }
@@ -1213,7 +1216,7 @@ void ParserClass::ImportRawData(QString fileName)
     qint64 maxLen = 1000;
     char buff[maxLen];
     int readByte = 1;
-    QVector<HPoint>* points = new(QVector<HPoint>);
+    RawData* points = new(RawData);
     while (readByte > 0)
     {
         readByte = file.readLine(buff,maxLen);

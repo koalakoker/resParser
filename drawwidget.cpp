@@ -242,13 +242,13 @@ HPoint DrawWidget::fromLocalToGlobal(QPoint local)
     return HPoint(globX,globY);
 }
 
-void DrawWidget::setPoints(QVector<HPoint> *p)
+void DrawWidget::setPoints(RawData *p)
 {
     m_points = p;
     m_dataPointUpdate = true;
 }
 
-QVector<HPoint>* DrawWidget::Points(void)
+RawData* DrawWidget::Points(void)
 {
     return m_points;
 }

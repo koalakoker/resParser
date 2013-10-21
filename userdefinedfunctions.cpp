@@ -60,7 +60,7 @@ QString userdefinedFunctions::toString(void)
     return retVal;
 }
 
-void userdefinedFunctions::setRawPoints(QVector<HPoint> *points)
+void userdefinedFunctions::setRawPoints(RawData *points)
 {
     m_points = points;
 }
@@ -70,7 +70,7 @@ void userdefinedFunctions::setRawRange(Range range)
     m_range = range;
 }
 
-bool userdefinedFunctions::RawData(void) const
+bool userdefinedFunctions::HasRawData(void) const
 {
     bool retVal = false;
     if (m_points)
@@ -83,7 +83,7 @@ bool userdefinedFunctions::RawData(void) const
     return retVal;
 }
 
-QVector<HPoint> *userdefinedFunctions::RawPoints(void) const
+RawData *userdefinedFunctions::RawPoints(void) const
 {
     return m_points;
 }
@@ -98,7 +98,15 @@ void userdefinedFunctions::Save(QDataStream& out)
     out << m_functionStr;
     out << m_name;
     out << m_args;
-    out << *m_points;
+    if (m_points)
+    {
+        out << true;
+        out << *m_points;
+    }
+    else
+    {
+        out << false;
+    }
     out << m_range;
 }
 
@@ -107,7 +115,12 @@ void userdefinedFunctions::Load(QDataStream& in)
     in >> m_functionStr;
     in >> m_name;
     in >> m_args;
-    m_points = new (QVector<HPoint>);
-    in >> *m_points;
+    bool hasRawSerialized;
+    in >> hasRawSerialized;
+    if (hasRawSerialized)
+    {
+        m_points = new (RawData);
+        in >> *m_points;
+    }
     in >> m_range;
 }

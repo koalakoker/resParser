@@ -17,7 +17,7 @@ public:
     hfloat(float val);
     hfloat(const hfloat& val);
 
-    QString toString(QString format) const;
+    QString toString(QString format = "%.10Rg") const;
     float toFloat() const;
     int toInt() const;
     bool isNan(void) const;

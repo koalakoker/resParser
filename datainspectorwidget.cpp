@@ -23,7 +23,7 @@ DataInspectorWidget::~DataInspectorWidget()
     delete ui;
 }
 
-void DataInspectorWidget::setDataPoints(QVector<HPoint>* pData)
+void DataInspectorWidget::setDataPoints(RawData* pData)
 {
     m_points = pData;
     UpdateTable();

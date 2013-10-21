@@ -10,6 +10,7 @@
 #include "userdefinedfunctions.h"
 #include "tableinfoelement.h"
 #include "range.h"
+#include "rawdata.h"
 
 typedef enum {Fixed, Scientific, Auto, Hexadecimal} formatOutput_t;
 
