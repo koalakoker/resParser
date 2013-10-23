@@ -62,7 +62,9 @@ void DataInspectorWidget::on_tableWidget_customContextMenuRequested(const QPoint
         {
             int row = ui->tableWidget->itemAt(pos)->row();
             m_points->remove(row);
+            m_points->updateRange();
             UpdateTable();
+            emit dataChanged(m_points->RawRange());
         }
     }
 }

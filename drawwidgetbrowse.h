@@ -36,21 +36,18 @@ private slots:
     void on_cursor1x_valueChanged(double arg1);
     void on_cursor2x_valueChanged(double arg1);
     void on_action_Data_triggered();
+    void on_actionHiglight_Points_toggled(bool arg1);
+    void on_actionLabel_X_axe_toggled(bool arg1);
+    void on_actionShow_labels_Y_axe_toggled(bool arg1);
+    void on_actionShow_grid_orizzontal_toggled(bool arg1);
+    void on_actionShow_grid_vertical_toggled(bool arg1);
 
     void spin_ymin(int step);
     void spin_xmin(int step);
 
     void cursorValueChanged(int cursor, hfloat x, hfloat y);
 
-    void on_actionHiglight_Points_toggled(bool arg1);
-
-    void on_actionLabel_X_axe_toggled(bool arg1);
-
-    void on_actionShow_labels_Y_axe_toggled(bool arg1);
-
-    void on_actionShow_grid_orizzontal_toggled(bool arg1);
-
-    void on_actionShow_grid_vertical_toggled(bool arg1);
+    void updateRange(Range r); // Update Range and repaint
 
 private:
     Ui::DrawWidgetBrowse *ui;

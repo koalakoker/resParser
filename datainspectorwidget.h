@@ -27,6 +27,9 @@ private:
 
 private:
     void UpdateTable(void);
+
+signals:
+    void dataChanged(Range r);
 };
 
 #endif // DATAINSPECTORWIDGET_H

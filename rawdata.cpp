@@ -19,7 +19,7 @@ RawData::RawData(const QVector<HPoint>& obj) :
 {
 }
 
-void RawData::append(const HPoint &t)
+void RawData::updateLimitFromPoint(const HPoint &t)
 {
     hfloat x = t.x();
     if (!x.isNan())
@@ -61,7 +61,36 @@ void RawData::append(const HPoint &t)
             m_ymax = y;
         }
     }
+}
+
+void RawData::append(const HPoint &t)
+{
+    updateLimitFromPoint(t);
     QVector<HPoint>::append(t);
+}
+
+void RawData::updateRange(void)
+{
+    int l = count();
+    if (l == 0)
+    {
+        m_xmax.setNan();
+        m_xmin.setNan();
+        m_ymax.setNan();
+        m_ymin.setNan();
+    }
+    else
+    {
+        int i;
+        HPoint p = at(0);
+        m_xmax = m_xmin = p.x();
+        m_ymax = m_ymin = p.y();
+        for (i = 0; i < l; i++)
+        {
+            p = at(i);
+            updateLimitFromPoint(p);
+        }
+    }
 }
 
 Range RawData::RawRange(void) const

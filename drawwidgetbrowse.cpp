@@ -53,6 +53,21 @@ void DrawWidgetBrowse::setYmax(float value)
     on_ymax_valueChanged(value);
 }
 
+void DrawWidgetBrowse::updateRange(Range r)
+{
+    hfloat xmin = r.m_min, xmax = r.m_max;
+    ui->xmin->setValue(xmin.toFloat());
+    ui->drawWidget->setXmin(xmin);
+    ui->xmin->setSingleStep(fabs(xmin.toFloat())/10);
+
+    ui->xmax->setValue(xmax.toFloat());
+    ui->drawWidget->setXmax(xmax);
+    ui->xmax->setSingleStep(fabs(xmax.toFloat())/10);
+
+    ui->autoXCheck->setCheckState(Qt::Checked);
+    ui->drawWidget->repaint();
+}
+
 void DrawWidgetBrowse::checkAutoX(void)
 {
     ui->autoXCheck->setCheckState(Qt::Checked);
@@ -164,6 +179,7 @@ void DrawWidgetBrowse::on_action_Data_triggered()
     DataInspectorWidget* d = new DataInspectorWidget;
     d->show();
     d->setDataPoints(ui->drawWidget->Points());
+    connect(d,SIGNAL(dataChanged(Range)),this,SLOT(updateRange(Range)));
 }
 
 void DrawWidgetBrowse::spin_ymin(int step)

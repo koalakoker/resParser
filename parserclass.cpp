@@ -436,8 +436,7 @@ QString ParserClass::Exec(QString str, hfloat &result)
                 emit(functionListUpdate(builtInFunctionList()));
             }
 
-            qDebug() << QString("points xmin:%1 xmax:%2 ymin:%3 ymax:%4").arg(points->xMin().toFloat()).
-                        arg(points->xMax().toFloat()).arg(points->yMin().toFloat()).arg(points->yMax().toFloat());
+            points->updateRange();
             d->drawWidget()->setPoints(points);
             d->setXmin(points->xMin().toFloat());
             d->setXmax(points->xMax().toFloat());

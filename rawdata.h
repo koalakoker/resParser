@@ -12,6 +12,7 @@ public:
     RawData(const RawData& obj);
     RawData(const QVector<HPoint>& obj);
     void append(const HPoint &t);
+    void updateRange(void);
     Range RawRange(void) const;
 
     hfloat xMax(void) const;
@@ -29,6 +30,8 @@ private:
     hfloat m_ymax;
     hfloat m_xmin;
     hfloat m_ymin;
+
+    void updateLimitFromPoint(const HPoint &t);
 };
 
 QDataStream &operator<<(QDataStream &ds, const RawData &obj);
