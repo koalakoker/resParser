@@ -398,51 +398,55 @@ QString ParserClass::Exec(QString str, hfloat &result)
         int udFuncOrder;
         if ((udFuncOrder = HasUserDefinedFunction(str+"("))!= -1)
         {
-            DrawWidgetBrowse* d = new DrawWidgetBrowse();
-            RawData* points = new(RawData);
-            if ((m_userdefinedFunctions[udFuncOrder].HasRawData())&&
-                    ((r == m_userdefinedFunctions[udFuncOrder].RawRange())||
+            userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
+            bool hasRaw = udFunc.HasRawData();
+            if ((hasRaw) || ((!hasRaw)&&(udFunc.functionSrt()!="RAW")))
+            {
+                DrawWidgetBrowse* d = new DrawWidgetBrowse();
+                RawData* points = new(RawData);
+                if ((hasRaw) &&
+                    ((r == udFunc.RawRange())||
                     (!r.isValid())))
-            {
-                points = m_userdefinedFunctions[udFuncOrder].RawPoints();
-                r = points->RawRange();
-            }
-            else
-            {
-                if (!r.isValid())
                 {
-                    // Set default range
-                    r = Range(-10,10,0.1);
+                    points = udFunc.RawPoints();
+                    r = points->RawRange();
                 }
-                // Prepare for function computation
-                userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
-                QString functionStr = udFunc.functionSrt();
-                QStringList funcionArgs = udFunc.args();
-
-                hfloat x;
-                for (x = r.m_min; x <= r.m_max; x += r.m_step)
+                else
                 {
-                    QString tmpStr = functionStr;
-                    tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
-                    points->append(HPoint(x,Parse(tmpStr)));
+                    if (!r.isValid())
+                    {
+                        // Set default range
+                        r = Range(-10,10,0.1);
+                    }
+                    // Prepare for function computation
+                    QString functionStr = udFunc.functionSrt();
+                    QStringList funcionArgs = udFunc.args();
+
+                    hfloat x;
+                    for (x = r.m_min; x <= r.m_max; x += r.m_step)
+                    {
+                        QString tmpStr = functionStr;
+                        tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
+                        points->append(HPoint(x,Parse(tmpStr)));
+                    }
+                    // Just for last point
+                    functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
+                    points->append(HPoint(r.m_max,Parse(functionStr)));
+
+                    // Store RAW data in function
+                    m_userdefinedFunctions[udFuncOrder].setRawRange(r);
+                    m_userdefinedFunctions[udFuncOrder].setRawPoints(points);
+                    emit(functionListUpdate(builtInFunctionList()));
                 }
-                // Just for last point
-                functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
-                points->append(HPoint(r.m_max,Parse(functionStr)));
 
-                // Store RAW data in function
-                m_userdefinedFunctions[udFuncOrder].setRawRange(r);
-                m_userdefinedFunctions[udFuncOrder].setRawPoints(points);
-                emit(functionListUpdate(builtInFunctionList()));
+                points->updateRange();
+                d->drawWidget()->setPoints(points);
+                d->setXmin(points->xMin().toFloat());
+                d->setXmax(points->xMax().toFloat());
+                d->setYmin(points->yMin().toFloat());
+                d->setYmax(points->yMax().toFloat());
+                d->show();
             }
-
-            points->updateRange();
-            d->drawWidget()->setPoints(points);
-            d->setXmin(points->xMin().toFloat());
-            d->setXmax(points->xMax().toFloat());
-            d->setYmin(points->yMin().toFloat());
-            d->setYmax(points->yMax().toFloat());
-            d->show();
         }
     }
         break;
