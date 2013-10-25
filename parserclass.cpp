@@ -268,12 +268,19 @@ bool ParserClass::StoreFunction(QString name,QStringList args,QString newFuncStr
         userdefinedFunctions func = m_userdefinedFunctions.at(i);
         if (func.Name() == name)
         {
-            func.setFunctionStr(newFuncStr);
-            func.setArgs(args);
-            m_userdefinedFunctions[i]=func;
             found = true;
             retVal = true;
-            emit(functionListUpdate(builtInFunctionList()));
+            if (func.functionSrt() != newFuncStr)
+            {
+                func.setFunctionStr(newFuncStr);
+                func.setArgs(args);
+                // Reset RAW data
+                delete func.RawPoints();
+                func.setRawPoints(NULL);
+                func.setRawRange(Range());
+                m_userdefinedFunctions[i]=func;
+                emit(functionListUpdate(builtInFunctionList()));
+            }
         }
     }
     if (!found)
