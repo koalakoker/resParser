@@ -169,7 +169,7 @@ void DrawWidget::paintEvent(QPaintEvent *)
     }
     p.setClipRegion(QRegion(m_drawRect));
     p.setPen(QPen(Qt::SolidLine));
-    for (i = 0; i < m_points->count() - 1; i++)
+    for (i = 0; i < m_pointsFloat.count() - 1; i++)
     {
         QPoint la = m_pointsFloat.at(i);
         QPoint lb = m_pointsFloat.at(i+1);
@@ -260,7 +260,11 @@ void DrawWidget::updateDataPoint()
     int i;
     for (i = 0; i < m_points->count(); i++)
     {
-        m_pointsFloat.append(fromGlobalToLocal(m_points->at(i)));
+        HPoint p = m_points->at(i);
+        if ((!p.x().isNan())&&(!p.y().isNan()))
+        {
+            m_pointsFloat.append(fromGlobalToLocal(p));
+        }
     }
     m_dataPointUpdate = false;
 }
