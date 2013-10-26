@@ -1,0 +1,81 @@
+v.0.1.4
+Fixed a bug on Plot window (Set Xmin, Xmax). Implemented Rawdata class and used first working. Issue: - There is no way to update range from point after modification (Delete, Edit) - On load there is no update of the range from point (it is just serialized) Can be fixed with the above
+Implemented clead a data point in the DataInspector. Points are stored as pointer. New in the plot, import and load.
+Implemented (draft) import RAW data. Fixed a bug on plot (now is case sensitive for function names). The save/load and working with plot is too slow for RAW data big (ex. 200 000 points)
+Improved management of history (Get previous, Next, no add if already present)
+Clear history implementd (both command line and GUI)
+Starting new version 0.1.4. Added the "note of the autor" in the about dialog
+
+v.0.1.3
+Implemented clearraw command
+Added Draw keyword and fixed E12 and E13
+Added del and delete keyword and fixed clear beaviour in ParseClass
+Managed not valid range input during plot and automatic range detection when raw data exist.
+hfloat specified const some methods.
+Architecture changed for Tableinfoelement. User defined function dock visualize if RAW data is present and the range
+RAW function partially implemented. (Create from plot and save/load)
+Drawwidget option: inpmplemented show grid orizzontal and vertical
+Drawwidget option: implemented show x and y labels
+Drawwidget automatic computation of marginX based on lenght of the label
+Drawwidget option: implemented highlight points feature
+Implemented zoom simultaneous using step up or step down of double spin box xmin or ymin
+Optimized plot (a list of float point is recalculated just if necessary)
+Optimization for plot
+Plot data implemented in hfloat (it seems to slow)
+Workaround in HFloat conversion toString. "," replaced with "."
+Optimized plot data. Implemented data inspector widget.
+Cursor implementation has been optimized. Working.
+Implemented two cursor in the drawwidget with drag functionality
+Implemented first version of drawwidgetbrowse to change range of axis etc...
+Fixed label and grid in DrawWidget
+Set withe background in the plot
+Fixed bug in the computation of function argument. Es. sin(1)*sin(1)
+Plot development: - Widget created (just draw) - Plot command implemented (working but too slow)
+
+v.0.1.2
+Implemented 6 operator ^ as POW
+Variable dock is updated if format is changed
+Major modification. Keyword and formatting has been moved into Parser Class
+Remove Vars and Function using context menu in Docky
+Remove variables and user defined function implemented
+Variables and built in function are now soted in a QList
+
+v.0.1.1
+Implemented insert variable or functions from dock with double click
+Fixed manage of windows when extended for docky (Variable, Functions, ...)
+Implemented new dock views for Variables, Built In functions, and User defined functions.
+
+v.0.1.0
+Added bynary input
+Added input support to Hexadecimal values 64bit
+Added Load on init and Save on exti for hystory persistency
+Added Save Load of Variables and User defined functions
+Save Load Variables
+Save/Load partially implemented (Just commands [Input,Result])
+Moved append qsInput inside the AddNewCommand
+Added CommandClass to store both input string and result (Updating output pane ogn change format)
+Added Hexadecimal support (Output format) - Working
+Fixed bug on format output
+Added support for different output format (Auto, Scientific, Fixed point) Bug on output format not identified Feature shall be upadted
+Fixed bug when result is to big or to small and the result is in esponential format.
+When name of function is in input the formula is printed.
+ans is no more assigned if retVal is nan
+Added a "preview" flag to avoid store or modify variable and functions during preview (just after a return it become effective)
+First version with user defined functions (working)
+Fixed a bug in the computation of built-in function when is non present the ")" Minor aesteic modifications
+Added version (0.1.0) Fixed usage output text
+Added Readme
+Added function window Added about window
+Added some built-in function - supported up two arguments
+Using QList for built in function arguments
+First version with builtin function (sqr,sqrt) working (just 1 arg function supported)
+Added tooltip functionality
+Extended support to mpfr and fixed many issues that causes heap crash.
+Updated UI
+.gitIgnore updated
+Command si now managed inside command class instead of extarnally
+Graphical aspect improoved Fixed bug in resistor assignment
+Using gmplib for arbitrari flota precision
+Added ans if operator is pressed as first caracter.
+Fixed sum difference evaluation
+Initial commit

@@ -1,0 +1,3 @@
+- Syntax highlight (example function in green, variable in red, parentesis)
+- Auto completion (ctrl+space to complete functions or variables and pop-up the relevant possibility)
+- Multi plots etc...

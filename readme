@@ -1,10 +1,32 @@
-The purpouse of this project is to implement a command line calculator able to execute the floating point computation with good precision. For this reason the GMP and MPFR library has been used for computations.
+resParser is a compact and effective scentific command line calculator able to execute the most common aritmetic, trigonometric and trascendent functions operation with the best floting point precision. GMP and MPFR library has been used to achiece this purpouse.
+A set of buit-in function like sin, cos, exponential, sqt, etc functions are already available, but is possible also to add and store new user defined functions (like f(x)=sin(x)*cos(x)*sqrt(x)) in the functions library that is stored in the hystory.
+The hystory is retained between sessions.
+An infinite number of variable can be used to store result of operation and them are stored in the hystory together with each commands typed by the user.
+For the user defined functions is possible also to plot the graph in xy chart defining the existence domain.
+It is possible to import a RAW data from a text file with x and y values comma separated to the library.
+
 The project will be open source with GLP v2 licence and cross platform an so it is implemented with QT.
 
-Features:
+FEATURES
 * Command line input
-* Built-in functions (log, exp, sin, cos, ...)
-* Variables
+* 50 digit of precision in the computation
+* Built-in aritmetic, trigonometric and trascendent and functions (log, exp, sin, cos, ...)
+* Infinite number of variables to store intermediate results
+* User defined functions
+* Import of RAW data from text file (comma separated values x,y)
+* Plot of User defined functions or imported RAW data
 * Specific functions for computation of resistors value (E12, E24) rounding, parallel computation, k = 000, M = 000000
 * Store the status (hystory of the commands, variables status) between session
 
+NOTES OF THE AUTHOR
+This software is OPEN SOURCE and released under GPL license so you can feel FREE to use, copy, share, (but above all) to study, analyze and modify it as you like (within the terms of the license).
+If you like, hate or simply use this software, if you find any bug or have any request, please do not hesitate to let me know through the services offered by the site that hosts the project or through my Facebook page (http://facebook.com/koalakoker). And (if you think it's the case) do not hesitate to recommend the program to your friends.
+It will be nice to mention me or just let me know if you reuse my code for another project.
+If you feel the need to become part of the development team of the project, let me know and we'll discuss it together.
+
+REPOSITORIES
+The code is stored in a git repository freely clonable at:
+* gitHub (https://github.com/)
+* sourceforge (http://sourceforge.net/)
+Executable for Windows and Linux will be availble in the same portals.
+See changelog for any detail
