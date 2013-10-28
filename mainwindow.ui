@@ -68,6 +68,8 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="action_Wiki"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -217,6 +219,11 @@
   <action name="action_Import_raw_data">
    <property name="text">
     <string>&amp;Import RAW data</string>
+   </property>
+  </action>
+  <action name="action_Wiki">
+   <property name="text">
+    <string>&amp;Wiki</string>
    </property>
   </action>
  </widget>

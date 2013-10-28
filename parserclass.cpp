@@ -384,11 +384,17 @@ QString ParserClass::Exec(QString str, hfloat &result)
         retVal.append("<br>");
         retVal.append("Using built-in function <b>function_name(arg,[arg])</b>.<br>");
         retVal.append("Variable assignment: <b>var_name = expression</b>.<br>");
+        retVal.append("Function assignment: <b>func_name(arg,[arg]) = expression</b>.<br>");
         retVal.append("Show variables <b>list</b> or <b>ls</b>.<br>");
-        retVal.append("<b>clear</b> to delete all varaibles.<br>");
-        retVal.append("<b>E12</b> to show all E12 resitor values.<br>");
-        retVal.append("<b>E24</b> to show all E24 resitor values.<br>");
-        retVal.append("<b>->E12</b> to round to nearest E12 resitor values.<br>");
+        retVal.append("<b>clear</b> to delete all variables.<br>");
+        retVal.append("<b>clear var_name</b> to delete variable var_name.<br>");
+        retVal.append("<b>clear func_name</b> to delete user function func_name.<br>");
+        retVal.append("<b>clearraw func_name</b> to delete RAW data from user function func_name.<br>");
+        retVal.append("<b>plot (or draw) func_name[range]</b> to plot user function func_name.<br>");
+        retVal.append("<b>E12</b> to show all E12 resistor values.<br>");
+        retVal.append("<b>E24</b> to show all E24 resistor values.<br>");
+        retVal.append("<b>->E12</b> to round to nearest E12 resistor values.<br>");
+        retVal.append("<b>^</b> power operator.<br>");
         retVal.append("<b>:</b> parallel operator between resistors.<br>");
     }
         break;

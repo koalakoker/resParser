@@ -3,12 +3,15 @@
 #include "QToolTip"
 #include "aboutdialog.h"
 #include <QFileDialog>
+#include <QDesktopServices>
+#include <QUrl>
 #include <QDebug>
 
 #define PRJ_NAME    "resParser"
 #define PRJ_VERSION "0.2.0"
 #define PRJ_WINDOWS_TITLE (QString("%1 - v%2").arg(QString(PRJ_NAME)).arg(QString(PRJ_VERSION)))
 #define HYST_FILENAME "hyst.rp"
+#define WIKIURL "https://sourceforge.net/p/resparser/wiki/Home/"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -272,4 +275,10 @@ void MainWindow::on_action_Import_raw_data_triggered()
             m_cmdMngr.Parser()->ImportRawData(d.selectedFiles().at(i));
         }
     }
+}
+
+void MainWindow::on_action_Wiki_triggered()
+{
+    QString link = WIKIURL;
+    QDesktopServices::openUrl(QUrl(link));
 }
