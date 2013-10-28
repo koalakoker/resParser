@@ -1,3 +1,13 @@
+v.0.2.0
+Added link to Wiki page in the Help. Updated usage command response string.
+Fixed a wrong approximation in the computation of the coordinate of the grid in plot window causing a not good alignment between data point and axis and grid.tk
+readMe has been reviewed and a pdf version has been added
+Updated readme, todo and changelog
+Fix. When function str is changed the RAW data is cleared.
+Managed the nan value in the plot (to be reviewed)
+Fixed a bug when RAW function is tryied to plot after a clearraw. (Improvement: the check is only on function str = "RAW" it is possible to check if the function is valid)
+Range is updated on new plot based on actual values of points. Plot is updated when data is changed from datainspector
+
 v.0.1.4
 Fixed a bug on Plot window (Set Xmin, Xmax). Implemented Rawdata class and used first working. Issue: - There is no way to update range from point after modification (Delete, Edit) - On load there is no update of the range from point (it is just serialized) Can be fixed with the above
 Implemented clead a data point in the DataInspector. Points are stored as pointer. New in the plot, import and load.
