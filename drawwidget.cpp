@@ -97,12 +97,12 @@ void DrawWidget::paintEvent(QPaintEvent *)
 
     // Draw vertical elements
     int fontW;
-    int delta = m_drawRect.width() / 10;
+    float delta = m_drawRect.width() / 10.0;
     hfloat deltaLabelX = (m_xmax-m_xmin)/10;
     hfloat deltaLabelY = (m_ymax-m_ymin)/10;
     for (i = 0;  i < 11; i++)
     {
-        int x = left+(delta*i);
+        int x = (int)(left+(delta*i));
         if (m_showGridVertical)
         {
             // Vertical Axe
@@ -131,10 +131,10 @@ void DrawWidget::paintEvent(QPaintEvent *)
     }
 
     // Draw orizzontal elements
-    delta = m_drawRect.height() / 10;
+    delta = m_drawRect.height() / 10.0;
     for (i = 0;  i < 11; i++)
     {
-        int y = top+(delta*i);
+        int y = (int)(top+(delta*i));
         if (m_showGridOrizzontal)
         {
             // Orizontal axe
