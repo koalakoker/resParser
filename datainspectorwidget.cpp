@@ -14,7 +14,7 @@ DataInspectorWidget::DataInspectorWidget(QWidget *parent) :
     QStringList header;
     header << "x" << "y";
     ui->tableWidget->setHorizontalHeaderLabels(header);
-    ui->tableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->verticalHeader()->hide();
 }
 

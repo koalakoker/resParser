@@ -998,7 +998,7 @@ QString ParserClass::EvaluateExadecimal(QString str)
     long int result = 0;
     for (i = 0; i < l; i++)
     {
-        char digitA = str[(l-1)-i].toAscii();
+        char digitA = str[(l-1)-i].toLatin1();
         long int digit = FromAsciiHexDigitToNUmber(digitA);
         result += digit * pow(16,i);
     }
@@ -1012,7 +1012,7 @@ QString ParserClass::EvaluateBinary(QString str)
     long int result = 0;
     for (i = 0; i < l; i++)
     {
-        char digitA = str[(l-1)-i].toAscii();
+        char digitA = str[(l-1)-i].toLatin1();
         long int digit = FromAsciiBinDigitToNUmber(digitA);
         result += digit * pow(2,i);
     }
