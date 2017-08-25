@@ -28,7 +28,6 @@ private slots:
 
     void on_line_input_textChanged(const QString &arg1);
     void on_actionFunctions_toggled(bool arg1);
-    void on_actionAbout_activated();
     void on_actionAuto_toggled(bool arg1);
     void on_actionFloating_toggled(bool arg1);
     void on_actionScientific_toggled(bool arg1);
@@ -50,12 +49,10 @@ private slots:
     void clearHistorySlot(void);
 
     void on_actionClear_Hystory_triggered();
-
     void on_actionClear_All_triggered();
-
     void on_action_Import_raw_data_triggered();
-
     void on_action_Wiki_triggered();
+    void on_actionAbout_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -115,13 +115,6 @@ void MainWindow::on_line_input_textChanged(const QString &arg1)
     QToolTip::showText(ui->line_input->mapToGlobal(QPoint(10,-45)),m_cmdMngr.PreviewResult(arg1));
 }
 
-void MainWindow::on_actionAbout_activated()
-{
-    AboutDialog diag;
-    diag.SetAboutTxt(PRJ_WINDOWS_TITLE);
-    diag.exec();
-}
-
 void MainWindow::on_actionAuto_toggled(bool arg1)
 {
     if (arg1)
@@ -281,4 +274,12 @@ void MainWindow::on_action_Wiki_triggered()
 {
     QString link = WIKIURL;
     QDesktopServices::openUrl(QUrl(link));
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    AboutDialog diag;
+    diag.SetAboutTxt(PRJ_WINDOWS_TITLE);
+    diag.exec();
+
 }
