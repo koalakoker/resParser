@@ -25,6 +25,24 @@ QString userdefinedFunctions::Name(void)
     return m_name;
 }
 
+QString userdefinedFunctions::NameArgs(void)
+{
+    QString nameArgs = m_name;
+    nameArgs += "(";
+    int count = m_args.count();
+    for (int i=0; i < count ; i++)
+    {
+        nameArgs += m_args[i];
+        if (i < count - 1)
+        {
+            nameArgs += ",";
+        }
+    }
+
+    nameArgs += ")";
+    return nameArgs;
+}
+
 QString userdefinedFunctions::functionSrt(void)
 {
     return m_functionStr;

@@ -148,7 +148,7 @@ TableInfo ParserClass::UserDefinedFunctionsInfo(void)
     {
         TableInfoElement info;
         userdefinedFunctions func = m_userdefinedFunctions[i];
-        info.m_value.append(func.Name());
+        info.m_value.append(func.NameArgs());
         info.m_value.append(func.functionSrt());
         info.m_value.append(func.HasRawData()?QString("RAW"):QString(""));
         info.m_value.append(func.RawRange().toString());
@@ -1175,7 +1175,7 @@ QString ParserClass::UserDefineFunctionFormulaFromName(QString name)
     if ((udFuncOrder >= 0) && (udFuncOrder < m_userdefinedFunctions.count()))
     {
         userdefinedFunctions func = m_userdefinedFunctions.at(udFuncOrder);
-        retVal = func.functionSrt();
+        retVal = func.toString();
     }
     return retVal;
 }

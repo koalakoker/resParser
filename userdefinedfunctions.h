@@ -23,6 +23,7 @@ public:
     void setFunctionStr(QString str);
     void setArgs(QStringList args);
     QString Name(void);
+    QString NameArgs(void);
     QString functionSrt(void);
     QStringList args(void);
     void setRawPoints(RawData *points);
