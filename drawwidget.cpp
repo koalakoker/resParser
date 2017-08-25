@@ -420,10 +420,13 @@ void DrawWidget::mouseMoveEvent(QMouseEvent* event)
 
 void DrawWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-    int i;
-    for (i = 0; i < CURSOR_NUM; i++)
+    if (event->button() == Qt::LeftButton)
     {
-        m_cursorDragged[i] = false;
+        int i;
+        for (i = 0; i < CURSOR_NUM; i++)
+        {
+            m_cursorDragged[i] = false;
+        }
     }
 }
 

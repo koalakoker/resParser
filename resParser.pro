@@ -11,8 +11,16 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = resParser
 TEMPLATE = app
 
-unix:LIBS+= -L/usr/lib -lgmp
-unix:LIBS+= -L/usr/lib -lmpfr
+unix:!macx {
+    LIBS+= -L/usr/lib -lgmp
+    LIBS+= -L/usr/lib -lmpfr
+}
+
+macx: {
+    LIBS+= -L/opt/local/lib -lgmp
+    LIBS+= -L/opt/local/lib -lmpfr
+}
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -91,3 +99,7 @@ else:win32:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/mpfrd.lib
 
 RESOURCES += \
     AboutDialog.qrc
+
+macx: {
+    INCLUDEPATH += /opt/local/include/
+}
