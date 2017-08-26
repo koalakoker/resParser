@@ -9,10 +9,13 @@
 class CommandMngrClass : public QObject
 {
     Q_OBJECT
-private:
+public:
     ParserClass m_parser;
+
+private:
     QList<CommandClass> m_commands;
     int m_commandIndex;
+    bool m_useFlex;
 
 public:
     explicit CommandMngrClass(QObject *parent = 0);

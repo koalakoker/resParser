@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "FlexParse.h"
 #include "variable.h"
 #include "QString"
 #include "hfloat.h"
@@ -27,6 +28,10 @@ public:
 class ParserClass : public QObject
 {
     Q_OBJECT
+
+public:
+    FlexParse m_flexParse;
+
 private:
     QList<Variable> m_variables;
     QList<builtinFunction> m_functions;

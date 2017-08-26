@@ -43,7 +43,11 @@ SOURCES += main.cpp\
     qrecthf.cpp \
     doublespinbox.cpp \
     range.cpp \
-    rawdata.cpp
+    rawdata.cpp \
+    calcFunc.c \
+    calc.lex.c \
+    calc.tab.c \
+    FlexParse.cpp
 
 HEADERS  += mainwindow.h \
     resistor.h \
@@ -66,7 +70,10 @@ HEADERS  += mainwindow.h \
     qrecthf.h \
     doublespinbox.h \
     range.h \
-    rawdata.h
+    rawdata.h \
+    calc.h \
+    calc.tab.h \
+    FlexParse.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \
@@ -103,3 +110,7 @@ RESOURCES += \
 macx: {
     INCLUDEPATH += /opt/local/include/
 }
+
+DISTFILES += \
+    calc.y \
+    calc.l

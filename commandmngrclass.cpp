@@ -8,6 +8,7 @@ CommandMngrClass::CommandMngrClass(QObject *parent):
     QObject(parent)
 {
     m_commandIndex = 0;
+    m_useFlex = false;
 
     connect(&m_parser,SIGNAL(ClearHistory()),this,SLOT(ClearHistorySlot()));
 }
@@ -24,27 +25,24 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     hfloat result;
 
     newCmd.setInputStr(qsInput);
-    retVal = m_parser.Exec(qsInput,result);
+    if (m_useFlex)
+    {
+        QString parse = m_parser.m_flexParse.parse(qsInput);
+        retVal = qsInput + "<br>" + m_parser.FormatAnswer("ans=" + parse) + "<br>";
+        result = parse.toDouble();
+    }
+    else
+    {
+        retVal = m_parser.Exec(qsInput,result);
+    }
+
     if (!result.isNan())
     {
         newCmd.setResult(result);
     }
-    // Check if it is a new command
-    bool isNewCmd = true;
-    int i;
-    for (i = 0; i < m_commands.count(); i++)
-    {
-        CommandClass cmd = m_commands.at(i);
-        if (cmd.inputStr() == qsInput)
-        {
-            isNewCmd = false;
-        }
-    }
-    if (isNewCmd)
-    {
-        m_commands.append(newCmd);
-        m_commandIndex = m_commands.count();
-    }
+
+    m_commands.append(newCmd);
+    m_commandIndex = m_commands.count();
 
     return retVal;
 }
@@ -83,11 +81,24 @@ QString CommandMngrClass::GetNextCommand(void)
 QString CommandMngrClass::PreviewResult(QString qsInput)
 {
     QString retVal;
-    hfloat result = m_parser.Parse(qsInput,true);
-    if (!result.isNan())
+
+    if (m_useFlex)
     {
-        retVal = QString("ans=") + result.toString(m_parser.FormatOutput());
+        QString parse = m_parser.m_flexParse.parse(qsInput);
+        if (parse != "")
+        {
+            retVal = QString("ans=") + parse;
+        }
     }
+    else
+    {
+        hfloat result = m_parser.Parse(qsInput,true);
+        if (!result.isNan())
+        {
+            retVal = QString("ans=") + result.toString(m_parser.FormatOutput());
+        }
+    }
+
     return retVal;
 }
 

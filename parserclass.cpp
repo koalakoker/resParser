@@ -493,9 +493,9 @@ hfloat ParserClass::Parse(QString str, bool preview)
     // Remove spaces
     str = str.replace(" ","");
     // Convert k and M
-    str = str.replace ("k","000");
-    str = str.replace ("K","000");
-    str = str.replace ("M","000000");
+//    str = str.replace ("k","000");
+//    str = str.replace ("K","000");
+//    str = str.replace ("M","000000");
 
     hfloat retVal;
     int biFunc,udFunc;
