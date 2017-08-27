@@ -1,21 +1,25 @@
 /* calculator with AST */
 %{
-    # include <stdio.h>
-    # include <stdlib.h>
-    # include "calc.h"
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include "calc.h"
+    #include "keywordcode.h"
     int yylex(void);
     char retVal[255];
+    keyWordCode_t kwc;
 %}
 
 %union 
 {
     struct ast *a;
-    double d; 
+    double d;
+    int kwc;
 }
 
 /* declare tokens */ 
 %token <d> NUMBER 
 %token EOL
+%token <kwc> KEYWORD
 
 %type <a> exp factor term
 
@@ -26,6 +30,7 @@ calclist: /* nothing */
     treefree($2);
   }
   | calclist EOL { } /* blank line or a comment */
+  | calclist KEYWORD EOL { kwc = $2 };
   ;
 
 exp: factor

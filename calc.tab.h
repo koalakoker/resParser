@@ -40,25 +40,28 @@
       know about them.  */
    enum yytokentype {
      NUMBER = 258,
-     EOL = 259
+     EOL = 259,
+     KEYWORD = 260
    };
 #endif
 /* Tokens.  */
 #define NUMBER 258
 #define EOL 259
+#define KEYWORD 260
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 11 "calc.y"
+#line 13 "calc.y"
 {
     struct ast *a;
-    double d; 
+    double d;
+    int kwc;
 }
 /* Line 1529 of yacc.c.  */
-#line 62 "calc.tab.h"
+#line 65 "calc.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

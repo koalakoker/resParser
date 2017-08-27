@@ -34,6 +34,7 @@ bool ParserClass::IsKeyWord(QString str)
     return false;
 }
 
+// To be removed after final integration with flex
 keyWordCode_t ParserClass::KeyWordCode(QString str)
 {
     int i;
@@ -311,6 +312,7 @@ void ParserClass::Clear(void)
     m_variables.clear();
 }
 
+// To be removed after final integration with flex
 QString ParserClass::Exec(QString str, hfloat &result)
 {
     QString retVal = str + QString("<br>");
@@ -485,6 +487,163 @@ QString ParserClass::Exec(QString str, hfloat &result)
     }
         break;
     }
+    return retVal;
+}
+
+QString ParserClass::Exec(keyWordCode_t code, QString param1, QString param2)
+{
+    QString retVal;
+
+    /* execute command */
+    switch (code)
+    {
+        case key_List:
+        {
+            int i;
+            for (i = 0; i < VariableCreated(); i++)
+            {
+                Variable* var = GetVariableAtIndex(i);
+                retVal.append(var->ToString());
+                retVal.append("<br>");
+            }
+        }
+        break;
+
+        case key_Clear:
+        {
+            if (param1 == "")
+            {
+                Clear();
+            }
+            else
+            {
+                if (IsVariableName(param1))
+                {
+                    RemoveVariable(param1);
+                }
+                else if (IsUserDefinedFunctionName(param1))
+                {
+                    RemoveUserDefinedFunction(param1);
+                }
+            }
+        }
+        break;
+
+        case key_ClearRaw:
+        {
+            if (IsUserDefinedFunctionName(param1))
+            {
+                RemoveUserDefinedFunctionRawData(param1);
+            }
+        }
+        break;
+
+        case key_ClearHistory:
+        {
+            emit ClearHistory();
+        }
+        break;
+
+        case key_E12:
+        {
+            retVal.append(Resistor::E12ValuesToString());
+            retVal.append("<br>");
+        }
+        break;
+
+        case key_E24:
+        {
+            retVal.append(Resistor::E24ValuesToString());
+            retVal.append("<br>");
+        }
+        break;
+
+        case key_Usage:
+        {
+            retVal.append("<br>");
+            retVal.append("Using built-in function <b>function_name(arg,[arg])</b>.<br>");
+            retVal.append("Variable assignment: <b>var_name = expression</b>.<br>");
+            retVal.append("Function assignment: <b>func_name(arg,[arg]) = expression</b>.<br>");
+            retVal.append("Show variables <b>list</b> or <b>ls</b>.<br>");
+            retVal.append("<b>clear</b> to delete all variables.<br>");
+            retVal.append("<b>clear var_name</b> to delete variable var_name.<br>");
+            retVal.append("<b>clear func_name</b> to delete user function func_name.<br>");
+            retVal.append("<b>clearraw func_name</b> to delete RAW data from user function func_name.<br>");
+            retVal.append("<b>plot (or draw) func_name[range]</b> to plot user function func_name.<br>");
+            retVal.append("<b>E12</b> to show all E12 resistor values.<br>");
+            retVal.append("<b>E24</b> to show all E24 resistor values.<br>");
+            retVal.append("<b>->E12</b> to round to nearest E12 resistor values.<br>");
+            retVal.append("<b>^</b> power operator.<br>");
+            retVal.append("<b>:</b> parallel operator between resistors.<br>");
+        }
+        break;
+
+        case key_Plot:
+        {
+            Range r = EvaluateRange(param2); // To be Flexed
+
+            int udFuncOrder;
+            if ((udFuncOrder = HasUserDefinedFunction(param1+"("))!= -1) // To be Flexed
+            {
+                userdefinedFunctions udFunc = m_userdefinedFunctions[udFuncOrder];
+                bool hasRaw = udFunc.HasRawData();
+                if ((hasRaw) || ((!hasRaw)&&(udFunc.functionSrt()!="RAW")))
+                {
+                    DrawWidgetBrowse* d = new DrawWidgetBrowse();
+                    RawData* points = new(RawData);
+                    if ((hasRaw) &&
+                        ((r == udFunc.RawRange())||
+                        (!r.isValid())))
+                    {
+                        points = udFunc.RawPoints();
+                        r = points->RawRange();
+                    }
+                    else
+                    {
+                        if (!r.isValid())
+                        {
+                            // Set default range
+                            r = Range(-10,10,0.1);
+                        }
+                        // Prepare for function computation
+                        QString functionStr = udFunc.functionSrt();
+                        QStringList funcionArgs = udFunc.args();
+
+                        hfloat x;
+                        for (x = r.m_min; x <= r.m_max; x += r.m_step)
+                        {
+                            QString tmpStr = functionStr;
+                            tmpStr.replace(funcionArgs[0],x.toString(HF_MAXRES));
+                            points->append(HPoint(x,Parse(tmpStr)));
+                        }
+                        // Just for last point
+                        functionStr.replace(funcionArgs[0],r.m_max.toString(HF_MAXRES));
+                        points->append(HPoint(r.m_max,Parse(functionStr)));
+
+                        // Store RAW data in function
+                        m_userdefinedFunctions[udFuncOrder].setRawRange(r);
+                        m_userdefinedFunctions[udFuncOrder].setRawPoints(points);
+                        emit(functionListUpdate(builtInFunctionList()));
+                    }
+
+                    points->updateRange();
+                    d->drawWidget()->setPoints(points);
+                    d->setXmin(points->xMin().toFloat());
+                    d->setXmax(points->xMax().toFloat());
+                    d->setYmin(points->yMin().toFloat());
+                    d->setYmax(points->yMax().toFloat());
+                    d->show();
+                }
+            }
+        }
+        break;
+
+        default:
+        {
+        }
+        break;
+    }
+
     return retVal;
 }
 

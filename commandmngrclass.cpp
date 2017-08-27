@@ -8,7 +8,7 @@ CommandMngrClass::CommandMngrClass(QObject *parent):
     QObject(parent)
 {
     m_commandIndex = 0;
-    m_useFlex = false;
+    m_useFlex = true;
 
     connect(&m_parser,SIGNAL(ClearHistory()),this,SLOT(ClearHistorySlot()));
 }
@@ -28,8 +28,17 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     if (m_useFlex)
     {
         QString parse = m_parser.m_flexParse.parse(qsInput);
-        retVal = qsInput + "<br>" + m_parser.FormatAnswer("ans=" + parse) + "<br>";
-        result = parse.toDouble();
+
+        keyWordCode_t code = m_parser.m_flexParse.m_kwc;
+        if (code != key_None)
+        {
+            retVal = m_parser.Exec(code);
+        }
+        else
+        {
+            retVal = qsInput + "<br>" + m_parser.FormatAnswer("ans=" + parse) + "<br>";
+            result = parse.toDouble();
+        }
     }
     else
     {

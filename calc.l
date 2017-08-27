@@ -1,7 +1,9 @@
 %option noyywrap nodefault yylineno nounput noinput
 %{
-    # include "calc.h"
-    # include "calc.tab.h"
+    #include "calc.h"
+    #include "calc.tab.h"
+    #include "keywordcode.h"
+
     void yyparse(void);
     char inpVal[256];
 %}
@@ -10,6 +12,14 @@
 
 EXP ([Ee][-+]?[0-9]+)
 %%
+"usage" { yylval.kwc = key_Usage; return KEYWORD;}
+"clearhistory" { yylval.kwc = key_ClearHistory; return KEYWORD;}
+"clearraw" { yylval.kwc = key_ClearRaw; return KEYWORD;}
+"e12" { yylval.kwc = key_E12; return KEYWORD;}
+"e24" { yylval.kwc = key_E24; return KEYWORD;}
+"clear" | "del" | "delete" { yylval.kwc = key_Clear; return KEYWORD;}
+"list" | "ls" { yylval.kwc = key_List; return KEYWORD;}
+"draw" | "plot" { yylval.kwc = key_Plot; return KEYWORD;}
 "+" |
 "-" |
 "*" |

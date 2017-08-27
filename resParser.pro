@@ -73,7 +73,8 @@ HEADERS  += mainwindow.h \
     rawdata.h \
     calc.h \
     calc.tab.h \
-    FlexParse.h
+    FlexParse.h \
+    keywordcode.h
 
 FORMS    += mainwindow.ui \
     functionwindow.ui \
