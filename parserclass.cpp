@@ -15,12 +15,14 @@
 
 #define HF_MAXRES "%.50Rf"
 
+// To be removed after final integration with flex
 keyWord::keyWord(keyWordCode_t code, QString str)
 {
     m_code = code;
     m_str = str;
 }
 
+// To be removed after final integration with flex
 bool ParserClass::IsKeyWord(QString str)
 {
     int i;
@@ -48,6 +50,7 @@ keyWordCode_t ParserClass::KeyWordCode(QString str)
     return key_None;
 }
 
+// To be removed after final integration with flex
 QString ParserClass::RemoveKeyWord(QString str,keyWordCode_t code)
 {
     QString retVal = str;
@@ -102,6 +105,7 @@ ParserClass::ParserClass(QObject *parent):
     addBuiltInFunction("sinh",hfloat::sinh);
     addBuiltInFunction("tanh",hfloat::tanh);
 
+    // To be removed after final integration with flex
     m_keyWord.append(keyWord(key_ClearHistory,"clearhistory"));
     m_keyWord.append(keyWord(key_ClearRaw,"clearraw"));
     m_keyWord.append(keyWord(key_Clear,"clear"));
