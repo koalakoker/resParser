@@ -41,13 +41,19 @@
    enum yytokentype {
      NUMBER = 258,
      EOL = 259,
-     KEYWORD = 260
+     KEYWORD = 260,
+     SEPARATOR = 261,
+     VARSIDENT = 262,
+     FUNCIDENT = 263
    };
 #endif
 /* Tokens.  */
 #define NUMBER 258
 #define EOL 259
 #define KEYWORD 260
+#define SEPARATOR 261
+#define VARSIDENT 262
+#define FUNCIDENT 263
 
 
 
@@ -61,7 +67,7 @@ typedef union YYSTYPE
     int kwc;
 }
 /* Line 1529 of yacc.c.  */
-#line 65 "calc.tab.h"
+#line 71 "calc.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

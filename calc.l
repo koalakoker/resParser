@@ -17,9 +17,12 @@ EXP ([Ee][-+]?[0-9]+)
 "clearraw" { yylval.kwc = key_ClearRaw; return KEYWORD;}
 "e12" { yylval.kwc = key_E12; return KEYWORD;}
 "e24" { yylval.kwc = key_E24; return KEYWORD;}
-"clear" | "del" | "delete" { yylval.kwc = key_Clear; return KEYWORD;}
-"list" | "ls" { yylval.kwc = key_List; return KEYWORD;}
-"draw" | "plot" { yylval.kwc = key_Plot; return KEYWORD;}
+"clear"|"del"|"delete" { yylval.kwc = key_Clear; return KEYWORD;}
+"list"|"ls" { yylval.kwc = key_List; return KEYWORD;}
+"draw"|"plot" { yylval.kwc = key_Plot; return KEYWORD;}
+[A-z]+ {return VARSIDENT;}
+[A-z]+"(" {return FUNCIDENT;}
+" " {return SEPARATOR;}
 "+" |
 "-" |
 "*" |

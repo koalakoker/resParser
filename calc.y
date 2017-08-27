@@ -20,6 +20,9 @@
 %token <d> NUMBER 
 %token EOL
 %token <kwc> KEYWORD
+%token SEPARATOR
+%token VARSIDENT
+%token FUNCIDENT
 
 %type <a> exp factor term
 
@@ -30,7 +33,10 @@ calclist: /* nothing */
     treefree($2);
   }
   | calclist EOL { } /* blank line or a comment */
-  | calclist KEYWORD EOL { kwc = $2 };
+  | calclist KEYWORD SEPARATOR VARSIDENT EOL { kwc = $2; yyerror("Keyword + Vars"); }
+  | calclist KEYWORD SEPARATOR FUNCIDENT EOL { kwc = $2; yyerror("Keyword + Func");}
+  | calclist KEYWORD EOL { kwc = $2; yyerror("Keyword"); }
+  | calclist VARSIDENT EOL { }
   ;
 
 exp: factor
