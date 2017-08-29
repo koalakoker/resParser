@@ -19,9 +19,6 @@ QString FlexParse::parse(QString inp)
     retVal[0] = '\0';
     kwc = key_None;
     yyinit();
-    if (kwc != key_None)
-    {
-        m_kwc = kwc;
-    }
+    m_kwc = kwc;
     return QString(retVal);
 }

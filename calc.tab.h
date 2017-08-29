@@ -40,20 +40,40 @@
       know about them.  */
    enum yytokentype {
      NUMBER = 258,
-     EOL = 259,
-     KEYWORD = 260,
-     SEPARATOR = 261,
-     VARSIDENT = 262,
-     FUNCIDENT = 263
+     NAME = 259,
+     FUNC = 260,
+     EOL = 261,
+     KEYWORD = 262,
+     SEPARATOR = 263,
+     VARSIDENT = 264,
+     FUNCIDENT = 265,
+     IF = 266,
+     THEN = 267,
+     ELSE = 268,
+     WHILE = 269,
+     DO = 270,
+     LET = 271,
+     CMP = 272,
+     UMINUS = 273
    };
 #endif
 /* Tokens.  */
 #define NUMBER 258
-#define EOL 259
-#define KEYWORD 260
-#define SEPARATOR 261
-#define VARSIDENT 262
-#define FUNCIDENT 263
+#define NAME 259
+#define FUNC 260
+#define EOL 261
+#define KEYWORD 262
+#define SEPARATOR 263
+#define VARSIDENT 264
+#define FUNCIDENT 265
+#define IF 266
+#define THEN 267
+#define ELSE 268
+#define WHILE 269
+#define DO 270
+#define LET 271
+#define CMP 272
+#define UMINUS 273
 
 
 
@@ -65,9 +85,12 @@ typedef union YYSTYPE
     struct ast *a;
     double d;
     int kwc;
+    struct symbol *s;   /* which symbol */
+    struct symlist *sl;
+    int fn;     /* which function */
 }
 /* Line 1529 of yacc.c.  */
-#line 71 "calc.tab.h"
+#line 94 "calc.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
