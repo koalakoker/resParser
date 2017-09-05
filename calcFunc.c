@@ -1,9 +1,9 @@
-# include <stdio.h> 
-# include <stdlib.h> 
-# include <stdarg.h>
-#  include <string.h>
-#  include <math.h>
-# include "calc.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
+#include <math.h>
+#include "calc.h"
 
 /* symbol table */
 /* hash a symbol */
@@ -12,7 +12,7 @@ static unsigned int symhash(char *sym)
   unsigned int hash = 0;
   unsigned c;
 
-  while(c = *sym++) hash = hash*9 ^ c;
+  while ((c = *sym++)) hash = hash*9 ^ c;
 
   return hash;
 }
@@ -184,7 +184,7 @@ static double calluser(struct ufncall *);
 
 double eval(struct ast *a)
 {
-  double v;
+  double v = 0.0;
 
   if(!a) {
     yyerror("internal error, null eval");

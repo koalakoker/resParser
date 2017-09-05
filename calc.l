@@ -71,7 +71,7 @@ EXP ([Ee][-+]?[0-9]+)
 .   { yyerror("Mystery character %c\n", *yytext); }
 %%
 
-void yyinit(void)
+void yyExec(void)
 {
     YY_BUFFER_STATE bp;
     bp = yy_scan_string(inpVal);

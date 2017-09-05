@@ -1,3 +1,3 @@
 #!/bin/bash
-bison -d calc.y
+bison -d -v calc.y
 flex -ocalc.lex.c calc.l

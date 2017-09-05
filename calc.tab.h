@@ -44,17 +44,14 @@
      FUNC = 260,
      EOL = 261,
      KEYWORD = 262,
-     SEPARATOR = 263,
-     VARSIDENT = 264,
-     FUNCIDENT = 265,
-     IF = 266,
-     THEN = 267,
-     ELSE = 268,
-     WHILE = 269,
-     DO = 270,
-     LET = 271,
-     CMP = 272,
-     UMINUS = 273
+     IF = 263,
+     THEN = 264,
+     ELSE = 265,
+     WHILE = 266,
+     DO = 267,
+     LET = 268,
+     CMP = 269,
+     UMINUS = 270
    };
 #endif
 /* Tokens.  */
@@ -63,24 +60,21 @@
 #define FUNC 260
 #define EOL 261
 #define KEYWORD 262
-#define SEPARATOR 263
-#define VARSIDENT 264
-#define FUNCIDENT 265
-#define IF 266
-#define THEN 267
-#define ELSE 268
-#define WHILE 269
-#define DO 270
-#define LET 271
-#define CMP 272
-#define UMINUS 273
+#define IF 263
+#define THEN 264
+#define ELSE 265
+#define WHILE 266
+#define DO 267
+#define LET 268
+#define CMP 269
+#define UMINUS 270
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 13 "calc.y"
+#line 20 "calc.y"
 {
     struct ast *a;
     double d;
@@ -90,7 +84,7 @@ typedef union YYSTYPE
     int fn;     /* which function */
 }
 /* Line 1529 of yacc.c.  */
-#line 94 "calc.tab.h"
+#line 88 "calc.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

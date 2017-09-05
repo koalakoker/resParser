@@ -4,9 +4,16 @@
     #include <stdlib.h>
     #include "calc.h"
     #include "keywordcode.h"
+
     int yylex(void);
+
     char retVal[255];
     keyWordCode_t kwc;
+    char* symbol;
+    int newAssignVar;
+    int newAssignFunc;
+
+    struct symlist *symListRet;
 %}
 
 %union 
@@ -25,9 +32,6 @@
 %token <fn> FUNC
 %token EOL
 %token <kwc> KEYWORD
-%token SEPARATOR
-%token VARSIDENT
-%token FUNCIDENT
 
 %token IF THEN ELSE WHILE DO LET
 
@@ -36,6 +40,7 @@
 %left '+' '-'
 %left '*' '/'
 %nonassoc '|' UMINUS
+%nonassoc KEYWORD
 
 %type <a> exp stmt list explist
 %type <sl> symlist
@@ -69,7 +74,7 @@ exp: exp CMP exp          { $$ = newcmp($2, $1, $3); }
    | NUMBER               { $$ = newnum($1); }
    | FUNC '(' explist ')' { $$ = newfunc($1, $3); }
    | NAME                 { $$ = newref($1); }
-   | NAME '=' exp         { $$ = newasgn($1, $3); }
+   | NAME '=' exp         { $$ = newasgn($1, $3); newAssignVar = 1; symbol = $1->name; }
    | NAME '(' explist ')' { $$ = newcall($1, $3); }
 ;
 
@@ -88,12 +93,12 @@ calclist: /* nothing */
     }
   | calclist LET NAME '(' symlist ')' '=' list EOL {
                        dodef($3, $5, $8);
-                       sprintf(retVal, "Defined %s", $3->name); }
-
-  | calclist error EOL { yyerrok; }
-  | calclist KEYWORD SEPARATOR VARSIDENT EOL { kwc = $2; yyerror("Keyword + Vars"); }
-  | calclist KEYWORD SEPARATOR FUNCIDENT EOL { kwc = $2; yyerror("Keyword + Func");}
+                       sprintf(retVal, "Defined %s", $3->name);
+                       newAssignFunc = 1; symbol = $3->name;
+                       symListRet = $5;
+                       }
+  | calclist KEYWORD NAME EOL { kwc = $2; symbol = $3->name; yyerror("Keyword + Name"); }
   | calclist KEYWORD EOL { kwc = $2; yyerror("Keyword"); }
-  | calclist VARSIDENT EOL { }
+  | calclist error EOL { yyerrok; }
  ;
 %%

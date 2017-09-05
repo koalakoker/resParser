@@ -517,17 +517,21 @@ QString ParserClass::Exec(keyWordCode_t code, QString param1, QString param2)
         {
             if (param1 == "")
             {
-                Clear();
+                Clear(); // Only variables!!
             }
             else
             {
+                //retVal.append("Symbol not foud"); To be fixed
                 if (IsVariableName(param1))
                 {
                     RemoveVariable(param1);
+                    m_flexParse.parse(param1+"=0");
+                    retVal.append(FormatAnswer("Removed variable."));
                 }
                 else if (IsUserDefinedFunctionName(param1))
                 {
                     RemoveUserDefinedFunction(param1);
+                    retVal.append(FormatAnswer("Removed user function."));
                 }
             }
         }
@@ -564,7 +568,6 @@ QString ParserClass::Exec(keyWordCode_t code, QString param1, QString param2)
 
         case key_Usage:
         {
-            retVal.append("<br>");
             retVal.append("Using built-in function <b>function_name(arg,[arg])</b>.<br>");
             retVal.append("Variable assignment: <b>var_name = expression</b>.<br>");
             retVal.append("Function assignment: <b>func_name(arg,[arg]) = expression</b>.<br>");
@@ -578,7 +581,7 @@ QString ParserClass::Exec(keyWordCode_t code, QString param1, QString param2)
             retVal.append("<b>E24</b> to show all E24 resistor values.<br>");
             retVal.append("<b>->E12</b> to round to nearest E12 resistor values.<br>");
             retVal.append("<b>^</b> power operator.<br>");
-            retVal.append("<b>:</b> parallel operator between resistors.<br>");
+            retVal.append("<b>:</b> parallel operator between resistors.");
         }
         break;
 
@@ -649,6 +652,17 @@ QString ParserClass::Exec(keyWordCode_t code, QString param1, QString param2)
     }
 
     return retVal;
+}
+
+QString ParserClass::ExtractFormulaFromAssignment(QString str)
+{
+    QString expression = "";
+    int equalPos = str.indexOf("=");
+    if (equalPos>0)
+    {
+        expression = str.mid(equalPos+1,str.length()-equalPos-1);
+    }
+    return expression;
 }
 
 hfloat ParserClass::Parse(QString str, bool preview)
@@ -1374,6 +1388,7 @@ void ParserClass::Load(QDataStream& in)
         in >> valueStr;
         hfloat newValue = hfloat(valueStr);
         StoreVariable(name,newValue);
+        m_flexParse.parse(name+"="+valueStr);
     }
     // Load User defined functions
     m_userdefinedFunctions.clear();
@@ -1383,6 +1398,18 @@ void ParserClass::Load(QDataStream& in)
         userdefinedFunctions newUDF;
         newUDF.Load(in);
         m_userdefinedFunctions.append(newUDF);
+        QString toBeParsed = "def "+ newUDF.Name() + "(";
+        int argNum = newUDF.args().length();
+        for (int i = 0; i < argNum; i++)
+        {
+            toBeParsed.append(newUDF.args().at(i));
+            if (i < argNum - 1)
+            {
+                toBeParsed.append(",");
+            }
+        }
+        toBeParsed.append (")=" + newUDF.functionSrt());
+        m_flexParse.parse(toBeParsed);
     }
 }
 

@@ -27,17 +27,35 @@ QString CommandMngrClass::AddNewCommand(QString qsInput)
     newCmd.setInputStr(qsInput);
     if (m_useFlex)
     {
-        QString parse = m_parser.m_flexParse.parse(qsInput);
+        FlexParse parser = m_parser.m_flexParse;
+        QString parse = parser.parse(qsInput);
+        QString symbol = parser.m_symbol;
 
-        keyWordCode_t code = m_parser.m_flexParse.m_kwc;
+        keyWordCode_t code = parser.m_kwc;
         if (code != key_None)
         {
-            retVal = m_parser.Exec(code);
+            retVal = qsInput + "<br>" + m_parser.Exec(code, symbol) + "<br>";
         }
         else
         {
             retVal = qsInput + "<br>" + m_parser.FormatAnswer("ans=" + parse) + "<br>";
             result = parse.toDouble();
+
+            if (parser.m_newAssignVar)
+            {
+                m_parser.StoreVariable(parser.m_symbol, result);
+            }
+
+            if (parser.m_newAssignFunc)
+            {
+                QString expresion = m_parser.ExtractFormulaFromAssignment(qsInput);
+                m_parser.StoreFunction(parser.m_symbol,parser.m_args,expresion);
+            }
+
+            parser.parse("ans="+parse);
+            m_parser.StoreVariable("ans",result); // Store the last result
+
+
         }
     }
     else

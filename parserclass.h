@@ -87,6 +87,7 @@ public:
     bool RemoveUserDefinedFunction(QString name);
     bool RemoveUserDefinedFunctionRawData(QString name);
     bool StoreFunction(QString name,QStringList args,QString newValue);
+    QString ExtractFormulaFromAssignment(QString str);
     Variable *GetVariableAtIndex(int i);
     void Clear(void);
 

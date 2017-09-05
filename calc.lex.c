@@ -2011,7 +2011,7 @@ void yyfree (void * ptr )
 
 
 
-void yyinit(void)
+void yyExec(void)
 {
     YY_BUFFER_STATE bp;
     bp = yy_scan_string(inpVal);
