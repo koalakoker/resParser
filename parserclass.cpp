@@ -657,6 +657,9 @@ QString ParserClass::Exec(keyWordCode_t code, QString param1, QString param2)
 
 QString ParserClass::ExtractFormulaFromAssignment(QString str)
 {
+    // Remove spaces
+    str = str.replace(" ","");
+
     QString expression = "";
     int equalPos = str.indexOf("=");
     if (equalPos>0)
