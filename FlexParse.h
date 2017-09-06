@@ -11,6 +11,7 @@ public:
     FlexParse();
 
     QString parse(QString inp);
+    void deleteFunc(QString name);
 
     keyWordCode_t m_kwc;
 

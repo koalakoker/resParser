@@ -17,6 +17,12 @@ static unsigned int symhash(char *sym)
   return hash;
 }
 
+void flexDeleteFunc(char* sym)
+{
+    struct symbol *sp = &symtab[symhash(sym)%NHASH];
+    sp->func = 0;
+}
+
 struct symbol* lookup(char* sym)
 {
   struct symbol *sp = &symtab[symhash(sym)%NHASH];

@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 extern "C" void yyExec(void);
+extern "C" void flexDeleteFunc(char* sym);
 extern char retVal[];
 extern char inpVal[];
 extern keyWordCode_t kwc;
@@ -15,6 +16,11 @@ extern struct symlist *symListRet;
 FlexParse::FlexParse()
 {
 
+}
+
+void FlexParse::deleteFunc(QString name)
+{
+    flexDeleteFunc(name.toLatin1().data());
 }
 
 QString FlexParse::parse(QString inp)

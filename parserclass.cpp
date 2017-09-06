@@ -531,6 +531,7 @@ QString ParserClass::Exec(keyWordCode_t code, QString param1, QString param2)
                 else if (IsUserDefinedFunctionName(param1))
                 {
                     RemoveUserDefinedFunction(param1);
+                    m_flexParse.deleteFunc(param1);
                     retVal.append(FormatAnswer("Removed user function."));
                 }
             }
