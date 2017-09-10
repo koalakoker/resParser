@@ -8,3 +8,11 @@ mpfr.h
 mpfr.lib
 mpir.dll
 calc.output
+*.o
+moc*
+ui*
+.qmake.stash
+Makefile
+hyst.rp
+qrc*
+resParser.app
